@@ -8,6 +8,7 @@ user = authenticate(username='student', password='1#lklsaK313')
 
 
 def index(request):
+    # Student Advices
     student_advices = student_logic.get_student_advices(student_id=user.id)
 
     # For Testing Only
@@ -19,6 +20,7 @@ def index(request):
 
 
 def student_courses(request):
+    # Student Courses
     courses = student_logic.get_student_courses(student_id=user.id)
 
     # For Testing Only
