@@ -2,6 +2,7 @@ from django.conf import settings
 from django.db import models
 
 from .department_model import Department
+from .term_model import Term
 from .year_model import Year
 
 
@@ -23,8 +24,9 @@ class Student(models.Model):
                    (at_home, 'At Home'), (other, 'Other'))
 
     user = models.OneToOneField(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, primary_key=True)
-    year = models.ForeignKey(Year, on_delete=models.CASCADE)
-    department = models.ForeignKey(Department, on_delete=models.CASCADE)
+    year = models.ForeignKey(Year, on_delete=models.SET_NULL, null=True)
+    term = models.ForeignKey(Term, on_delete=models.SET_NULL, null=True)
+    department = models.ForeignKey(Department, on_delete=models.PROTECT)
 
     sex = models.CharField(max_length=1, choices=sex_choices)
     age = models.SmallIntegerField()

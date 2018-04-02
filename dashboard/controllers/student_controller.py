@@ -8,12 +8,21 @@ user = authenticate(username='student', password='1#lklsaK313')
 
 
 def index(request):
+
     # Student Advices
     student_advices = student_logic.get_student_advices(student_id=user.id)
 
+    # Student Predictions
+    predictions = student_logic.get_student_predictions(student_id=user.id)
+
+    # Student Recommendations
+    recommendations = student_logic.get_student_recommendations(student_id=user.id)
+
     # For Testing Only
     result = {
-        'student_advices': student_advices
+        'student_advices': student_advices,
+        'student_predictions': predictions,
+        'student_recommendations': recommendations
     }
 
     return JsonResponse(result, safe=False)
