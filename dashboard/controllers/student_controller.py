@@ -20,7 +20,13 @@ def index(request):
 
 def student_courses(request):
     courses = student_logic.get_student_courses(student_id=user.id)
-    return JsonResponse(courses, safe=False)
+
+    # For Testing Only
+    result = {
+        'student_courses': courses
+    }
+
+    return JsonResponse(result, safe=False)
 
 
 def educator_profile(request, educator_id):
