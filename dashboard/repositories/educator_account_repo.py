@@ -7,4 +7,4 @@ class EducatorAccountRepo(Repo):
         super().__init__(EducatorAccount)
 
     def get_educator_accounts(self, educator):
-        return EducatorAccount.objects.filter(educator=educator)
+        return EducatorAccount.objects.filter(educator=educator).select_related('account')

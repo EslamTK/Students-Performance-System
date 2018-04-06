@@ -8,10 +8,19 @@ class StudentReviewItemRepo(Repo):
     def __init__(self):
         super().__init__(StudentReviewItem)
 
-    def get_educator_rating(self, educator):
-        reviews = StudentReview.objects.filter(educator=educator)
+    def get_educator_rating(self, educator, year=None, department=None):
 
-        rating = StudentReviewItem.objects.filter(student_review__in=reviews). \
-            values('review_item').annotate(Avg('rate'))
+        filters = {
+            'student_review__educator': educator
+        }
+
+        if year:
+            filters['student_review__created_at__year'] = year
+
+        if department:
+            filters['student_review__student__department'] = department
+
+        rating = StudentReviewItem.objects.select_related('review_item').filter(**filters). \
+            values('review_item__id', 'review_item__name').annotate(Avg('rate')).order_by('review_item__name')
 
         return rating

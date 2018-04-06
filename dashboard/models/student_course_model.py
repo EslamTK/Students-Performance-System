@@ -16,3 +16,5 @@ class StudentCourse(models.Model):
     take_paid_class = models.BooleanField()
     midterm_grade = models.SmallIntegerField()
     final_grade = models.SmallIntegerField(null=True, blank=True)
+    prediction_grade = models.SmallIntegerField(null=True, editable=False)
+    created_at = models.DateTimeField(auto_now_add=True)

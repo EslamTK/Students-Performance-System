@@ -5,27 +5,22 @@ unit_of_work = UnitOfWork()
 
 
 def get_student_advices(student_id):
-    result = unit_of_work.educators_advices.get_student_advices(student=student_id)
-    advices = []
-    for i in result:
-        advice = {
-            'educator_id': i.educator.user_id,
-            'educator_name': i.educator.name,
-            'educator_image_url': i.educator.image_url,
-            'advice_content': i.content,
-            'date': i.created_at
-        }
-        advices.append(advice)
+    advices = unit_of_work.educators_advices.get_student_advices(student=student_id)
+
     return advices
 
 
-def get_student_courses(student_id):
-    result = unit_of_work.students_courses.get_student_courses(student=student_id, is_current=False)
+def get_student_courses(student_id, is_all=False):
+    courses_prediction = None
+    if is_all:
+        result = unit_of_work.students_courses.get_student_courses(student=student_id, is_all=True)
+        courses_prediction = get_student_predictions(student_id)
+    else:
+        result = unit_of_work.students_courses.get_student_courses(student=student_id, is_current=False)
 
     courses = {}
 
     for i in result:
-
         if i.course.year.id not in courses:
             courses[i.course.year.id] = {}
 
@@ -44,18 +39,26 @@ def get_student_courses(student_id):
         if 'courses' not in courses[i.course.year.id]['terms'][i.course.term.id]:
             courses[i.course.year.id]['terms'][i.course.term.id]['courses'] = []
 
-        courses[i.course.year.id]['terms'][i.course.term.id]['courses'].append({
+        course = {
             'id': i.course.id,
             'name': i.course.name,
             'midterm': i.midterm_grade,
-            'final': i.final_grade,
             'educator': {
                 'id': i.educator.user_id,
                 'name': i.educator.name
             }
-        })
+        }
 
-    formated_courses = []
+        if i.final_grade:
+            course['final'] = i.final_grade
+        else:
+            for j in courses_prediction['courses']:
+                if j['id'] == i.course.id:
+                    course['prediction'] = j['prediction']
+
+        courses[i.course.year.id]['terms'][i.course.term.id]['courses'].append(course)
+
+    formatted_courses = []
 
     for i in courses:
         year = {
@@ -72,9 +75,9 @@ def get_student_courses(student_id):
             }
             year['terms'].append(term)
 
-        formated_courses.append(year)
+        formatted_courses.append(year)
 
-    return formated_courses
+    return formatted_courses
 
 
 def get_student_predictions(student_id):
@@ -93,7 +96,7 @@ def get_student_recommendations(student_id):
 
 def get_student_data(student_id):
     student = unit_of_work.students.get_one(student_id)
-    student_courses = unit_of_work.students_courses.get_student_courses(student=student_id, is_current=True)
+    student_courses = unit_of_work.students_courses.get_student_courses(student=student_id)
 
     student_data = {
         "sex": student.sex,

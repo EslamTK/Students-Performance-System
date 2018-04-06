@@ -27,7 +27,7 @@ class Student(models.Model):
     year = models.ForeignKey(Year, on_delete=models.SET_NULL, null=True)
     term = models.ForeignKey(Term, on_delete=models.SET_NULL, null=True)
     department = models.ForeignKey(Department, on_delete=models.PROTECT)
-
+    name = models.CharField(max_length=50)
     sex = models.CharField(max_length=1, choices=sex_choices)
     age = models.SmallIntegerField()
     family_size = models.CharField(max_length=3, choices=family_size_choices)

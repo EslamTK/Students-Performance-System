@@ -5,59 +5,49 @@ unit_of_work = UnitOfWork()
 
 def get_educator_info(educator_id):
     educator = unit_of_work.educators.get_one(educator_id)
-    educator_info = {
-        'id': educator.user_id,
-        'name': educator.name,
-        'image_url': educator.image_url,
-        'title': educator.title,
-        'email': educator.email,
-        'about_me': educator.about_me
-    }
-    return educator_info
+
+    return educator
 
 
 def get_educator_accounts(educator_id):
     accounts = unit_of_work.educators_accounts.get_educator_accounts(educator_id)
-    educator_accounts = []
-    for i in accounts:
-        account = {
-            'account_url': i.url,
-            'id': i.account.id,
-            'name': i.account.name,
-            'logo_url': i.account.logo_url
-        }
-        educator_accounts.append(account)
-    return educator_accounts
+
+    return accounts
 
 
-def get_review_items():
-    items = unit_of_work.review_items.get_all()
+def get_educator_reviews_years(educator_id):
+    years = unit_of_work.students_reviews.get_educator_reviews_years(educator=educator_id)
 
-    review_items = []
-    for i in items:
-        item = {
-            'id': i.id,
-            'name': i.name
-        }
-        review_items.append(item)
-
-    return review_items
+    return years
 
 
-"""
-add review
+def get_educator_reviews_departments(educator_id):
+    departments = unit_of_work.students_reviews.get_educator_reviews_departments(educator=educator_id)
 
-    student = unit_of_work.students.get_one(user=user)
-    educator = unit_of_work.educators.get_one(user_1)
+    return departments
 
-    review = StudentReview(student=student, educator=educator, content='zay al fol')
-    review.save()
-    review_x = unit_of_work.review_items.get_all().first()
-    review_item = StudentReviewItem(student_review=review, review_item=review_x, rate=3)
-    review_item.save()
 
-"""
+def get_educator_rating(educator_id, year=None, department=None):
+    rating = unit_of_work.students_review_items. \
+        get_educator_rating(educator=educator_id, year=year, department=department)
 
-"""
-result = unit_of_work.students_review_items.get_educator_rating(educator=educator)
-"""
+    return rating
+
+
+def get_educator_reviews(educator_id):
+    reviews = unit_of_work.students_reviews.get_educator_reviews(educator_id)
+
+    return reviews
+
+
+def get_educator_students(educator_id):
+    students = unit_of_work.students_courses.get_educator_students(educator=educator_id)
+
+    return students
+
+
+def get_educator_counts(educator_id, department=None, year=None, term=None):
+    counts = unit_of_work.students_courses. \
+        get_educator_students_counts(educator=educator_id, department=department, year=year, term=term)
+
+    return counts
