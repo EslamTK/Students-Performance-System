@@ -50,8 +50,11 @@ def educator_profile(request, educator_id):
     review_items = general_logic.get_review_items()
 
     # For Testing Only
+    educator_info = model_to_dict(educator_info)
+    educator_info['photo'] = educator_info['photo'].url
+
     result = {
-        'educator_info': model_to_dict(educator_info),
+        'educator_info': educator_info,
         'educator_accounts': list(educator_accounts.values()),
         'review_items': list(review_items.values())
     }

@@ -1,6 +1,8 @@
 from django.db import models
 
+from .utilities import get_path_with_time_now
+
 
 class Account(models.Model):
     name = models.CharField(max_length=50)
-    logo_url = models.CharField(max_length=200)
+    logo = models.ImageField(upload_to=get_path_with_time_now)

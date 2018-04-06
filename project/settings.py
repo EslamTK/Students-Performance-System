@@ -118,6 +118,5 @@ USE_TZ = True
 
 STATIC_URL = '/static/'
 
-# from django.utils import timezone
-# print(timezone.now().strftime('%Y%m%d%H%M%S%f'))
-# MEDIA_ROOT = BASE_DIR + '/uploads/'
+MEDIA_ROOT = BASE_DIR + '/uploads/'
+MEDIA_URL = '/uploads/'
