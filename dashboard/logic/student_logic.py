@@ -10,74 +10,11 @@ def get_student_advices(student_id):
     return advices
 
 
-def get_student_courses(student_id, is_all=False):
-    courses_prediction = None
-    if is_all:
-        result = unit_of_work.students_courses.get_student_courses(student=student_id, is_all=True)
-        courses_prediction = get_student_predictions(student_id)
-    else:
-        result = unit_of_work.students_courses.get_student_courses(student=student_id, is_current=False)
+def get_student_courses(student_id, is_all=False, year=None, term=None):
+    courses = unit_of_work.students_courses. \
+        get_student_courses(student=student_id, is_all=is_all, year=year, term=term)
 
-    courses = {}
-
-    for i in result:
-        if i.course.year.id not in courses:
-            courses[i.course.year.id] = {}
-
-        courses[i.course.year.id]['year_id'] = i.course.year.id
-        courses[i.course.year.id]['year_name'] = i.course.year.name
-
-        if 'terms' not in courses[i.course.year.id]:
-            courses[i.course.year.id]['terms'] = {}
-
-        if i.course.term.id not in courses[i.course.year.id]['terms']:
-            courses[i.course.year.id]['terms'][i.course.term.id] = {}
-
-        courses[i.course.year.id]['terms'][i.course.term.id]['term_id'] = i.course.term.id
-        courses[i.course.year.id]['terms'][i.course.term.id]['term_name'] = i.course.term.name
-
-        if 'courses' not in courses[i.course.year.id]['terms'][i.course.term.id]:
-            courses[i.course.year.id]['terms'][i.course.term.id]['courses'] = []
-
-        course = {
-            'id': i.course.id,
-            'name': i.course.name,
-            'midterm': i.midterm_grade,
-            'educator': {
-                'id': i.educator.user_id,
-                'name': i.educator.name
-            }
-        }
-
-        if i.final_grade:
-            course['final'] = i.final_grade
-        else:
-            for j in courses_prediction['courses']:
-                if j['id'] == i.course.id:
-                    course['prediction'] = j['prediction']
-
-        courses[i.course.year.id]['terms'][i.course.term.id]['courses'].append(course)
-
-    formatted_courses = []
-
-    for i in courses:
-        year = {
-            'year_id': courses[i]['year_id'],
-            'year_name': courses[i]['year_name'],
-            'terms': []
-        }
-
-        for j in courses[i]['terms']:
-            term = {
-                'term_id': courses[i]['terms'][j]['term_id'],
-                'term_name': courses[i]['terms'][j]['term_name'],
-                'courses': courses[i]['terms'][j]['courses']
-            }
-            year['terms'].append(term)
-
-        formatted_courses.append(year)
-
-    return formatted_courses
+    return courses
 
 
 def get_student_predictions(student_id):

@@ -8,16 +8,24 @@ class StudentCourseRepo(Repo):
     def __init__(self):
         super().__init__(StudentCourse)
 
-    def get_student_courses(self, student, is_current=True, is_all=False):
+    def get_student_courses(self, student, is_current=True, is_all=False, year=None, term=None):
 
-        courses = StudentCourse.objects.filter(student=student) \
-            .order_by('-course__year', 'course__term')
+        filters = {
+            'student': student
+        }
 
-        if is_all or not is_current:
-            courses = courses.select_related('course', 'course__year', 'course__term', 'educator')
+        if year and term:
+            filters['course__year'] = year
+            filters['course__term'] = term
 
-        if not is_all:
-            courses = courses.exclude(final_grade__isnull=not is_current)
+        courses = StudentCourse.objects.filter(**filters)
+
+        if is_all:
+            courses = courses.select_related('course', 'course__year', 'course__term', 'educator') \
+                .order_by('-created_at')
+
+        elif is_current:
+            courses = courses.exclude(final_grade__isnull=True)
 
         return courses
 

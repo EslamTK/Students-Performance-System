@@ -31,15 +31,23 @@ def index(request):
 
 
 def student_profile(request, student_id):
-    # Student Courses
-    student_courses = student_logic.get_student_courses(student_id=student_id, is_all=True)
+    # Student Current Courses Predictions
+    predictions = student_logic.get_student_predictions(student_id=student_id)
+
+    # Years
+    years = general_logic.get_years()
+
+    # Terms
+    terms = general_logic.get_terms()
 
     # Student Advices
     student_advices = student_logic.get_student_advices(student_id=student_id)
 
     # For Testing Only
     result = {
-        'student_courses': student_courses,
+        'student_predictions': predictions,
+        'years': list(years.values()),
+        'terms': list(terms.values()),
         'student_advices': list(student_advices.values())
     }
 

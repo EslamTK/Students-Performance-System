@@ -11,7 +11,7 @@ def index(request):
     # Student Advices
     student_advices = student_logic.get_student_advices(student_id=user.id)
 
-    # Student Predictions
+    # Student Courses Predictions
     predictions = student_logic.get_student_predictions(student_id=user.id)
 
     # Student Recommendations
@@ -28,12 +28,24 @@ def index(request):
 
 
 def student_courses(request):
-    # Student Courses
-    courses = student_logic.get_student_courses(student_id=user.id)
+    # Student Current Courses Predictions
+    predictions = student_logic.get_student_predictions(student_id=user.id)
+
+    # Years
+    years = general_logic.get_years()
+
+    # Terms
+    terms = general_logic.get_terms()
+
+    # Student All Courses
+    courses = student_logic.get_student_courses(student_id=user.id, is_all=True)
 
     # For Testing Only
     result = {
-        'student_courses': courses
+        'student_predictions': predictions,
+        'years': list(years.values()),
+        'terms': list(terms.values()),
+        'student_courses': list(courses.values())
     }
 
     return JsonResponse(result, safe=False)

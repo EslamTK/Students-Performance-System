@@ -17,4 +17,4 @@ class StudentCourse(models.Model):
     midterm_grade = models.PositiveSmallIntegerField()
     final_grade = models.PositiveSmallIntegerField(null=True, blank=True)
     prediction_grade = models.PositiveSmallIntegerField(null=True, editable=False)
-    created_at = models.DateTimeField(auto_now_add=True)
+    created_at = models.DateTimeField(auto_now_add=True, db_index=True)
