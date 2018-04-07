@@ -3,6 +3,8 @@ from django.urls import path
 from dashboard.controllers import educator_controller
 from dashboard.controllers import student_controller
 
+app_name = 'dashboard'
+
 urlpatterns = [
     path('student/', student_controller.index, name='student_index'),
     path('student/courses/', student_controller.student_courses, name='student_courses'),

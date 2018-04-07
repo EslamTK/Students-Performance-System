@@ -1,0 +1,89 @@
+{% extends 'base.html' %}
+{% block body %}
+    <main class="animated fadeIn">
+        <div class="row" style="margin-top: 10px;">
+
+            <div class="col-md-4 col-xs-12 card">
+                <div class="mydetails slideanim text-center card-body">
+                    <img class="img-circle img-responsive"
+                         src="{{ educator_info.photo.url }}"
+                         alt="Generic placeholder image" width="150" height="150">
+                    <h3>{{ educator_info.name }}</h3>
+                    <p>{{ educator_info.title }}</p>
+                    <p><b>{{ educator_info.email }}</b></p>
+                    <div class="social-icons">
+                        {% for acc in educator_accounts %}
+                            <a href="{{ acc.url }}" style="margin: 0 2px 0 5px;"><span
+                                    class="btn-facebook"></span></a>
+                        {% endfor %}
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-md-7 col-xs-12 card" style="margin: auto; padding: 0;">
+                <div class="card-header">
+                    <h3 class="card-title mb-0">About Me</h3>
+                </div>
+                <div class="card-body">
+                    <p>{{ educator_info.about_me }}</p>
+                </div>
+            </div>
+
+
+            <div class="col-md-12 col-xs-12 card" style=" padding: 0;">
+                <div class=" card-header">
+                    <h4 class="card-title mb-0">Tell The Doctor Something</h4>
+                </div>
+                <div class="card-body">
+                    <div class="container">
+                        <div class="row">
+                            <div class="col-sm-3"></div>
+
+                            <label class="col-sm-2 h3">Bad</label>
+                            <label class="col-sm-2 h3">Good</label>
+                            <label class="h3">Excellent</label>
+                        </div>
+                    </div>
+
+                    <div class="container">
+                        <div class="form-group">
+                            {% for rev in review_items %}
+                                <div class="row form-group">
+                                    <div class="col-sm-3 h4">
+                                        <label>{{ rev.name }}</label>
+                                    </div>
+                                    <div class="col-sm-9 ">
+                                        <input title="Bad" type="radio" name="{{ rev.name }}">
+                                        <input title="Good" class="col-sm-6" type="radio" name="{{ rev.name }}">
+                                        <input title="Excellent" type="radio" name="{{ rev.name }}">
+                                    </div>
+                                </div>
+                            {% endfor %}
+                        </div>
+                    </div>
+
+
+                    <div class="form-group">
+                        <textarea id="textarea-input" name="textarea-input" rows="6"
+                                  class="form-control" placeholder="Content"></textarea>
+                    </div>
+
+                    <div class="mr-3" data-toggle="buttons">
+                        <label class="btn btn-outline-danger">
+                            <input type="checkbox" name="options" id="option1">
+                            <b>Anonymous</b>
+                        </label>
+                    </div>
+                    <div style="text-align: center;">
+                        <button type="submit" class="btn btn-sm btn-outline-primary">
+                            <b>Submit</b>
+
+                        </button>
+
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+{% endblock %}

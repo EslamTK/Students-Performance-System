@@ -1,0 +1,116 @@
+{% extends 'base.html' %}
+{% block body %}
+    {% load static %}
+    <script>
+        var requireJS = [];
+        loadJS(requireJS, "{% static 'dashboard/views/charts.js'%}");
+    </script>
+
+    <main class="animated fadeIn row">
+
+        <div class="card" style="margin-top: 10px">
+            <div class="card-header">
+                <h3 class="card-title mb-0">Courses Performance</h3>
+            </div>
+            <div class="card-body">
+                <div class="row">
+
+                    <div class="input-group-btn col-md-6">
+                        <button type="button" class="btn btn-light dropdown-toggle"
+                                data-toggle="dropdown">Year
+                            <span class="caret"></span>
+                        </button>
+                        <div class="dropdown-menu">
+                            <a class="dropdown-item" href="#">First</a>
+                            <a class="dropdown-item" href="#">Second</a>
+                            <a class="dropdown-item" href="#">Third</a>
+                        </div>
+                    </div>
+
+                    <div class="col-md-6">
+                        <div class="btn-toolbar float-right" role="toolbar"
+                             aria-label="Toolbar with button groups">
+                            <div class="btn-group mr-3" data-toggle="buttons"
+                                 aria-label="First group">
+                                <label class="btn btn-outline-secondary active">
+                                    <input type="radio" name="options" id="option1"
+                                           checked> First Term
+                                </label>
+                                <label class="btn btn-outline-secondary">
+                                    <input type="radio" name="options" id="option2">
+                                    Second Term
+                                </label>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="chart-wrapper" style="height: 70vh;width: 80vw;">
+                    <canvas id="canvas-1" class="chart"
+                            style="height: inherit;"></canvas>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-12">
+            <div class="card" style="margin-top: 10px">
+                <div class="card-header">
+                    <div class="row">
+                        <div class="col-md-8 col-sm-12">
+                            <h3 class="card-title mb-0">Courses</h3>
+                        </div>
+                        <div class="input-group col-md-4 col-sm-12">
+                            <input type="text" id="input1-group2"
+                                   name="input1-group2"
+                                   class="form-control" placeholder="Course Name">
+                            <span class=" input-group-btn ">
+                        <button type="button" class="btn btn-primary "><i
+                                class="fa fa-search"></i></button>
+                      </span>
+
+                        </div>
+                    </div>
+                </div>
+                <div class="card-body">
+                    <table class="table table-responsive-sm">
+                        <thead>
+                        <tr>
+                            <th>Course Name</th>
+                            <th>Year</th>
+                            <th>Doctor</th>
+                            <th>Grade</th>
+                            <th>Status</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        {% for something in something %}
+                            <tr>
+                                <td>Programming 1</td>
+                                <td>First</td>
+                                <td><a href="#Student/profile.html" target="_blank">Ahmed
+                                    Mostafa</a>
+                                </td>
+                                <td>60%</td>
+                                <td>
+                                    <span class="badge badge-success">Pass</span>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>Data Structure</td>
+                                <td>Second</td>
+                                <td><a href="#Student/profile.html" target="_blank">Mohamed
+                                    Ali</a></td>
+                                <td>30%</td>
+                                <td>
+                                    <span class="badge badge-danger">Fail</span>
+                                </td>
+                            </tr>
+                        {% endfor %}
+
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </main>
+{% endblock %}

@@ -1,0 +1,84 @@
+{% extends 'base.html' %}
+{% block title %}Student{% endblock %}
+{% block body %}
+
+    {% load static %}
+    <script>
+        var requireJS = [];
+        loadJS(requireJS, "{% static 'dashboard/views/charts.js'%}");
+    </script>
+    <main class="animated fadeIn row">
+        <div class="col-md-8 col-sm-12">
+            <div class="card" style="margin-top: 10px">
+                <div class="card-header">
+                    <h3 class="card-title mb-0">Courses Performance</h3>
+                    <div class="small text-muted">First Term - 4th Year</div>
+                </div>
+                <div class="card-body" style="height: 60vh">
+                    <div class="chart-wrapper" style="height: inherit">
+                        <canvas id="canvas-1" class="chart"
+                                style="height: inherit;"></canvas>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-4 col-sm-12">
+            <div class="card" style="margin-top: 10px">
+                <div class="card-header">
+                    <h4 class="card-title mb-0">To Increase Your Performance</h4>
+                </div>
+                <div class="card-body" style="height: calc(70vh + 20px)">
+                    <h5>General recommendation:</h5>
+                    <table class="table table-responsive-sm">
+                        <tbody>
+                        {% for rec_gen in student_recommendations.general_recommendations.0 %}
+                            <tr>
+                                <td>{{ rec_gen }}</td>
+                            </tr>
+                        {% endfor %}
+                        </tbody>
+                    </table>
+                    <h5>course specific:</h5>
+                    <table class="table table-responsive-sm">
+                        <tbody>
+                        {% for rec_co in student_recommendations.courses %}
+                            <tr>
+                                <th>{{ rec_co.name }}:</th>
+                                {% for rec in rec_co.recommendations %}
+                                    <td>{{ rec }}</td>
+                                {% endfor %}
+                            </tr>
+                        {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-12">
+            <div class="card" style="margin-top: 10px">
+                <div class="card-header">
+                    <h3 class="card-title mb-0">Educators Advices</h3>
+                </div>
+                <div class="card-body">
+                    {% for advice in student_advices %}
+                        <div class="media mb-4">
+                            <img class="d-flex mr-3 rounded-circle"
+                                 src="{{ advice.educator.photo.url }}" width="50" height="50"
+                                 alt="">
+                            <div class="media-body">
+                                <h5 class="mt-0" style="margin-bottom: 2px;"><a
+                                        target="_blank"
+                                        href="{% url 'dashboard:student_educator_profile' advice.educator_id %}">{{ advice.educator.name }}</a>
+                                </h5>
+                                {{ advice.content }}
+                            </div>
+                        </div>
+                    {% endfor %}
+
+                </div>
+            </div>
+
+        </div>
+    </main>
+
+{% endblock %}

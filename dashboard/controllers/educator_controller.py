@@ -1,5 +1,4 @@
 from django.contrib.auth import authenticate
-from django.http import JsonResponse
 
 from dashboard.logic import educator_logic, student_logic, general_logic
 
@@ -7,6 +6,7 @@ user = authenticate(username='educator', password='3$81jkjjSA')
 
 
 def index(request):
+
     # Educator Reviews Rating
     educator_rating = educator_logic.get_educator_rating(educator_id=user.id)
 
@@ -19,15 +19,21 @@ def index(request):
     # Educator Reviews
     educator_reviews = educator_logic.get_educator_reviews(educator_id=user.id)
 
-    # For Testing Only
     result = {
-        'educator_reviews': list(educator_reviews),
-        'educator_rating': list(educator_rating),
-        'educator_reviews_years': list(educator_reviews_years),
-        'educator_reviews_departments': list(educator_reviews_departments)
+        'educator_reviews': educator_reviews,
+        'educator_rating': educator_rating,
+        'educator_reviews_years': educator_reviews_years,
+        'educator_reviews_departments': educator_reviews_departments
     }
 
-    return JsonResponse(result, safe=False)
+    # For Testing Only
+    # test_result = {
+    #     'educator_reviews': list(educator_reviews),
+    #     'educator_rating': list(educator_rating),
+    #     'educator_reviews_years': list(educator_reviews_years),
+    #     'educator_reviews_departments': list(educator_reviews_departments)
+    # }
+    # return JsonResponse(test_result, safe=False)
 
 
 def student_profile(request, student_id):
@@ -43,15 +49,22 @@ def student_profile(request, student_id):
     # Student Advices
     student_advices = student_logic.get_student_advices(student_id=student_id)
 
-    # For Testing Only
     result = {
         'student_predictions': predictions,
-        'years': list(years.values()),
-        'terms': list(terms.values()),
-        'student_advices': list(student_advices.values())
+        'years': years,
+        'terms': terms,
+        'student_advices': student_advices
     }
 
-    return JsonResponse(result, safe=False)
+    # For Testing Only
+    # test_result = {
+    #     'student_predictions': predictions,
+    #     'years': list(years.values()),
+    #     'terms': list(terms.values()),
+    #     'student_advices': list(student_advices.values())
+    # }
+    #
+    # return JsonResponse(test_result, safe=False)
 
 
 def educator_students(request):
@@ -70,13 +83,21 @@ def educator_students(request):
     # Educator Students Pass & Fail Counts
     courses_counts = educator_logic.get_educator_counts(educator_id=user.id)
 
-    # For Testing Only
     result = {
-        'educator_students': list(students),
-        'departments': list(departments.values()),
-        'years': list(years.values()),
-        'terms': list(terms.values()),
-        'courses_counts': list(courses_counts)
+        'educator_students': students,
+        'departments': departments,
+        'years': years,
+        'terms': terms,
+        'courses_counts': courses_counts
     }
 
-    return JsonResponse(result, safe=False)
+    # For Testing Only
+    # test_result = {
+    #     'educator_students': list(students),
+    #     'departments': list(departments.values()),
+    #     'years': list(years.values()),
+    #     'terms': list(terms.values()),
+    #     'courses_counts': list(courses_counts)
+    # }
+    #
+    # return JsonResponse(test_result, safe=False)

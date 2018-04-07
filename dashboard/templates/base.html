@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    {% load static %}
+    <!-- Icons -->
+    <link href="{% static 'dashboard/font-awesome.min.css' %}" type="text/css" rel="stylesheet">
+    <link href="{% static 'dashboard/simple-line-icons.css' %}" type="text/css" rel="stylesheet">
+    <link href="{% static 'dashboard/style.css' %}" type="text/css" rel="stylesheet">
+    <script src="{% static 'dashboard/jquery.min.js' %}" type="text/javascript"></script>
+    <script src="{% static 'dashboard/popper.min.js' %}" type="text/javascript"></script>
+    <script src="{% static 'dashboard/bootstrap.min.js' %}" type="text/javascript"></script>
+    <script src="{% static 'dashboard/pace.min.js' %}" type="text/javascript"></script>
+
+    <!-- CoreUI main scripts -->
+    <script src="{% static 'dashboard/app.js' %}"></script>
+
+    <!-- Plugins and scripts required by all views -->
+    <script src="{% static 'dashboard/Chart.min.js' %}" type="text/javascript"></script>
+
+
+    <title>{% block title %}Dashboard{% endblock %}</title>
+</head>
+<body class="app header-fixed sidebar-fixed aside-menu-fixed aside-menu-hidden sidebar-hidden">
+<header class="app-header navbar">
+    <button class="navbar-toggler mobile-sidebar-toggler d-lg-none mr-auto" type="button">
+        <span class="navbar-toggler-icon"></span>
+    </button>
+
+    <button class="navbar-toggler sidebar-toggler d-md-down-none" type="button">
+        <span class="navbar-toggler-icon"></span>
+    </button>
+
+</header>
+
+<div class="app-body">
+    <div class="sidebar">
+        <nav class="sidebar-nav">
+            <ul class="nav">
+
+                <li class="nav-item nav-dropdown">
+                    <a class="nav-link nav-dropdown-toggle" href="#"><i class="icon-puzzle"></i> Administartor </a>
+                    <ul class="nav-dropdown-items">
+                        <li class="nav-item">
+                            <a class="nav-link" href="#"><i class="icon-speedometer"></i>Student Performance</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="#"><i class="icon-speedometer"></i>Educator Performance</a>
+                        </li>
+                    </ul>
+                </li>
+
+                <li class="nav-item nav-dropdown">
+                    <a class="nav-link nav-dropdown-toggle" href="#"><i class="icon-puzzle"></i> Educator </a>
+                    <ul class="nav-dropdown-items">
+                        <li class="nav-item">
+                            <a class="nav-link" href="#"><i class="icon-speedometer"></i> Dashboard </a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="#"><i class="icon-puzzle"></i> My Students</a>
+                        </li>
+                    </ul>
+                </li>
+
+                <li class="nav-item nav-dropdown">
+                    <a class="nav-link nav-dropdown-toggle" href="#"><i class="icon-puzzle"></i> Student </a>
+                    <ul class="nav-dropdown-items">
+                        <li class="nav-item">
+                            <a class="nav-link" href="{% url 'dashboard:student_index' %}"><i
+                                    class="icon-speedometer"></i> Dashboard </a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="{% url 'dashboard:student_courses' %}"><i class="icon-puzzle"></i>My
+                                Courses</a>
+                        </li>
+                    </ul>
+                </li>
+
+            </ul>
+        </nav>
+        <button class="sidebar-minimizer brand-minimizer" type="button"></button>
+    </div>
+
+    <!-- Main content -->
+    <main class="main">
+        <div class="container-fluid">
+            <div id="ui-view"></div>
+        </div>
+
+        {% block body %}
+        {% endblock %}
+    </main>
+
+</div>
+
+<!-- Bootstrap and necessary plugins -->
+
+
+</body>
+</html>
