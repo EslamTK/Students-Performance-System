@@ -86,11 +86,13 @@
     <!-- Main content -->
     <main class="main">
         <div class="container-fluid">
-            <div id="ui-view"></div>
+            <div id="ui-view">
+                {% block body %}
+                {% endblock %}
+            </div>
         </div>
 
-        {% block body %}
-        {% endblock %}
+        
     </main>
 
 </div>

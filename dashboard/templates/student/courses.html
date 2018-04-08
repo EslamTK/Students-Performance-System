@@ -83,32 +83,54 @@
                         </tr>
                         </thead>
                         <tbody>
-                        {% for something in something %}
+                        {% for course in course %}
                             <tr>
-                                <td>Programming 1</td>
-                                <td>First</td>
-                                <td><a href="#Student/profile.html" target="_blank">Ahmed
-                                    Mostafa</a>
+                                <td>{{course.course.name}}</td>
+                                <td>{{course.course.term.name}}</td>
+                                <td><a href="{% url 'dashboard:student_educator_profile' course.course.educator_id %}" target="_blank">{{course.educator.name}}</a>
                                 </td>
-                                <td>60%</td>
-                                <td>
-                                    <span class="badge badge-success">Pass</span>
-                                </td>
-                            </tr>
-                            <tr>
-                                <td>Data Structure</td>
-                                <td>Second</td>
-                                <td><a href="#Student/profile.html" target="_blank">Mohamed
-                                    Ali</a></td>
-                                <td>30%</td>
-                                <td>
-                                    <span class="badge badge-danger">Fail</span>
-                                </td>
+                                {% if course.final_grade is None%}
+                                    <td>--</td>
+                                    <td>--</td>
+                                {%else%}
+                                    <td>{{course.final_grade}}</td>
+                                
+                                    {%if course.final_grade >= 10%}
+                                    <td>
+                                        <span class="badge badge-success">Pass</span>
+                                    </td>
+                                    {%else%}
+                                    <td>
+                                        <span class="badge badge-danger">Fail</span>
+                                    </td>
+                                    {%endif%}
+
+                                {%endif%}
                             </tr>
                         {% endfor %}
-
-                        </tbody>
+                    </tbody>
                     </table>
+                    {% if course.has_other_pages %}
+                        <ul class="pagination">
+                            {% if course.has_previous %}
+                                <li><a href="?page={{ course.previous_page_number }}">prev</a></li>
+                            {% else %}
+                                <li class="disabled"><a href="#">Prev</a></li>
+                            {% endif %}
+                            {% for i in course.paginator.page_range %}
+                                {% if course.number == i %}
+                                    <li class="active"><a href="#">{{ i }}</a></li>
+                                {% else %}
+                                    <li><a href="?page={{ i }}">{{ i }}</a></li>
+                                {% endif %}
+                            {% endfor %}
+                            {% if course.has_next %}
+                                <li><a href="?page={{ course.next_page_number }}">next</a></li>
+                            {% else %}
+                                    <li class="disabled"><a>Next</a></li>
+                            {% endif %}
+                        </ul>
+                    {% endif %}
                 </div>
             </div>
         </div>

@@ -1,6 +1,6 @@
 from django.contrib.auth import authenticate
 from django.shortcuts import render
-
+from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 from dashboard.logic import student_logic, educator_logic, general_logic
 
 user = authenticate(username='student', password='1#lklsaK313')
@@ -16,8 +16,17 @@ def index(request):
     # Student Recommendations
     recommendations = student_logic.get_student_recommendations(student_id=user.id)
 
+    paginator = Paginator(student_advices, 6) # Show 25 contacts per page
+
+    page = request.GET.get('page')
+    try:
+        advice = paginator.page(page)
+    except PageNotAnInteger:
+        advice = paginator.page(1)
+    except EmptyPage:
+        advice = paginator.page(paginator.num_pages)
     result = {
-        'student_advices': student_advices,
+        'student_advices': advice,
         'student_predictions': predictions,
         'student_recommendations': recommendations
     }
@@ -46,13 +55,24 @@ def student_courses(request):
     # Student All Courses
     courses = student_logic.get_student_courses(student_id=user.id, is_all=True)
 
+    paginator = Paginator(courses, 6) # Show 6 results per page
+
+    page = request.GET.get('page')
+    try:
+        course = paginator.page(page)
+    except PageNotAnInteger:
+        course = paginator.page(1)
+    except EmptyPage:
+        course = paginator.page(paginator.num_pages)
     result = {
         'student_predictions': predictions,
         'years': years,
         'terms': terms,
-        'student_courses': courses
+        'student_courses': course
     }
 
+
+    
     return render(request, 'student/courses.html', result)
 
     # For Testing Only
