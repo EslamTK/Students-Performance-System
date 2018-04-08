@@ -1,0 +1,99 @@
+{% extends 'base.html' %}
+{% block title %}Student{% endblock %}
+{% block body %}
+{% load static %}
+
+<script>
+    var requireJS = [];
+    loadJS(requireJS, "{% static 'dashboard/views/charts.js'%}");
+</script>
+
+<main class="animated fadeIn row">
+        <div class="col-md-12">
+            <div class="card" style="margin-top: 10px">
+                <div class="card-header">
+                    <h3 class="card-title mb-0">Student Performance</h3>
+                </div>
+                <div class="card-body">
+                    <div class="row">
+        
+                        <div class="input-group-btn col-md-6">
+                            <button type="button" class="btn btn-light dropdown-toggle"
+                                    data-toggle="dropdown">Year
+                                <span class="caret"></span>
+                            </button>
+                            <div class="dropdown-menu">
+                                <a class="dropdown-item" href="#">First</a>
+                                <a class="dropdown-item" href="#">Second</a>
+                                <a class="dropdown-item" href="#">Third</a>
+                            </div>
+                        </div>
+        
+                        <div class="col-md-6">
+                            <div class="btn-toolbar float-right" role="toolbar"
+                                 aria-label="Toolbar with button groups">
+                                <div class="btn-group mr-3" data-toggle="buttons"
+                                     aria-label="First group">
+                                    <label class="btn btn-outline-secondary active">
+                                        <input type="radio" name="options" id="option1"
+                                               checked> First Term
+                                    </label>
+                                    <label class="btn btn-outline-secondary">
+                                        <input type="radio" name="options" id="option2">
+                                        Second Term
+                                    </label>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                  </div>
+                    <div class="chart-wrapper" style="height: 70vh;width: 80vw;">
+                        <canvas id="canvas-1" class="chart"
+                                style="height: inherit;"></canvas>
+                    </div>
+                  </div>
+                  <div class="col-md-12">
+                    <div class="card  style="margin-top: 10px"">
+                      <div class="card-header">
+                        <h3 class="card-title mb-0">Add Review</h3>
+                      </div>
+                      <div class="card-body">
+                        <div class="form-group">
+                            <label for="comment">Review :</label>
+                            <textarea class="form-control" rows="5" id="comment"></textarea>
+                        </div>
+                        <div  class= "col-md-8 col-sm-12 " >
+                             <button type="button" class="btn btn-primary " >Submit</button>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="col-md-12">
+                      <div class="card" style="margin-top: 10px">
+                          <div class="card-header">
+                            <h3 class="card-title mb-0">Educators Reviews</h3>
+                        </div>
+        
+                          <div class="card-body">
+                                {% for advice in student_advices %}
+                                <div class="media mb-4">
+                                    <img class="d-flex mr-3 rounded-circle"
+                                         src="{{ advice.educator.photo.url }}" width="50" height="50"
+                                         alt="">
+                                    <div class="media-body">
+                                        <h5 class="mt-0" style="margin-bottom: 2px;"><a
+                                                target="_blank"
+                                                href="{% url 'dashboard:student_educator_profile' advice.educator_id %}">{{ advice.educator.name }}</a>
+                                        </h5>
+                                        {{ advice.content }}
+                                    </div>
+                                </div>
+                            {% endfor %}
+                          </div>
+                      </div>
+        
+                  </div>
+        
+        
+        </main>
+{% endblock %}        

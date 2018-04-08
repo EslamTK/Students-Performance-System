@@ -64,11 +64,12 @@ def student_courses(request):
         course = paginator.page(1)
     except EmptyPage:
         course = paginator.page(paginator.num_pages)
+    courses = course
     result = {
         'student_predictions': predictions,
         'years': years,
         'terms': terms,
-        'student_courses': course
+        'student_courses': courses
     }
 
 

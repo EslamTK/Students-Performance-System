@@ -1,0 +1,111 @@
+{% extends 'base.html' %}
+{% block title %}Educator{% endblock %}
+{% block body %}
+{% load static %}
+<script>
+    
+    var requireJS = [];
+    loadJS(requireJS, "{% static 'dashboard/views/charts2.js'%}");
+</script>
+
+<main class="animated fadeIn row">
+
+    <div class="card" style="margin-top: 10px">
+        <div class="card-header">
+            <h3 class="card-title mb-0">Strengths & Weakness</h3>
+        </div>
+        <div class="card-body">
+            <div class="row col-md-2">
+
+                <div class="input-group-btn col-md-6">
+                    <button type="button" class="btn btn-light dropdown-toggle"
+                            data-toggle="dropdown">Year
+                        <span class="caret"></span>
+                    </button>
+                    <div class="dropdown-menu">
+                        <a class="dropdown-item" href="#">First</a>
+                        <a class="dropdown-item" href="#">Second</a>
+                        <a class="dropdown-item" href="#">Third</a>
+                    </div>
+
+                </div>
+                <div class="input-group-btn col-md-6">
+                  <button type="button" class="btn btn-light dropdown-toggle"
+                            data-toggle="dropdown">Department
+                            <span class="caret"></span>
+                    </button>
+                    <div class="dropdown-menu">
+                        <a class="dropdown-item" href="#">IT</a>
+                        <a class="dropdown-item" href="#">CS</a>
+                        <a class="dropdown-item" href="#">OS</a>
+                   </div>
+                    </div>
+
+            </div>
+
+            <div class="chart-wrapper" style="height: 70vh;width: 80vw;">
+                <canvas id="canvas-1" class="chart"
+                        style="height: inherit;"></canvas>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-md-12">
+        <div class="card" style="margin-top: 10px">
+            <div class="card-header">
+                <h3 class="card-title mb-0">Student Reviews</h3>
+            </div>
+            <div class="card-body">
+                {%for rev in educator_reviews%}
+                <div class="media mb-4">
+                    {%if rev.is_anonymous%}
+                    <img class="d-flex mr-3 rounded-circle"
+                         src="{% static 'imgs/anonymous.png'%}" width="50" height="50"
+                         alt="">
+                    <div class="media-body">
+                        <h5 class="mt-0" style="margin-bottom: 2px;">Anonymous</h5>
+                    {%else%}
+                    <img class="d-flex mr-3 rounded-circle"
+                    src="{% static 'dashboard\img\profile-pictures.png'%}" width="50" height="50"
+                    alt="">
+                    <div class="media-body">
+                        <h5 class="mt-0" style="margin-bottom: 2px;"><a href="{% url 'dashboard:educator_student_profile' rev.student_id %}">{{rev.student__name}}</a></h5>
+                    
+                    {%endif%}
+                        <p>{{rev.content}}</p>
+                        <div class="btn-group btn-group-justified">
+                        <button type="button" class="btn btn-link">Report Abuse</button>
+                        </div>
+
+                    </div>
+                </div>
+                {%endfor%}
+                {% if educator_reviews.has_other_pages %}
+                    <ul class="pagination">
+                        {% if educator_reviews.has_previous %}
+                            <li><a href="?page={{ educator_reviews.previous_page_number }}">prev</a></li>
+                        {% else %}
+                            <li class="disabled"><a href="#">Prev</a></li>
+                        {% endif %}
+                        {% for i in educator_reviews.paginator.page_range %}
+                            {% if educator_reviews.number == i %}
+                                <li class="active"><a href="#">{{ i }}</a></li>
+                            {% else %}
+                                <li><a href="?page={{ i }}">{{ i }}</a></li>
+                            {% endif %}
+                        {% endfor %}
+                        {% if educator_reviews.has_next %}
+                            <li><a href="?page={{ educator_reviews.next_page_number }}">next</a></li>
+                        {% else %}
+                            <li class="disabled"><a>Next</a></li>
+                        {% endif %}
+                    </ul>
+                {% endif %}
+                
+            </div>
+        </div>
+
+    </div>
+
+</main>
+{% endblock %}

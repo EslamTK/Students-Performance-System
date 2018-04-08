@@ -1,5 +1,6 @@
 from django.contrib.auth import authenticate
-
+from django.shortcuts import render
+from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 from dashboard.logic import educator_logic, student_logic, general_logic
 
 user = authenticate(username='educator', password='3$81jkjjSA')
@@ -18,14 +19,25 @@ def index(request):
 
     # Educator Reviews
     educator_reviews = educator_logic.get_educator_reviews(educator_id=user.id)
+    
+    paginator = Paginator(educator_reviews, 2) # Show 3 contacts per page
+
+    page = request.GET.get('page')
+    try:
+        reviews = paginator.page(page)
+    except PageNotAnInteger:
+        reviews = paginator.page(1)
+    except EmptyPage:
+        reviews = paginator.page(paginator.num_pages)
 
     result = {
-        'educator_reviews': educator_reviews,
+        'educator_reviews': reviews,
         'educator_rating': educator_rating,
         'educator_reviews_years': educator_reviews_years,
-        'educator_reviews_departments': educator_reviews_departments
+        'educator_reviews_departments': educator_reviews_departments,
     }
-
+    
+    return render(request, 'educator/index.html', result)
     # For Testing Only
     # test_result = {
     #     'educator_reviews': list(educator_reviews),
@@ -49,13 +61,23 @@ def student_profile(request, student_id):
     # Student Advices
     student_advices = student_logic.get_student_advices(student_id=student_id)
 
+    paginator = Paginator(student_advices, 3) # Show 3 contacts per page
+
+    page = request.GET.get('page')
+    try:
+        advice = paginator.page(page)
+    except PageNotAnInteger:
+        advice = paginator.page(1)
+    except EmptyPage:
+        advice = paginator.page(paginator.num_pages)
+    
     result = {
         'student_predictions': predictions,
         'years': years,
         'terms': terms,
-        'student_advices': student_advices
+        'student_advices': advice
     }
-
+    return render(request, 'educator/student_profile.html', result)
     # For Testing Only
     # test_result = {
     #     'student_predictions': predictions,
@@ -82,15 +104,27 @@ def educator_students(request):
 
     # Educator Students Pass & Fail Counts
     courses_counts = educator_logic.get_educator_counts(educator_id=user.id)
+    
+    paginator = Paginator(students, 3) # Show 3 contacts per page
+
+    page = request.GET.get('page')
+    try:
+        student = paginator.page(page)
+    except PageNotAnInteger:
+        student = paginator.page(1)
+    except EmptyPage:
+        student = paginator.page(paginator.num_pages)
 
     result = {
-        'educator_students': students,
+        'educator_students': student,
         'departments': departments,
         'years': years,
         'terms': terms,
         'courses_counts': courses_counts
     }
-
+    
+    
+    return render(request, 'educator/students.html', result)
     # For Testing Only
     # test_result = {
     #     'educator_students': list(students),

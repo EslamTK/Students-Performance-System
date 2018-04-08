@@ -1,0 +1,166 @@
+{% extends 'base.html' %}
+{% block title %}Students{% endblock %}
+{% block body %}
+{% load static %}
+
+<script>
+        var requireJS = [];
+        loadJS(requireJS, "{% static 'dashboard/views/charts3.js'%}");
+</script>
+    
+    <main class="animated fadeIn row">
+      <div class="col-md-12">
+    
+        <div class="card" style="margin-top: 10px">
+            <div class="card-header">
+                <h3 class="card-title mb-0">Courses Performance</h3>
+            </div>
+            <div class="card-body">
+    
+                <div class="row ">
+                    <div class="col-md-3">
+                      <div class="row ">
+                      <div>  <button type="button" class="btn btn-light dropdown-toggle"
+                                data-toggle="dropdown" style="color:rgba(41,54,61,1);font-size: 16px;font-weight: bold;font-variant: small-caps;">Year
+                            <div class="dropdown-menu" >
+    
+                                <li><a class="dropdown-item" href="#">First</a></li>
+                                <li><a class="dropdown-item" href="#">Second</a></li>
+                                <li><a class="dropdown-item" href="#">Third</a></li>
+    
+                            </div>
+                        </button></div>
+    
+                        <div><button type="button" class="btn btn-light dropdown-toggle"
+                                  data-toggle="dropdown" style="color:rgba(41,54,61,1);font-size: 16px;font-weight: bold;font-variant: small-caps;">Department
+                                  <div class="dropdown-menu" >
+                                      <li><a class="dropdown-item" href="#">IT</a></li>
+                                      <li><a class="dropdown-item" href="#">CS</a></li>
+                                      <li><a class="dropdown-item" href="#">OS</a></li>
+                                  </div>
+                          </button></div>
+    
+    </div>
+                       </div>
+    
+                    <div class="col-md-9">
+                        <div class="btn-toolbar float-right" role="toolbar"
+                             aria-label="Toolbar with button groups">
+                            <div class="btn-group mr-3" data-toggle="buttons"
+                                 aria-label="First group">
+                                <label class="btn btn-outline-secondary active">
+                                    <input type="radio" name="options" id="option1"
+                                           checked> First Term
+                                </label>
+                                <label class="btn btn-outline-secondary">
+                                    <input type="radio" name="options" id="option2">
+                                    Second Term
+                                </label>
+                            </div>
+    
+    
+                        </div>
+    
+                    </div>
+                    <br><br>
+                    <div class="container">
+                      <div class="row">
+                        <div class="col-md-4"></div>
+                           &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                           <label class="col-md-1 " style="color: rgba(41,54,61,.7);font-size: 15px;font-weight: bold;">MidTerm</label>
+                           &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                           <label style="color:rgba(41,54,61,.7);font-size: 15px;font-weight: bold;">Final/Expected</label>
+                         </div>
+                    </div>
+                </div>
+    </div>
+                <div class="chart-wrapper" style="height: 70vh;width: 80vw;">
+                    <canvas id="canvas-1" class="chart"
+                            style="height: inherit;"></canvas>
+                </div>
+              </div>
+    
+        <div class="col-md-12">
+            <div class="card" style="margin-top: 10px">
+                <div class="card-header">
+                    <div class="row">
+                        <div class="col-md-8 col-sm-12">
+                            <h3 class="card-title mb-0">Students</h3>
+                        </div>
+                        <div class="input-group col-md-4 col-sm-12">
+                            <input type="text" id="input1-group2"
+                                   name="input1-group2"
+                                   class="form-control" placeholder="Student Name">
+                            <span class=" input-group-btn ">
+                        <button type="button" class="btn btn-primary "><i
+                                class="fa fa-search"></i></button>
+                      </span>
+    
+                        </div>
+                    </div>
+                </div>
+                <div class="card-body">
+                    <table class="table table-responsive-sm">
+                        <thead>
+                        <tr>
+                            <th>Student</th>
+                            <th>Course</th>
+                            <th>Department</th>
+                            <th>Year</th>
+                            <th>Result/Expected</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        {%for student in educator_students%}
+                        <tr>
+                          <td><a href="{% url 'dashboard:educator_student_profile' student.student %}" target="_blank">{{student.student__name}}</a>
+                          </td>
+                            <td>{{student.course__name}}</td>
+                            <td>{{student.student__department__name}}</td>
+                            <td>{{student.course__year__name}}</td>
+                            {%if student.final_grade is None%}
+                                <td>--</td>
+                            {%else%}
+                                {%if student.final_grade >= 50%}
+                                <td>
+                                    <span class="badge badge-success">Pass</span>
+                                </td>
+                                {%else%}
+                                <td>
+                                    <span class="badge badge-danger">Fail</span>
+                                </td>
+                                {%endif%}
+                            {%endif%}
+
+                        </tr>
+                        {%endfor%}
+                        
+                        </tbody>
+                    </table>
+                    {% if educator_students.has_other_pages %}
+                    <ul class="pagination">
+                        {% if educator_students.has_previous %}
+                            <li><a href="?page={{ educator_students.previous_page_number }}">prev</a></li>
+                        {% else %}
+                            <li class="disabled"><a href="#">Prev</a></li>
+                        {% endif %}
+                        {% for i in educator_students.paginator.page_range %}
+                            {% if educator_students.number == i %}
+                                <li class="active"><a href="#">{{ i }}</a></li>
+                            {% else %}
+                                <li><a href="?page={{ i }}">{{ i }}</a></li>
+                            {% endif %}
+                        {% endfor %}
+                        {% if educator_students.has_next %}
+                            <li><a href="?page={{ educator_students.next_page_number }}">next</a></li>
+                        {% else %}
+                            <li class="disabled"><a>Next</a></li>
+                        {% endif %}
+                    </ul>
+                {% endif %}
+                </div>
+            </div>
+        </div>
+    
+    </main>
+{% endblock %}
