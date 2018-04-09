@@ -20,7 +20,7 @@ class StudentReviewItemRepo(Repo):
         if department:
             filters['student_review__student__department'] = department
 
-        rating = StudentReviewItem.objects.select_related('review_item').filter(**filters). \
+        rating = self._model.objects.select_related('review_item').filter(**filters). \
             values('review_item__id', 'review_item__name').annotate(Avg('rate')).order_by('review_item__name')
 
         return rating

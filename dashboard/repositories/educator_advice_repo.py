@@ -7,7 +7,7 @@ class EducatorAdviceRepo(Repo):
         super().__init__(EducatorAdvice)
 
     def get_student_advices(self, student):
-        advices = EducatorAdvice.objects.filter(student=student). \
+        advices = self._model.objects.filter(student=student). \
             select_related('educator').order_by('created_at')
 
         return advices

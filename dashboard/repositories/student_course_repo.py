@@ -18,7 +18,7 @@ class StudentCourseRepo(Repo):
             filters['course__year'] = year
             filters['course__term'] = term
 
-        courses = StudentCourse.objects.filter(**filters)
+        courses = self._model.objects.filter(**filters)
 
         if is_all:
             courses = courses.select_related('course', 'course__year', 'course__term', 'educator') \
@@ -31,7 +31,7 @@ class StudentCourseRepo(Repo):
 
     def get_educator_students(self, educator):
 
-        students = StudentCourse.objects.filter(educator=educator) \
+        students = self._model.objects.filter(educator=educator) \
             .values('student', 'student__name', 'student__department', 'student__department__name',
                     'course', 'course__name', 'course__year', 'course__year__name', 'final_grade',
                     'prediction_grade').order_by('-created_at')
@@ -56,7 +56,7 @@ class StudentCourseRepo(Repo):
         midterm_pass = Count('midterm_grade', filter=Q(midterm_grade__gte=50))
         final_pass = Count('final_grade', filter=Q(final_grade__gte=50))
 
-        counts = StudentCourse.objects.filter(**filters). \
+        counts = self._model.objects.filter(**filters). \
             values('course', 'course__name') \
             .annotate(midterm_pass=midterm_pass, final_pass=final_pass, total=Count('course'))
 

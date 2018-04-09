@@ -1,9 +1,16 @@
 from django.contrib.auth import authenticate
-from django.shortcuts import render
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
-from dashboard.logic import educator_logic, student_logic, general_logic
+from django.shortcuts import render
+
+from dashboard.logic.educator_logic import EducatorLogic
+from dashboard.logic.general_logic import GeneralLogic
+from dashboard.logic.student_logic import StudentLogic
 
 user = authenticate(username='educator', password='3$81jkjjSA')
+
+student_logic = StudentLogic()
+educator_logic = EducatorLogic()
+general_logic = GeneralLogic()
 
 
 def index(request):
@@ -19,8 +26,9 @@ def index(request):
 
     # Educator Reviews
     educator_reviews = educator_logic.get_educator_reviews(educator_id=user.id)
-    
-    paginator = Paginator(educator_reviews, 2) # Show 3 contacts per page
+
+    # Show 3 contacts per page
+    paginator = Paginator(educator_reviews, 2)
 
     page = request.GET.get('page')
     try:
@@ -61,7 +69,8 @@ def student_profile(request, student_id):
     # Student Advices
     student_advices = student_logic.get_student_advices(student_id=student_id)
 
-    paginator = Paginator(student_advices, 3) # Show 3 contacts per page
+    # Show 3 contacts per page
+    paginator = Paginator(student_advices, 3)
 
     page = request.GET.get('page')
     try:
@@ -104,8 +113,9 @@ def educator_students(request):
 
     # Educator Students Pass & Fail Counts
     courses_counts = educator_logic.get_educator_counts(educator_id=user.id)
-    
-    paginator = Paginator(students, 3) # Show 3 contacts per page
+
+    # Show 3 contacts per page
+    paginator = Paginator(students, 3)
 
     page = request.GET.get('page')
     try:
@@ -122,8 +132,7 @@ def educator_students(request):
         'terms': terms,
         'courses_counts': courses_counts
     }
-    
-    
+
     return render(request, 'educator/students.html', result)
     # For Testing Only
     # test_result = {
