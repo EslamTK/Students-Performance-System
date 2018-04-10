@@ -7,6 +7,7 @@
         var requireJS = [];
         loadJS(requireJS, "{% static 'dashboard/views/charts.js'%}");
     </script>
+    <input type="hidden" id="myVar" name="variable" readonly value="{{ student_predictions }}">
     <main class="animated fadeIn row">
         <div class="col-md-8 col-sm-12">
             <div class="card" style="margin-top: 10px">
