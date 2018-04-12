@@ -56,11 +56,8 @@ def educator_profile(request, educator_id):
     # Educator Info
     educator_info = educator_logic.get_educator_info(educator_id=educator_id)
 
-    # Available Accounts
+    # All the accounts including url if the educator has the account
     accounts = administrator_logic.get_educator_accounts(educator_id=educator_id)
-
-    # Educator Accounts
-    educator_accounts = educator_logic.get_educator_accounts(educator_id=educator_id)
 
     # Educator Reviews Rating
     educator_rating = educator_logic.get_educator_rating(educator_id=educator_id)
@@ -78,9 +75,20 @@ def educator_profile(request, educator_id):
     educator_info = model_to_dict(educator_info)
     educator_info['photo'] = educator_info['photo'].url
 
+    educator_accounts = []
+
+    for i in accounts:
+        account = {
+            'id': i.id,
+            'name': i.name,
+            'logo': i.logo.url,
+            'url': i.url
+        }
+        educator_accounts.append(account)
+
     test_result = {
         'educator_info': educator_info,
-        'educator_accounts': list(accounts),
+        'educator_accounts': educator_accounts,
         'educator_reviews': list(educator_reviews),
         'educator_rating': list(educator_rating),
         'educator_reviews_years': list(educator_reviews_years),
