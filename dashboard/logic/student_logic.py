@@ -20,23 +20,28 @@ class StudentLogic:
         return courses
 
     def get_student_predictions(self, student_id):
-        student_data = self.__get_student_data(student_id)
+        student_data = self.__get_student_formatted_data(student_id)
         predictions = ml_api.prediction(student_data)
 
         return predictions
 
     def get_student_recommendations(self, student_id):
-        student_data = self.__get_student_data(student_id)
+        student_data = self.__get_student_formatted_data(student_id)
         recommendations = ml_api.recommendation(student_data)
 
         return recommendations
 
-    def __get_student_data(self, student_id):
+    def get_student_data(self, student_id):
         student = self.unit_of_work.students.get_one(student_id)
-        student_courses = self.unit_of_work.students_courses.get_student_courses(student=student_id)
+
+        return student
+
+    def __get_student_formatted_data(self, student_id):
+        student = self.get_student_data(student_id)
+        student_courses = self.get_student_courses(student_id)
 
         student_data = {
-            "sex": student.sex,
+            "sex": student.gender,
             "age": student.age,
             "famsize": student.family_size,
             "Pstatus": student.parent_status,

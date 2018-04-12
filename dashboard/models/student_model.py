@@ -8,7 +8,7 @@ from .year_model import Year
 
 class Student(models.Model):
     male, female = 'M', 'F'
-    sex_choices = ((male, 'Male'), (female, 'Female'))
+    gender_choices = ((male, 'Male'), (female, 'Female'))
 
     less_3, greater_3 = 'LE3', 'GT3'
     family_size_choices = ((less_3, 'Less or equal to 3'), (greater_3, 'Greater than 3'))
@@ -28,7 +28,7 @@ class Student(models.Model):
     term = models.ForeignKey(Term, on_delete=models.SET_NULL, null=True)
     department = models.ForeignKey(Department, on_delete=models.PROTECT)
     name = models.CharField(max_length=50, db_index=True)
-    sex = models.CharField(max_length=1, choices=sex_choices)
+    gender = models.CharField(max_length=1, choices=gender_choices)
     age = models.PositiveSmallIntegerField()
     family_size = models.CharField(max_length=3, choices=family_size_choices)
     parent_status = models.CharField(max_length=1, choices=parent_status_choices)

@@ -61,3 +61,23 @@ class StudentCourseRepo(Repo):
             .annotate(midterm_pass=midterm_pass, final_pass=final_pass, total=Count('course'))
 
         return counts
+
+    def get_courses_success_fail_counts(self, department=None, term=None):
+
+        filters = {
+        }
+
+        if department:
+            filters['student__department'] = department
+
+        if term:
+            filters['course__term'] = term
+
+        years_counts = self._model.objects.exclude(final_grade__isnull=True) \
+            .filter(**filters) \
+            .extra(select={'year': "EXTRACT(year FROM created_at)"}) \
+            .values('year') \
+            .annotate(success=Count('final_grade', filter=Q(final_grade__gte=50)),
+                      fail=Count('final_grade', filter=Q(final_grade__lt=50)))
+
+        return years_counts

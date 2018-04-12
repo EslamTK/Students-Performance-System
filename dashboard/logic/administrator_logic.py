@@ -1,3 +1,4 @@
+from dashboard.logic.student_logic import StudentLogic
 from .unit_of_work import UnitOfWork
 
 
@@ -25,3 +26,18 @@ class AdministratorLogic:
         accounts = self.unit_of_work.accounts.get_educator_accounts(educator=educator_id)
 
         return accounts
+
+    def get_courses_pass_fail_counts(self, department=None, term=None):
+        counts = self.unit_of_work.students_courses. \
+            get_courses_success_fail_counts(department=department, term=term)
+
+        return counts
+
+    def get_available_student_courses(self, student_id):
+        student_logic = StudentLogic()
+
+        student = student_logic.get_student_data(student_id=student_id)
+
+        courses = self.unit_of_work.courses.get_available_student_courses(student=student)
+
+        return courses
