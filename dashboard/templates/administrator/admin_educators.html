@@ -1,0 +1,115 @@
+{% extends 'base.html' %}
+{% block title %}Educator{% endblock %}
+{% block body %}
+{% load static %}
+<script>
+        var requireJS = [];
+        loadJS(requireJS, "js/views/charts5.js");
+    </script>
+    
+    <main class="animated fadeIn row">
+    
+        <div class="card" style="margin-top: 10px">
+            <div class="card-header">
+                <h3 class="card-title mb-0">Educators Performance</h3>
+            </div>
+            <div class="card-body">
+                <div class="row">
+    
+                    <div class="input-group-btn col-md-6">
+                        <button type="button" class="btn btn-light dropdown-toggle"
+                                data-toggle="dropdown">Department
+                            <span class="caret"></span>
+                        </button>
+                        <div class="dropdown-menu">
+                            <div class="dropdown-menu">
+                                {%for dep in departments%}
+                                    <li><a class="dropdown-item" href="#">{{dep.name}}</a></li>
+                                {%endfor%}
+                            </div>
+                        </div>
+                    </div>
+    
+                    <div class="col-md-6">
+                        <div class="btn-toolbar float-right" role="toolbar"
+                             aria-label="Toolbar with button groups">
+                            <div class="btn-group mr-3" data-toggle="buttons"
+                                 aria-label="First group">
+    
+                            </div>
+                        </div>
+                    </div>
+                </div>
+    
+                <div class="chart-wrapper" style="height: 70vh;width: 80vw;">
+                    <canvas id="canvas-1" class="chart"
+                            style="height: inherit;"></canvas>
+                </div>
+          </div>
+        </div>
+    
+        <div class="col-md-12">
+            <div class="card" style="margin-top: 10px">
+                <div class="card-header">
+                    <div class="row">
+                        <div class="col-md-8 col-sm-12">
+                            <h3 class="card-title mb-0">Educators<button type="button" class="btn btn-info">Add</button>
+    </h3>
+                        </div>
+    
+                        <div class="input-group col-md-4 col-sm-12">
+                            <input type="text" id="input1-group2"
+                                   name="input1-group2"
+                                   class="form-control" placeholder="Educator Name">
+                            <span class=" input-group-btn ">
+                        <button type="button" class="btn btn-primary "><i
+                                class="fa fa-search"></i></button>
+                      </span>
+    
+                        </div>
+                    </div>
+                </div>
+                <div class="card-body">
+                    <table class="table table-responsive-sm">
+                        <thead>
+                        <tr>
+                            <th>Educator</th>
+                            <th>Courses</th>
+                            <th>Number Of Students</th>
+                            <th>Expected Fail</th>
+    
+                        </tr>
+                        </thead>
+                        <tbody>
+                        <tr>
+                          <td><a href="#Admin/EducatorProfile.html" target="_blank">Ahmed
+                              Mostafa</a>
+                          </td>
+                            <td>4</td>
+                            <td>300</td>
+                            <td>60%</td>
+                        </tr>
+                        
+                        </tbody>
+                    </table>
+                    <ul class="pagination">
+                        <li class="page-item"><a class="page-link" href="#">Prev</a>
+                        </li>
+                        <li class="page-item active">
+                            <a class="page-link" href="#">1</a>
+                        </li>
+                        <li class="page-item"><a class="page-link" href="#">2</a>
+                        </li>
+                        <li class="page-item"><a class="page-link" href="#">3</a>
+                        </li>
+                        <li class="page-item"><a class="page-link" href="#">4</a>
+                        </li>
+                        <li class="page-item"><a class="page-link" href="#">Next</a>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+        </div>
+    </main>
+    {% endblock %}

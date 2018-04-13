@@ -1,0 +1,137 @@
+{% extends 'base.html' %}
+{% block title %}Educator{% endblock %}
+{% block body %}
+{% load static %}
+<script>
+        var requireJS = [];
+        loadJS(requireJS, "js/views/charts.js");
+    </script>
+    
+    <main class="animated fadeIn row">
+    
+        <div class="card" style="margin-top: 10px">
+            <div class="card-header">
+                <h3 class="card-title mb-0">Student Performance</h3>
+            </div>
+            <div class="card-body">
+                <div class="row">
+    
+                    <div class="input-group-btn col-md-6">
+                        <button type="button" class="btn btn-light dropdown-toggle"
+                                data-toggle="dropdown">Year
+                            <span class="caret"></span>
+                        </button>
+                        <div class="dropdown-menu">
+                            <a class="dropdown-item" href="#">First</a>
+                            <a class="dropdown-item" href="#">Second</a>
+                            <a class="dropdown-item" href="#">Third</a>
+                        </div>
+                    </div>
+    
+                    <div class="col-md-6">
+                        <div class="btn-toolbar float-right" role="toolbar"
+                             aria-label="Toolbar with button groups">
+                            <div class="btn-group mr-3" data-toggle="buttons"
+                                 aria-label="First group">
+                                <label class="btn btn-outline-secondary active">
+                                    <input type="radio" name="options" id="option1"
+                                           checked> First Term
+                                </label>
+                                <label class="btn btn-outline-secondary">
+                                    <input type="radio" name="options" id="option2">
+                                    Second Term
+                                </label>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+    
+                <div class="chart-wrapper" style="height: 70vh;width: 80vw;">
+                    <canvas id="canvas-1" class="chart"
+                            style="height: inherit;"></canvas>
+                </div>
+              
+                <div class="col-md-12">
+                    <div class="card" style="margin-top: 10px">
+                        <div class="card-header">
+                          <h3 class="card-title mb-0">Educators Reviews</h3>
+                      </div>
+    
+                        <div class="card-body">
+                            <div class="media mb-4">
+                                <img class="d-flex mr-3 rounded-circle"
+                                     src="img/profile-pictures.png" width="50" height="50"
+                                     alt="">
+                                <div class="media-body">
+                                    <h5 class="mt-0" style="margin-bottom: 2px;"><a
+                                            target="_blank" href="#Student/profile.html">Ahmed
+                                        Mostafa</a></h5>
+                                    <a class="small text-muted" ta
+                                       style="margin-bottom: 5px; display: block;" href="#">Math
+                                        2</a>
+                                    Cras sit amet nibh libero, in gravida nulla. Nulla vel
+                                    metus scelerisque ante sollicitudin. Cras purus odio,
+                                    vestibulum in vulputate at, tempus viverra turpis. Fusce
+                                    condimentum nunc ac nisi vulputate fringilla. Donec
+                                    lacinia congue felis in faucibus.
+                                </div>
+                            </div>
+                            <div class="media mb-4">
+                                <img class="d-flex mr-3 rounded-circle"
+                                     src="img/profile-pictures.png" width="50" height="50"
+                                     alt="">
+                                <div class="media-body">
+                                    <h5 class="mt-0" style="margin-bottom: 2px;"><a
+                                            target="_blank" href="#Student/profile.html">Mohamed
+                                        Ali</a></h5>
+                                    <a class="small text-muted"
+                                       style="margin-bottom: 5px; display: block;" href="#">Computer
+                                        Vision</a>
+                                    Cras sit amet nibh libero, in gravida nulla. Nulla vel
+                                    metus scelerisque ante sollicitudin. Cras purus odio,
+                                    vestibulum in vulputate at, tempus viverra turpis. Fusce
+                                    condimentum nunc ac nisi vulputate fringilla. Donec
+                                    lacinia congue felis in faucibus.
+                                </div>
+                            </div>
+                            <div class="media mb-4">
+                                <img class="d-flex mr-3 rounded-circle"
+                                     src="img/profile-pictures.png" width="50" height="50"
+                                     alt="">
+                                <div class="media-body">
+                                    <h5 class="mt-0" style="margin-bottom: 2px;"><a
+                                            target="_blank" href="#Student/profile.html">Ahmed
+                                        Mostafa</a></h5>
+                                    <a class="small text-muted"
+                                       style="margin-bottom: 5px; display: block;" href="#">Network
+                                        Programming</a>
+                                    Cras sit amet nibh libero, in gravida nulla. Nulla vel
+                                    metus scelerisque ante sollicitudin. Cras purus odio,
+                                    vestibulum in vulputate at, tempus viverra turpis. Fusce
+                                    condimentum nunc ac nisi vulputate fringilla. Donec
+                                    lacinia congue felis in faucibus.
+                                </div>
+                            </div>
+                            <ul class="pagination" style="margin-top: 25px">
+                                <li class="page-item"><a class="page-link" href="#">Prev</a>
+                                </li>
+                                <li class="page-item active">
+                                    <a class="page-link" href="#">1</a>
+                                </li>
+                                <li class="page-item"><a class="page-link" href="#">2</a>
+                                </li>
+                                <li class="page-item"><a class="page-link" href="#">3</a>
+                                </li>
+                                <li class="page-item"><a class="page-link" href="#">4</a>
+                                </li>
+                                <li class="page-item"><a class="page-link" href="#">Next</a>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+    
+                </div>
+    
+    </main>
+    {% endblock %}
+    

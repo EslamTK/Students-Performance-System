@@ -85,6 +85,7 @@ def student_profile(request, student_id):
         'courses': courses
     }
 
+    return render(request, 'administrator/admin_student_profile.html', result)
     # For Testing Only
     # test_result = {
     #     'student': model_to_dict(student),
@@ -118,6 +119,7 @@ def educators(request):
         'educators_rating': educators_rating
     }
 
+    return render(request, 'administrator/admin_educators.html', result)
     # For Testing Only
     # test_result = {
     #     'departments': list(departments.values()),
@@ -156,6 +158,7 @@ def educator_profile(request, educator_id):
         'educator_reviews_departments': educator_reviews_departments
     }
 
+    return render(request, 'administrator/admin_educator_profile.html', result)
     # For Testing Only
     # educator_info = model_to_dict(educator_info)
     # educator_info['photo'] = educator_info['photo'].url

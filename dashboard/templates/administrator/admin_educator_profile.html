@@ -1,0 +1,230 @@
+{% extends 'base.html' %}
+{% block title %}Educator{% endblock %}
+{% block body %}
+{% load static %}
+<script>
+        var requireJS = [];
+        loadJS(requireJS, "js/views/charts6.js");
+    </script>
+    <main class="animated fadeIn">
+      <div class="col-md-12 ">
+          <div class="card " style="margin-top: 10px">
+          <div class="card-header ">
+              <h3 class="card-title mb-0">My profile</h3>
+          </div>
+          <div class="card-body">
+            <div class="row">
+            <div class="col-md-4 card" style="margin-top: 10px">
+                <div class=" text-center " >
+                        <img class="img-circle img-responsive"
+                             src="img/profile-pictures.png"
+                             alt="Generic placeholder image" width="150" height="150">
+                </div>
+              <div class="card-body" style="height: 50vh">
+                <form class="col-sm-12">
+                 <div class="input-group">
+                     <input type="text" class="form-control" id="usr"  value="Ahmed Ali" >
+                  </div>
+                  <div class="input-group">
+                      <input id="msg" type="text" class="form-control" name="msg" value="PHP In Computer science">
+                  </div>
+                  <div class="input-group">
+                      <i class="glyphicon glyphicon-user"></i></span>
+                      <input id="Email" type="text" class="form-control" name="email" value="Mail@Ahmed.Com">
+                  </div>
+                        <div class="col-md-12 social-icons margin: 0 2px 0 5px;" style="margin-top: 30px">
+                          <div class="row">
+    
+                            <a href="#" style="margin: 0 5px 0 5px; margin-top: 5px"><span
+                                    class="col-md-2 btn-facebook"></span></a>
+                              <span class="col-md-10"><input id="Email" type="text" class="form-control" name="email" value="facebook@Ahmed.Com"></span>
+                             <br><br>
+                            <a href="#" style="margin: 0 5px 0 5px; margin-top: 5px"><span
+                                    class="col-md-2 btn-twitter"></span></a>
+                                    <span class="col-md-10"><input id="Email" type="text" class="form-control" name="email" value="twitter@Ahmed.Com"></span>
+                                    <br><br>
+    
+                            <a href="#" style="margin: 0 5px 0 5px; margin-top: 5px"><span
+                                    class=" col-md-2 btn-linkedin"></span></a>
+                                    <span class="col-md-10"><input id="Email" type="text" class="form-control" name="email" value="linkedin@Ahmed.Com"></span>
+                                    <br><br>
+    
+                            <a href="#" style="margin: 0 5px 0 5px; margin-top: 5px"><span
+                                    class="col-md-2 btn-google-plus"></span></a>
+                                    <span class="col-md-10"><input id="Email" type="text" class="form-control" name="email" value="googlePluss@Ahmed.Com"></span>
+                      </div>
+                        </div>
+              </form>
+    
+              </div>
+    
+            </div>
+            <div class="col-md-8 card" style="margin-top: 10px">
+              <br><br><br><br><br><br>
+              <lable class="col-md-12 h4" style="color:rgb(26,99,115);">About Him
+                <textarea class="form-control " rows="10" id="comment">
+                      Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed
+                      do eiusmod tempor incididunt ut labore et dolore magna
+                      aliqua. Ut enim ad minim veniam, quis nostrud exercitation
+                      ullamco laboris nisi ut aliquip ex ea commodo consequat.
+                      Dpa qui officia
+                      deserunt mollit anim id est laborum.</textarea>
+                    </lable>
+    
+    
+            </div>
+    
+          </div>
+          <div class="container">
+             <div class="row col-md-12">
+               <div class="col-md-5"></div>
+               <div class=col-md-6>
+               <button type="button" class="btn btn-success">Save Change</button>
+               <button type="button" class="btn btn-success">Cancel</button>
+               </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    
+            <div class="card" style="margin-top: 10px">
+                <div class="card-header">
+                    <h3 class="card-title mb-0">Strength & Weakness</h3>
+                </div>
+                <div class="card-body">
+                    <div class="row">
+    <div class="dropdown">
+                          <button type="button" class="btn btn-light dropdown-toggle"
+                                  data-toggle="dropdown">year
+                              <span class="caret"></span>
+                          </button>
+                          <div class="dropdown-menu">
+                              <a class="dropdown-item" href="#">2000</a>
+                              <a class="dropdown-item" href="#">2001</a>
+                              <a class="dropdown-item" href="#">2003</a>
+                          </div>
+                        </div>
+                          <div class="dropdown">
+    
+    
+                        <button type="button" class="btn btn-light dropdown-toggle"
+                                data-toggle="dropdown">Department
+                            <span class="caret"></span>
+                        </button>
+                        <div class="dropdown-menu">
+                            <div class="dropdown-menu">
+                                {%for dep in departments%}
+                                    <li><a class="dropdown-item" href="#">{{dep.name}}</a></li>
+                                {%endfor%}
+                            </div>
+    
+                        </div>
+                      </div>
+                        <div class="col-md-6">
+                            <div class="btn-toolbar float-right" role="toolbar"
+                                 aria-label="Toolbar with button groups">
+                                <div class="btn-group mr-3" data-toggle="buttons"
+                                     aria-label="First group">
+    
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="chart-wrapper" style="height: 70vh;width: 80vw;">
+                        <canvas id="canvas-1" class="chart"
+                                style="height: inherit;"></canvas>
+                    </div>
+                  </div>
+                </div>
+                    <div class="col-md-12">
+                        <div class="card" style="margin-top: 10px">
+                            <div class="card-header">
+                                <h3 class="card-title mb-0">Student Reviews</h3>
+                            </div>
+                            <div class="card-body">
+                                <div class="media mb-4">
+                                    <img class="d-flex mr-3 rounded-circle"
+                                         src="img/anonymous.png" width="50" height="50"
+                                         alt="">
+                                    <div class="media-body">
+                                        <h5 class="mt-0" style="margin-bottom: 2px;">Anonymous</h5>
+    
+                                        <p>Cras sit amet nibh libero, in gravida nulla. Nulla vel
+                                        metus scelerisque ante sollicitudin. Cras purus odio,
+                                        vestibulum in vulputate at, tempus viverra turpis. Fusce
+                                        condimentum nunc ac nisi vulputate fringilla. Donec
+                                        lacinia congue felis in faucibus.</p>
+                                        <div class="btn-group btn-group-justified">
+                                        <button type="button" class="btn btn-link">Delete</button>
+                                        </div>
+    
+                                    </div>
+                                </div>
+                                <div class="media mb-4">
+                                    <img class="d-flex mr-3 rounded-circle"
+                                         src="img/profile-pictures.png" width="50" height="50"
+                                         alt="">
+                                    <div class="media-body">
+                                        <h5 class="mt-0" style="margin-bottom: 2px;"><a
+                                                target="_blank" href="#Student/profile.html">Mohamed
+                                            Ali</a></h5>
+    
+                                        <p>Cras sit amet nibh libero, in gravida nulla. Nulla vel
+                                        metus scelerisque ante sollicitudin. Cras purus odio,
+                                        vestibulum in vulputate at, tempus viverra turpis. Fusce
+                                        condimentum nunc ac nisi vulputate fringilla. Donec
+                                        lacinia congue felis in faucibus.</p>
+                                        <div class="btn-group btn-group-justified">
+                                        <button type="button" class="btn btn-link">Delete</button>
+                                        </div>
+    
+                                    </div>
+                                </div>
+                                <div class="media mb-4">
+                                    <img class="d-flex mr-3 rounded-circle"
+                                         src="img/profile-pictures.png" width="50" height="50"
+                                         alt="">
+                                    <div class="media-body">
+                                        <h5 class="mt-0" style="margin-bottom: 2px;"><a
+                                                target="_blank" href="#Student/profile.html">Ahmed
+                                            Mostafa</a></h5>
+    
+                                        <p>Cras sit amet nibh libero, in gravida nulla. Nulla vel
+                                        metus scelerisque ante sollicitudin. Cras purus odio,
+                                        vestibulum in vulputate at, tempus viverra turpis. Fusce
+                                        condimentum nunc ac nisi vulputate fringilla. Donec
+                                        lacinia congue felis in faucibus.<p>
+                                          <div class="btn-group btn-group-justified">
+                                          <button type="button" class="btn btn-link">Delete</button>
+                                          </div>
+    
+    
+    
+    
+                                    </div>
+                                </div>
+                                <ul class="pagination" style="margin-top: 25px">
+                                    <li class="page-item"><a class="page-link" href="#">Prev</a>
+                                    </li>
+                                    <li class="page-item active">
+                                        <a class="page-link" href="#">1</a>
+                                    </li>
+                                    <li class="page-item"><a class="page-link" href="#">2</a>
+                                    </li>
+                                    <li class="page-item"><a class="page-link" href="#">3</a>
+                                    </li>
+                                    <li class="page-item"><a class="page-link" href="#">4</a>
+                                    </li>
+                                    <li class="page-item"><a class="page-link" href="#">Next</a>
+                                    </li>
+                                </ul>
+                            </div>
+                        </div>
+    
+                    </div>
+    
+    
+    </main>
+    {% endblock %}
+
+    
