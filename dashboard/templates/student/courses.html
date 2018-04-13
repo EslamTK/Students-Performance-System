@@ -6,7 +6,7 @@
         var requireJS = [];
         loadJS(requireJS, "{% static 'dashboard/views/charts.js'%}");
     </script>
-
+    <input type="hidden" id="myVar" name="variable" readonly value="{{ student_predictions }}">
     <main class="animated fadeIn row">
 
         <div class="card" style="margin-top: 10px">
@@ -22,9 +22,10 @@
                             <span class="caret"></span>
                         </button>
                         <div class="dropdown-menu">
-                            <a class="dropdown-item" href="#">First</a>
-                            <a class="dropdown-item" href="#">Second</a>
-                            <a class="dropdown-item" href="#">Third</a>
+                            {%for year in years%}
+                                <a class="dropdown-item" href="#">{{year.name}}</a>
+                            {%endfor%}
+                            
                         </div>
                     </div>
 
@@ -33,14 +34,16 @@
                              aria-label="Toolbar with button groups">
                             <div class="btn-group mr-3" data-toggle="buttons"
                                  aria-label="First group">
-                                <label class="btn btn-outline-secondary active">
-                                    <input type="radio" name="options" id="option1"
-                                           checked> First Term
+                                {%for term in terms%}
+                                    {%if forloop.counter == 1%}
+                                        <label class="btn btn-outline-secondary active">
+                                    {%else%}
+                                        <label class="btn btn-outline-secondary">
+                                    {%endif%}
+                                    <input type="radio" name="options" id="option"+"{{forloop.counter}}"
+                                           > {{term.name}}
                                 </label>
-                                <label class="btn btn-outline-secondary">
-                                    <input type="radio" name="options" id="option2">
-                                    Second Term
-                                </label>
+                                {%endfor%}
                             </div>
                         </div>
                     </div>
