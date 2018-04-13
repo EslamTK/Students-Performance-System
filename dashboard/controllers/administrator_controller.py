@@ -1,5 +1,6 @@
 from django.contrib.auth import authenticate
-
+from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
+from django.shortcuts import render
 from dashboard.logic.administrator_logic import AdministratorLogic
 from dashboard.logic.educator_logic import EducatorLogic
 from dashboard.logic.general_logic import GeneralLogic
@@ -26,6 +27,17 @@ def index(request):
     # Students
     students = administrator_logic.get_students()
 
+    # Show 3 contacts per page
+    '''paginator = Paginator(educator_reviews, 2)
+
+    page = request.GET.get('page')
+    try:
+        reviews = paginator.page(page)
+    except PageNotAnInteger:
+        reviews = paginator.page(1)
+    except EmptyPage:
+        reviews = paginator.page(paginator.num_pages)'''
+
     result = {
         'departments': departments,
         'terms': terms,
@@ -41,6 +53,7 @@ def index(request):
     #     'students': list(students)
     # }
     # return JsonResponse(test_result, safe=False)
+    return render(request, 'administrator/index.html', result)
 
 
 def student_profile(request, student_id):

@@ -13,21 +13,27 @@ $(function () {
     data = data.replace(/'/g,'"');
     data = JSON.parse(data);
 
+    console.log(data);
     //collecting data
     var label_data = [];
-    var midpass = [];
-    var finalpass = [];
+    var midPass = [];
+    var midFail = [];
+    var finalPass = [];
+    var finalFail = [];
+
     for(var i = 0; i < data.length; i++){
         
         if(data[i].midterm_pass == 0){
             //for data to be visual remove if valid data entered
-            data[i].midterm_pass = randomScalingFactor();
+            //data[i].midterm_pass = randomScalingFactor();
             //for data to be visual remove if valid data entered
-            data[i].final_pass = randomScalingFactor();
+            //data[i].final_pass = randomScalingFactor();
 
             label_data.push(data[i].course__name);
-            midpass.push(data[i].midterm_pass);
-            finalpass.push(data[i].final_pass);
+            midPass.push(data[i].midterm_pass);
+            midFail.push(data[i].total - data[i].midterm_pass);
+            finalPass.push(data[i].final_pass);
+            finalFail.push(data[i].total - data[i].final_pass);
         }     
     }
 
@@ -41,17 +47,17 @@ $(function () {
                 borderColor: 'rgba(220,220,220,1)',
                 pointBackgroundColor: 'rgba(220,220,220,1)',
                 pointBorderColor: '#fff',
-                data: midpass
+                data: midPass
             },
             {
-                label: 'Fail',
+                label: 'Midterm Fail',
                 backgroundColor: 'rgba(151,187,205,0.2)',
                 borderColor: 'rgba(151,187,205,1)',
                 pointBackgroundColor: 'rgba(151,187,205,1)',
                 pointBorderColor: '#fff',
                 pointBorderColor: '#fff',
 
-                data: [randomScalingFactor(), randomScalingFactor(), randomScalingFactor(), randomScalingFactor(), randomScalingFactor(), randomScalingFactor(), randomScalingFactor()]
+                data: midFail
             }
             ,
             {
@@ -61,17 +67,17 @@ $(function () {
                 pointBackgroundColor: 'rgba(234,209,204,1)',
 
                 pointBorderColor: '#fff',
-                data: finalpass
+                data: finalPass
             }
             ,
             {
-                label: 'Fail',
+                label: 'Final Fail',
                 backgroundColor: 'rgba(41,54,61,0.2)',
                 borderColor: 'rgba(41,54,61,1)',
                 pointBackgroundColor: 'rgba(41,54,61,1)',
 
                 pointBorderColor: '#fff',
-                data: [randomScalingFactor(), randomScalingFactor(), randomScalingFactor(), randomScalingFactor(), randomScalingFactor(), randomScalingFactor(), randomScalingFactor()]
+                data: finalFail
             }
         ]
     }
