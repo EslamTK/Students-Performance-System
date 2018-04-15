@@ -41,31 +41,31 @@
             <ul class="nav">
 
                 <li class="nav-item nav-dropdown">
-                    <a class="nav-link nav-dropdown-toggle" href="#"><i class="icon-puzzle"></i> Administartor </a>
+                    <a class="nav-link nav-dropdown-toggle" href="{% url 'dashboard:administrator_index' %}"><i class="icon-puzzle"></i> Administartor </a>
                     <ul class="nav-dropdown-items">
                         <li class="nav-item">
-                            <a class="nav-link" href="#"><i class="icon-speedometer"></i>Student Performance</a>
+                            <a class="nav-link" href="{% url 'dashboard:administrator_index' %}"><i class="icon-speedometer"></i>Student Performance</a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link" href="#"><i class="icon-speedometer"></i>Educator Performance</a>
+                            <a class="nav-link" href="{% url 'dashboard:administrator_educators' %}"><i class="icon-speedometer"></i>Educator Performance</a>
                         </li>
                     </ul>
                 </li>
 
                 <li class="nav-item nav-dropdown">
-                    <a class="nav-link nav-dropdown-toggle" href="#"><i class="icon-puzzle"></i> Educator </a>
+                    <a class="nav-link nav-dropdown-toggle" href="{% url 'dashboard:educator_index' %}"><i class="icon-puzzle"></i> Educator </a>
                     <ul class="nav-dropdown-items">
                         <li class="nav-item">
-                            <a class="nav-link" href="#"><i class="icon-speedometer"></i> Dashboard </a>
+                            <a class="nav-link" href="{% url 'dashboard:educator_index' %}"><i class="icon-speedometer"></i> Dashboard </a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link" href="#"><i class="icon-puzzle"></i> My Students</a>
+                            <a class="nav-link" href="{% url 'dashboard:educator_students' %}"><i class="icon-puzzle"></i> My Students</a>
                         </li>
                     </ul>
                 </li>
 
                 <li class="nav-item nav-dropdown">
-                    <a class="nav-link nav-dropdown-toggle" href="#"><i class="icon-puzzle"></i> Student </a>
+                    <a class="nav-link nav-dropdown-toggle" href="{% url 'dashboard:student_index' %}"><i class="icon-puzzle"></i> Student </a>
                     <ul class="nav-dropdown-items">
                         <li class="nav-item">
                             <a class="nav-link" href="{% url 'dashboard:student_index' %}"><i

@@ -4,8 +4,29 @@ $(function () {
     var randomScalingFactor = function () {
         return Math.round(Math.random() * 100)
     };
+
+    //getting data from hidden input field
+    var my_data = document.getElementById("myVar").value;
+    
+    //transform string into valid json string
+    var data = my_data.replace(/'/g,'"');
+    
+    //trasnform data into json
+    data =JSON.parse(data);
+    console.log(data);
+    
+    //collecting data
+    var label_data = [];
+    var midterm = [];
+    var prediction = [];
+    for(var i = 0; i < data.length; i++){
+        label_data.push(data[i].name);
+        midterm.push(data[i].midterm);
+        prediction.push(data[i].prediction);
+       
+    }
     var lineChartData = {
-        labels: ['Math', 'Programming 1', 'Data Structure', 'Network', 'Security', 'Software Engineering', 'Computer Vision'],
+        labels: label_data,
         datasets: [
             {
                 label: 'MidTerm',
@@ -13,7 +34,7 @@ $(function () {
                 borderColor: 'rgba(220,220,220,1)',
                 pointBackgroundColor: 'rgba(220,220,220,1)',
                 pointBorderColor: '#fff',
-                data: [randomScalingFactor(), randomScalingFactor(), randomScalingFactor(), randomScalingFactor(), randomScalingFactor(), randomScalingFactor(), randomScalingFactor()]
+                data: midterm
             },
             {
                 label: 'Expected Final Grades',
@@ -21,7 +42,7 @@ $(function () {
                 borderColor: 'rgba(151,187,205,1)',
                 pointBackgroundColor: 'rgba(151,187,205,1)',
                 pointBorderColor: '#fff',
-                data: [randomScalingFactor(), randomScalingFactor(), randomScalingFactor(), randomScalingFactor(), randomScalingFactor(), randomScalingFactor(), randomScalingFactor()]
+                data: prediction
             }
         ]
     }

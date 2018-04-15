@@ -1,9 +1,11 @@
 from django.contrib.auth import authenticate
-
+from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
+from django.shortcuts import render
 from dashboard.logic.administrator_logic import AdministratorLogic
 from dashboard.logic.educator_logic import EducatorLogic
 from dashboard.logic.general_logic import GeneralLogic
 from dashboard.logic.student_logic import StudentLogic
+from django.forms.models import model_to_dict
 
 user = authenticate(username='admin', password='a1$$m2IN12')
 
@@ -32,6 +34,7 @@ def index(request):
         'years_counts': years_counts,
         'students': students
     }
+    
 
     # For Testing Only
     # test_result = {
@@ -41,6 +44,7 @@ def index(request):
     #     'students': list(students)
     # }
     # return JsonResponse(test_result, safe=False)
+    return render(request, 'administrator/index.html', result)
 
 
 def student_profile(request, student_id):
@@ -72,6 +76,8 @@ def student_profile(request, student_id):
         'courses': courses
     }
 
+    print(result)
+    return render(request, 'administrator/admin_student_profile.html', result)
     # For Testing Only
     # test_result = {
     #     'student': model_to_dict(student),
@@ -105,6 +111,8 @@ def educators(request):
         'educators_rating': educators_rating
     }
 
+    print(result)
+    return render(request, 'administrator/admin_educators.html', result)
     # For Testing Only
     # test_result = {
     #     'departments': list(departments.values()),
@@ -134,15 +142,30 @@ def educator_profile(request, educator_id):
     # Educator Reviews
     educator_reviews = educator_logic.get_educator_reviews(educator_id=educator_id)
 
+    educator_info = model_to_dict(educator_info)
+    educator_info['photo'] = educator_info['photo'].url
+    
+    educator_accounts = []
+    
+    for i in accounts:
+        account = {
+            'id': i.id,
+            'name': i.name,
+            'logo': i.logo.url,
+            'url': i.url
+        }
+        educator_accounts.append(account)
     result = {
         'educator_info': educator_info,
-        'educator_accounts': accounts,
+        'educator_accounts': educator_accounts,
         'educator_reviews': educator_reviews,
         'educator_rating': educator_rating,
         'educator_reviews_years': educator_reviews_years,
         'educator_reviews_departments': educator_reviews_departments
     }
+    
 
+    return render(request, 'administrator/admin_educator_profile.html', result)
     # For Testing Only
     # educator_info = model_to_dict(educator_info)
     # educator_info['photo'] = educator_info['photo'].url

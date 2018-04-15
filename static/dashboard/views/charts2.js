@@ -4,8 +4,27 @@ $(function () {
     var randomScalingFactor = function () {
         return Math.round(Math.random() * 100)
     };
+    //getting data from hidden input field
+    var my_data = document.getElementById("myVar").value;
+    //formating data to valid json format
+    var data = my_data.slice(10,my_data.length,my_data)
+    data = data.replace('>','');
+    data = data.replace(/'/g,'"');
+    data = JSON.parse(data);
+    
+    //collecting data 
+    var label_data = [];
+    var rates = [];
+    for(var i = 0; i < data.length; i++){
+        label_data.push(data[i].review_item__name);
+        rates.push(data[i].rate__avg);
+        
+       
+    }
+
+
     var lineChartData = {
-        labels: ['Knowledge', 'Preparation', 'Easy To Follow', 'Helpful', 'Respectful', 'Encourage Participation'],
+        labels: label_data,
         datasets: [
             {
                 label: 'Rate',
@@ -13,7 +32,7 @@ $(function () {
                 borderColor: 'rgba(151,187,205,1)',
                 pointBackgroundColor: 'rgba(151,187,205,1)',
                 pointBorderColor: '#fff',
-                data: [randomScalingFactor(), randomScalingFactor(), randomScalingFactor(), randomScalingFactor(), randomScalingFactor(), randomScalingFactor()]
+                data: rates
             },
 
         ]

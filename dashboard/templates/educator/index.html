@@ -7,7 +7,7 @@
     var requireJS = [];
     loadJS(requireJS, "{% static 'dashboard/views/charts2.js'%}");
 </script>
-
+<input type="hidden" id="myVar" name="variable" readonly value="{{ educator_rating }}">
 <main class="animated fadeIn row">
 
     <div class="card" style="margin-top: 10px">
@@ -23,9 +23,9 @@
                         <span class="caret"></span>
                     </button>
                     <div class="dropdown-menu">
-                        <a class="dropdown-item" href="#">First</a>
-                        <a class="dropdown-item" href="#">Second</a>
-                        <a class="dropdown-item" href="#">Third</a>
+                        {%for year in educator_reviews_years%}
+                            <a class="dropdown-item" href="#">{{year.name}}</a>
+                        {%endfor%}
                     </div>
 
                 </div>
@@ -35,9 +35,9 @@
                             <span class="caret"></span>
                     </button>
                     <div class="dropdown-menu">
-                        <a class="dropdown-item" href="#">IT</a>
-                        <a class="dropdown-item" href="#">CS</a>
-                        <a class="dropdown-item" href="#">OS</a>
+                        {%for dep in educator_reviews_departments%}
+                            <a class="dropdown-item" href="#">{{dep.name}}</a>
+                        {%endfor%}
                    </div>
                     </div>
 
@@ -80,27 +80,21 @@
                     </div>
                 </div>
                 {%endfor%}
-                {% if educator_reviews.has_other_pages %}
-                    <ul class="pagination">
-                        {% if educator_reviews.has_previous %}
-                            <li><a href="?page={{ educator_reviews.previous_page_number }}">prev</a></li>
-                        {% else %}
-                            <li class="disabled"><a href="#">Prev</a></li>
-                        {% endif %}
-                        {% for i in educator_reviews.paginator.page_range %}
-                            {% if educator_reviews.number == i %}
-                                <li class="active"><a href="#">{{ i }}</a></li>
-                            {% else %}
-                                <li><a href="?page={{ i }}">{{ i }}</a></li>
-                            {% endif %}
-                        {% endfor %}
-                        {% if educator_reviews.has_next %}
-                            <li><a href="?page={{ educator_reviews.next_page_number }}">next</a></li>
-                        {% else %}
-                            <li class="disabled"><a>Next</a></li>
-                        {% endif %}
-                    </ul>
-                {% endif %}
+                <ul class="pagination" style="margin-top: 25px">
+                    <li class="page-item"><a class="page-link" href="#">Prev</a>
+                    </li>
+                    <li class="page-item active">
+                        <a class="page-link" href="#">1</a>
+                    </li>
+                    <li class="page-item"><a class="page-link" href="#">2</a>
+                    </li>
+                    <li class="page-item"><a class="page-link" href="#">3</a>
+                    </li>
+                    <li class="page-item"><a class="page-link" href="#">4</a>
+                    </li>
+                    <li class="page-item"><a class="page-link" href="#">Next</a>
+                    </li>
+                </ul>
                 
             </div>
         </div>

@@ -7,7 +7,8 @@
         var requireJS = [];
         loadJS(requireJS, "{% static 'dashboard/views/charts3.js'%}");
 </script>
-    
+    <input type="hidden" id="myVar" name="variable" readonly value="{{ courses_counts }}">
+
     <main class="animated fadeIn row">
       <div class="col-md-12">
     
@@ -23,20 +24,18 @@
                       <div>  <button type="button" class="btn btn-light dropdown-toggle"
                                 data-toggle="dropdown" style="color:rgba(41,54,61,1);font-size: 16px;font-weight: bold;font-variant: small-caps;">Year
                             <div class="dropdown-menu" >
-    
-                                <li><a class="dropdown-item" href="#">First</a></li>
-                                <li><a class="dropdown-item" href="#">Second</a></li>
-                                <li><a class="dropdown-item" href="#">Third</a></li>
-    
+                                {%for year in years%}
+                                    <li><a class="dropdown-item" href="#">{{year.name}}</a></li>
+                                {%endfor%}    
                             </div>
                         </button></div>
     
                         <div><button type="button" class="btn btn-light dropdown-toggle"
                                   data-toggle="dropdown" style="color:rgba(41,54,61,1);font-size: 16px;font-weight: bold;font-variant: small-caps;">Department
                                   <div class="dropdown-menu" >
-                                      <li><a class="dropdown-item" href="#">IT</a></li>
-                                      <li><a class="dropdown-item" href="#">CS</a></li>
-                                      <li><a class="dropdown-item" href="#">OS</a></li>
+                                        {%for dep in departments%}
+                                            <li><a class="dropdown-item" href="#">{{dep.name}}</a></li>
+                                        {%endfor%}
                                   </div>
                           </button></div>
     
@@ -48,14 +47,16 @@
                              aria-label="Toolbar with button groups">
                             <div class="btn-group mr-3" data-toggle="buttons"
                                  aria-label="First group">
-                                <label class="btn btn-outline-secondary active">
-                                    <input type="radio" name="options" id="option1"
-                                           checked> First Term
+                                {%for term in terms%}
+                                    {%if forloop.counter == 1%}
+                                        <label class="btn btn-outline-secondary active">
+                                    {%else%}
+                                        <label class="btn btn-outline-secondary">
+                                    {%endif%}
+                                    <input type="radio" name="options" id="option"+"{{forloop.counter}}"
+                                           > {{term.name}}
                                 </label>
-                                <label class="btn btn-outline-secondary">
-                                    <input type="radio" name="options" id="option2">
-                                    Second Term
-                                </label>
+                                {%endfor%}
                             </div>
     
     
@@ -137,27 +138,21 @@
                         
                         </tbody>
                     </table>
-                    {% if educator_students.has_other_pages %}
                     <ul class="pagination">
-                        {% if educator_students.has_previous %}
-                            <li><a href="?page={{ educator_students.previous_page_number }}">prev</a></li>
-                        {% else %}
-                            <li class="disabled"><a href="#">Prev</a></li>
-                        {% endif %}
-                        {% for i in educator_students.paginator.page_range %}
-                            {% if educator_students.number == i %}
-                                <li class="active"><a href="#">{{ i }}</a></li>
-                            {% else %}
-                                <li><a href="?page={{ i }}">{{ i }}</a></li>
-                            {% endif %}
-                        {% endfor %}
-                        {% if educator_students.has_next %}
-                            <li><a href="?page={{ educator_students.next_page_number }}">next</a></li>
-                        {% else %}
-                            <li class="disabled"><a>Next</a></li>
-                        {% endif %}
+                        <li class="page-item"><a class="page-link" href="#">Prev</a>
+                        </li>
+                        <li class="page-item active">
+                            <a class="page-link" href="#">1</a>
+                        </li>
+                        <li class="page-item"><a class="page-link" href="#">2</a>
+                        </li>
+                        <li class="page-item"><a class="page-link" href="#">3</a>
+                        </li>
+                        <li class="page-item"><a class="page-link" href="#">4</a>
+                        </li>
+                        <li class="page-item"><a class="page-link" href="#">Next</a>
+                        </li>
                     </ul>
-                {% endif %}
                 </div>
             </div>
         </div>
