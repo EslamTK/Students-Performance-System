@@ -13,18 +13,18 @@ $(function () {
     
     //trasnform data into json
     data =JSON.parse(data);
+    console.log(data);
     
     //collecting data
     var label_data = [];
     var midterm = [];
     var prediction = [];
-    for(var i = 0; i < data.courses.length; i++){
-        label_data.push(data.courses[i].name);
-        midterm.push(data.courses[i].midterm);
-        prediction.push(data.courses[i].prediction);
+    for(var i = 0; i < data.length; i++){
+        label_data.push(data[i].name);
+        midterm.push(data[i].midterm);
+        prediction.push(data[i].prediction);
        
     }
-
     var lineChartData = {
         labels: label_data,
         datasets: [

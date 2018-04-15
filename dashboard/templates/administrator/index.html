@@ -7,7 +7,7 @@
     var requireJS = [];
     loadJS(requireJS, "{% static 'dashboard/views/charts4.js'%}");
 </script>
-    <input type="hidden" id="data" name="variable" readonly value="{{years_counts}}">
+    <input type="hidden" id="myData" name="variable" readonly value="{{years_counts}}">
 <main class="animated fadeIn row">
 
     <div class="card" style="margin-top: 10px">
@@ -84,77 +84,40 @@
                         <th>Student</th>
                         <th>Department</th>
                         <th>Year</th>
-                        <th>Status</th>
-
                     </tr>
                     </thead>
                     <tbody>
-                    <tr>
-                      <td><a href="#Admin/StudentProfile.html" target="_blank">Ahmed
-                          Mostafa</a>
-                      </td>
-                        <td>Computer Science</td>
-                        <td>First</td>
-                        <td>New</td>
-                    </tr>
-                    <tr>
-                      <td><a href="#Admin/StudentProfile.html"  target="_blank">Ahmed
-                          Mostafa</a>
-                      </td>
-                      <td>Data Structure</td>
-                        <td>Second</td>
-                        <td>Filed</td>
-
-                    </tr>
-                    <tr>
-                      <td><a href="#Admin/StudentProfile.html"  target="_blank">Mohamed
-                          Mostafa</a>
-                      </td>
-                        <td>Programming 1</td>
-                        <td>First</td>
-                        <td>New</td>
-                    </tr>
-                    <tr>
-                      <td><a href="#Admin/StudentProfile.html"  target="_blank">Ali
-                          Mostafa</a>
-                      </td>
-                        <td>Data Structure</td>
-                        <td>Second</td>
-                        <td>Filed</td>
-                    </tr>
-                    <tr>
-                      <td><a href="#Admin/StudentProfile.html"  target="_blank">Ali
-                          Mostafa</a>
-                      </td>
-                        <td>Programing</td>
-                        <td>First</td>
-                        <td>Filed</td>
-                    </tr>
-                    <tr>
-                      <td><a href="#Admin/StudentProfile.html"  target="_blank">Ahmed
-                          Mostafa</a>
-                      </td>
-                        <td>Data Structure</td>
-                        <td>Second</td>
-                        <td>New</td>
-                    </tr>
+                        {% for student in students %}
+                            <tr>
+                            <td><a href="{% url 'dashboard:administrator_student_profile' student.user_id%}" target="_blank">{{student.name}}</a>
+                            </td>
+                                <td>{{student.department__name}}</td>
+                                <td>{{student.year}}</td>
+                            </tr>
+                        {% endfor %}
                     </tbody>
                 </table>
-                <ul class="pagination">
-                    <li class="page-item"><a class="page-link" href="#">Prev</a>
-                    </li>
-                    <li class="page-item active">
-                        <a class="page-link" href="#">1</a>
-                    </li>
-                    <li class="page-item"><a class="page-link" href="#">2</a>
-                    </li>
-                    <li class="page-item"><a class="page-link" href="#">3</a>
-                    </li>
-                    <li class="page-item"><a class="page-link" href="#">4</a>
-                    </li>
-                    <li class="page-item"><a class="page-link" href="#">Next</a>
-                    </li>
-                </ul>
+                {% if students.has_other_pages %}
+                    <ul class="pagination">
+                            {% if students.has_previous %}
+                            <li><a href="?page={{ students.previous_page_number }}">prev</a></li>
+                        {% else %}
+                            <li class="disabled"><a href="#">Prev</a></li>
+                        {% endif %}
+                        {% for i in students.paginator.page_range %}
+                            {% if students.number == i %}
+                                <li class="active"><a href="#">{{ i }}</a></li>
+                            {% else %}
+                                <li><a href="?page={{ i }}">{{ i }}</a></li>
+                            {% endif %}
+                        {% endfor %}
+                        {% if students.has_next %}
+                            <li><a href="?page={{ students.next_page_number }}">next</a></li>
+                        {% else %}
+                                <li class="disabled"><a>Next</a></li>
+                        {% endif %}
+                    </ul>
+                {% endif %}
             </div>
         </div>
     </div>

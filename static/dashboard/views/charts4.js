@@ -6,13 +6,14 @@ $(function () {
     };
 
     //getting data from hidden input field
-    var my_data = document.getElementById("data").value;
-    console.log(data);
+    var my_data = document.getElementById("myData").value;
+    console.log(my_data);
     //formating data to valid json format
     var data = my_data.slice(10,my_data.length,my_data)
     data = data.replace('>','');
     data = data.replace(/'/g,'"');
     data = JSON.parse(data);
+    console.log(data);
 
     var label_data = [];
     var success = [];
@@ -21,11 +22,9 @@ $(function () {
 
     for(var i = 0; i < data.length; i++){
         
-        if(data[i].midterm_pass == 0){
-            label_data.push(data[i].years);
-            success.push(data[i].midterm_pass);
-            fail.push(data[i].final_pass);
-        }     
+        label_data.push(data[i].year);
+        success.push(data[i].success);
+        fail.push(data[i].fail);    
     }
 
     var lineChartData = {

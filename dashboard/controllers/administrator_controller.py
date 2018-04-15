@@ -5,6 +5,7 @@ from dashboard.logic.administrator_logic import AdministratorLogic
 from dashboard.logic.educator_logic import EducatorLogic
 from dashboard.logic.general_logic import GeneralLogic
 from dashboard.logic.student_logic import StudentLogic
+from django.forms.models import model_to_dict
 
 user = authenticate(username='admin', password='a1$$m2IN12')
 
@@ -28,15 +29,17 @@ def index(request):
     students = administrator_logic.get_students()
 
     # Show 3 contacts per page
-    '''paginator = Paginator(educator_reviews, 2)
+    paginator = Paginator(students, 6) # show 6 students per page 
 
     page = request.GET.get('page')
     try:
-        reviews = paginator.page(page)
+        student = paginator.page(page)
     except PageNotAnInteger:
-        reviews = paginator.page(1)
+        student = paginator.page(1)
     except EmptyPage:
-        reviews = paginator.page(paginator.num_pages)'''
+        student = paginator.page(paginator.num_pages)
+   
+    students = student
 
     result = {
         'departments': departments,
@@ -44,6 +47,7 @@ def index(request):
         'years_counts': years_counts,
         'students': students
     }
+    
 
     # For Testing Only
     # test_result = {
@@ -85,6 +89,7 @@ def student_profile(request, student_id):
         'courses': courses
     }
 
+    print(result)
     return render(request, 'administrator/admin_student_profile.html', result)
     # For Testing Only
     # test_result = {
@@ -119,6 +124,7 @@ def educators(request):
         'educators_rating': educators_rating
     }
 
+    print(result)
     return render(request, 'administrator/admin_educators.html', result)
     # For Testing Only
     # test_result = {
@@ -149,14 +155,28 @@ def educator_profile(request, educator_id):
     # Educator Reviews
     educator_reviews = educator_logic.get_educator_reviews(educator_id=educator_id)
 
+    educator_info = model_to_dict(educator_info)
+    educator_info['photo'] = educator_info['photo'].url
+    
+    educator_accounts = []
+    
+    for i in accounts:
+        account = {
+            'id': i.id,
+            'name': i.name,
+            'logo': i.logo.url,
+            'url': i.url
+        }
+        educator_accounts.append(account)
     result = {
         'educator_info': educator_info,
-        'educator_accounts': accounts,
+        'educator_accounts': educator_accounts,
         'educator_reviews': educator_reviews,
         'educator_rating': educator_rating,
         'educator_reviews_years': educator_reviews_years,
         'educator_reviews_departments': educator_reviews_departments
     }
+    
 
     return render(request, 'administrator/admin_educator_profile.html', result)
     # For Testing Only

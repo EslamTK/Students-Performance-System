@@ -73,13 +73,15 @@ def student_courses(request):
         course = paginator.page(1)
     except EmptyPage:
         course = paginator.page(paginator.num_pages)
-    courses = course
+    courses_page = course
     result = {
         'student_predictions': predictions,
         'years': years,
         'terms': terms,
-        'student_courses': courses
+        'student_courses_page': courses_page, 
+        'student_courses' : courses
     }
+    print(result)
 
     return render(request, 'student/courses.html', result)
 

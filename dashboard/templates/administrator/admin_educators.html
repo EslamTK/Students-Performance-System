@@ -4,9 +4,10 @@
 {% load static %}
 <script>
         var requireJS = [];
-        loadJS(requireJS, "js/views/charts5.js");
+        loadJS(requireJS, "{% static 'dashboard/views/charts5.js'%}");
     </script>
-    
+    <input type="hidden" id="myData" name="variable" readonly value="{{educators_rating}}">
+
     <main class="animated fadeIn row">
     
         <div class="card" style="margin-top: 10px">
@@ -81,14 +82,15 @@
                         </tr>
                         </thead>
                         <tbody>
+                        {%for educator in educators%}
                         <tr>
-                          <td><a href="#Admin/EducatorProfile.html" target="_blank">Ahmed
-                              Mostafa</a>
+                          <td><a href="{% url 'dashboard:administrator_educator_profile' educator.user_id%}" target="_blank">{{educator.name}}</a>
                           </td>
-                            <td>4</td>
-                            <td>300</td>
-                            <td>60%</td>
+                            <td>{{educator.courses}}</td>
+                            <td>{{educator.students}}</td>
+                            <td>{{educator.prediction_fail}}</td>
                         </tr>
+                        {%endfor%}
                         
                         </tbody>
                     </table>

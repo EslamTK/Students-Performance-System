@@ -4,8 +4,9 @@
 {% load static %}
 <script>
         var requireJS = [];
-        loadJS(requireJS, "js/views/charts6.js");
+        loadJS(requireJS, "{% static 'dashboard/views/charts6.js'%}");
     </script>
+    <input type="hidden" id="myData" name="variable" readonly value="{{educator_rating}}">
     <main class="animated fadeIn">
       <div class="col-md-12 ">
           <div class="card " style="margin-top: 10px">
@@ -17,41 +18,29 @@
             <div class="col-md-4 card" style="margin-top: 10px">
                 <div class=" text-center " >
                         <img class="img-circle img-responsive"
-                             src="img/profile-pictures.png"
+                             src="{{educator_info.photo}}"
                              alt="Generic placeholder image" width="150" height="150">
                 </div>
               <div class="card-body" style="height: 50vh">
                 <form class="col-sm-12">
                  <div class="input-group">
-                     <input type="text" class="form-control" id="usr"  value="Ahmed Ali" >
+                     <input type="text" class="form-control" id="usr"  value="{{educator_info.name}}" >
                   </div>
                   <div class="input-group">
-                      <input id="msg" type="text" class="form-control" name="msg" value="PHP In Computer science">
+                      <input id="msg" type="text" class="form-control" name="msg" value="{{educator_info.title}}">
                   </div>
                   <div class="input-group">
                       <i class="glyphicon glyphicon-user"></i></span>
-                      <input id="Email" type="text" class="form-control" name="email" value="Mail@Ahmed.Com">
+                      <input id="Email" type="text" class="form-control" name="email" value="{{educator_info.email}}">
                   </div>
                         <div class="col-md-12 social-icons margin: 0 2px 0 5px;" style="margin-top: 30px">
                           <div class="row">
-    
-                            <a href="#" style="margin: 0 5px 0 5px; margin-top: 5px"><span
-                                    class="col-md-2 btn-facebook"></span></a>
-                              <span class="col-md-10"><input id="Email" type="text" class="form-control" name="email" value="facebook@Ahmed.Com"></span>
+                            {%for acc in educator_accounts%}
+                            <a href="{{acc.url}}" style="margin: 0 5px 0 5px; margin-top: 5px"><span
+                                    class="col-md-2 btn"><img src='{{acc.logo}}'></span></a>
+                              <span class="col-md-10"><input id="Email" type="text" class="form-control" name="email" value="{{acc.url}}"></span>
                              <br><br>
-                            <a href="#" style="margin: 0 5px 0 5px; margin-top: 5px"><span
-                                    class="col-md-2 btn-twitter"></span></a>
-                                    <span class="col-md-10"><input id="Email" type="text" class="form-control" name="email" value="twitter@Ahmed.Com"></span>
-                                    <br><br>
-    
-                            <a href="#" style="margin: 0 5px 0 5px; margin-top: 5px"><span
-                                    class=" col-md-2 btn-linkedin"></span></a>
-                                    <span class="col-md-10"><input id="Email" type="text" class="form-control" name="email" value="linkedin@Ahmed.Com"></span>
-                                    <br><br>
-    
-                            <a href="#" style="margin: 0 5px 0 5px; margin-top: 5px"><span
-                                    class="col-md-2 btn-google-plus"></span></a>
-                                    <span class="col-md-10"><input id="Email" type="text" class="form-control" name="email" value="googlePluss@Ahmed.Com"></span>
+                            {%endfor%}
                       </div>
                         </div>
               </form>
@@ -62,13 +51,7 @@
             <div class="col-md-8 card" style="margin-top: 10px">
               <br><br><br><br><br><br>
               <lable class="col-md-12 h4" style="color:rgb(26,99,115);">About Him
-                <textarea class="form-control " rows="10" id="comment">
-                      Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed
-                      do eiusmod tempor incididunt ut labore et dolore magna
-                      aliqua. Ut enim ad minim veniam, quis nostrud exercitation
-                      ullamco laboris nisi ut aliquip ex ea commodo consequat.
-                      Dpa qui officia
-                      deserunt mollit anim id est laborum.</textarea>
+                <textarea class="form-control " rows="10" id="comment">{{educator_info.about_me}}</textarea>
                     </lable>
     
     
@@ -99,9 +82,9 @@
                               <span class="caret"></span>
                           </button>
                           <div class="dropdown-menu">
-                              <a class="dropdown-item" href="#">2000</a>
-                              <a class="dropdown-item" href="#">2001</a>
-                              <a class="dropdown-item" href="#">2003</a>
+                              {%for years in educator_reviews_years%}
+                                <a class="dropdown-item" href="#">{{year}}</a>
+                              {%endfor%}
                           </div>
                         </div>
                           <div class="dropdown">
@@ -113,7 +96,7 @@
                         </button>
                         <div class="dropdown-menu">
                             <div class="dropdown-menu">
-                                {%for dep in departments%}
+                                {%for dep in educator_reviews_departments%}
                                     <li><a class="dropdown-item" href="#">{{dep.name}}</a></li>
                                 {%endfor%}
                             </div>
@@ -142,67 +125,31 @@
                                 <h3 class="card-title mb-0">Student Reviews</h3>
                             </div>
                             <div class="card-body">
+                                {%for rev in educator_reviews%}
                                 <div class="media mb-4">
+                                    {%if rev.is_anonymous%}
                                     <img class="d-flex mr-3 rounded-circle"
-                                         src="img/anonymous.png" width="50" height="50"
+                                         src="{% static 'imgs/anonymous.png'%}" width="50" height="50"
                                          alt="">
                                     <div class="media-body">
                                         <h5 class="mt-0" style="margin-bottom: 2px;">Anonymous</h5>
-    
-                                        <p>Cras sit amet nibh libero, in gravida nulla. Nulla vel
-                                        metus scelerisque ante sollicitudin. Cras purus odio,
-                                        vestibulum in vulputate at, tempus viverra turpis. Fusce
-                                        condimentum nunc ac nisi vulputate fringilla. Donec
-                                        lacinia congue felis in faucibus.</p>
-                                        <div class="btn-group btn-group-justified">
-                                        <button type="button" class="btn btn-link">Delete</button>
-                                        </div>
-    
-                                    </div>
-                                </div>
-                                <div class="media mb-4">
+                                    {%else%}
                                     <img class="d-flex mr-3 rounded-circle"
-                                         src="img/profile-pictures.png" width="50" height="50"
-                                         alt="">
+                                    src="{% static 'dashboard\img\profile-pictures.png'%}" width="50" height="50"
+                                    alt="">
                                     <div class="media-body">
-                                        <h5 class="mt-0" style="margin-bottom: 2px;"><a
-                                                target="_blank" href="#Student/profile.html">Mohamed
-                                            Ali</a></h5>
-    
-                                        <p>Cras sit amet nibh libero, in gravida nulla. Nulla vel
-                                        metus scelerisque ante sollicitudin. Cras purus odio,
-                                        vestibulum in vulputate at, tempus viverra turpis. Fusce
-                                        condimentum nunc ac nisi vulputate fringilla. Donec
-                                        lacinia congue felis in faucibus.</p>
+                                        <h5 class="mt-0" style="margin-bottom: 2px;"><a href="{% url 'dashboard:educator_student_profile' rev.student_id %}">{{rev.student__name}}</a></h5>
+                                    
+                                    {%endif%}
+                                        <p>{{rev.content}}</p>
                                         <div class="btn-group btn-group-justified">
-                                        <button type="button" class="btn btn-link">Delete</button>
+                                            <button type="button" class="btn btn-link">Delete</button>
                                         </div>
-    
+                
                                     </div>
                                 </div>
-                                <div class="media mb-4">
-                                    <img class="d-flex mr-3 rounded-circle"
-                                         src="img/profile-pictures.png" width="50" height="50"
-                                         alt="">
-                                    <div class="media-body">
-                                        <h5 class="mt-0" style="margin-bottom: 2px;"><a
-                                                target="_blank" href="#Student/profile.html">Ahmed
-                                            Mostafa</a></h5>
-    
-                                        <p>Cras sit amet nibh libero, in gravida nulla. Nulla vel
-                                        metus scelerisque ante sollicitudin. Cras purus odio,
-                                        vestibulum in vulputate at, tempus viverra turpis. Fusce
-                                        condimentum nunc ac nisi vulputate fringilla. Donec
-                                        lacinia congue felis in faucibus.<p>
-                                          <div class="btn-group btn-group-justified">
-                                          <button type="button" class="btn btn-link">Delete</button>
-                                          </div>
-    
-    
-    
-    
-                                    </div>
-                                </div>
+                                {%endfor%}
+                                
                                 <ul class="pagination" style="margin-top: 25px">
                                     <li class="page-item"><a class="page-link" href="#">Prev</a>
                                     </li>
