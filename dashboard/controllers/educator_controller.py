@@ -27,19 +27,10 @@ def index(request):
     # Educator Reviews
     educator_reviews = educator_logic.get_educator_reviews(educator_id=user.id)
 
-    # Show 3 contacts per page
-    paginator = Paginator(educator_reviews, 2)
 
-    page = request.GET.get('page')
-    try:
-        reviews = paginator.page(page)
-    except PageNotAnInteger:
-        reviews = paginator.page(1)
-    except EmptyPage:
-        reviews = paginator.page(paginator.num_pages)
 
     result = {
-        'educator_reviews': reviews,
+        'educator_reviews': educator_reviews,
         'educator_rating': educator_rating,
         'educator_reviews_years': educator_reviews_years,
         'educator_reviews_departments': educator_reviews_departments,
@@ -69,22 +60,12 @@ def student_profile(request, student_id):
     # Student Advices
     student_advices = student_logic.get_student_advices(student_id=student_id)
 
-    # Show 3 contacts per page
-    paginator = Paginator(student_advices, 3)
-
-    page = request.GET.get('page')
-    try:
-        advice = paginator.page(page)
-    except PageNotAnInteger:
-        advice = paginator.page(1)
-    except EmptyPage:
-        advice = paginator.page(paginator.num_pages)
     
     result = {
         'student_predictions': predictions,
         'years': years,
         'terms': terms,
-        'student_advices': advice
+        'student_advices': student_advices
     }
     return render(request, 'educator/student_profile.html', result)
     # For Testing Only
@@ -114,19 +95,10 @@ def educator_students(request):
     # Educator Students Pass & Fail Counts
     courses_counts = educator_logic.get_educator_counts(educator_id=user.id)
 
-    # Show 3 contacts per page
-    paginator = Paginator(students, 3)
-
-    page = request.GET.get('page')
-    try:
-        student = paginator.page(page)
-    except PageNotAnInteger:
-        student = paginator.page(1)
-    except EmptyPage:
-        student = paginator.page(paginator.num_pages)
+    
 
     result = {
-        'educator_students': student,
+        'educator_students': students,
         'departments': departments,
         'years': years,
         'terms': terms,

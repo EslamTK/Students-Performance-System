@@ -63,22 +63,11 @@ def student_courses(request):
     # Student All Courses
     courses = student_logic.get_student_courses(student_id=user.id, is_all=True)
 
-    # Show 6 results per page
-    paginator = Paginator(courses, 6)
-
-    page = request.GET.get('page')
-    try:
-        course = paginator.page(page)
-    except PageNotAnInteger:
-        course = paginator.page(1)
-    except EmptyPage:
-        course = paginator.page(paginator.num_pages)
-    courses_page = course
+    
     result = {
         'student_predictions': predictions,
         'years': years,
-        'terms': terms,
-        'student_courses_page': courses_page, 
+        'terms': terms, 
         'student_courses' : courses
     }
     print(result)

@@ -28,19 +28,6 @@ def index(request):
     # Students
     students = administrator_logic.get_students()
 
-    # Show 3 contacts per page
-    paginator = Paginator(students, 6) # show 6 students per page 
-
-    page = request.GET.get('page')
-    try:
-        student = paginator.page(page)
-    except PageNotAnInteger:
-        student = paginator.page(1)
-    except EmptyPage:
-        student = paginator.page(paginator.num_pages)
-   
-    students = student
-
     result = {
         'departments': departments,
         'terms': terms,
