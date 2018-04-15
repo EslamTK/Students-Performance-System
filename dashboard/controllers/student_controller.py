@@ -1,6 +1,7 @@
 from django.contrib.auth import authenticate
-from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
+from django.http import JsonResponse
 from django.shortcuts import render
+from django.views.decorators.http import require_GET, require_POST
 
 from dashboard.logic.educator_logic import EducatorLogic
 from dashboard.logic.general_logic import GeneralLogic
@@ -13,6 +14,7 @@ educator_logic = EducatorLogic()
 general_logic = GeneralLogic()
 
 
+@require_GET
 def index(request):
     # Student Advices
     student_advices = student_logic.get_student_advices(student_id=user.id)
@@ -23,18 +25,8 @@ def index(request):
     # Student Recommendations
     recommendations = student_logic.get_student_recommendations(student_id=user.id)
 
-    # Show 25 contacts per page
-    paginator = Paginator(student_advices, 6)
-
-    page = request.GET.get('page')
-    try:
-        advice = paginator.page(page)
-    except PageNotAnInteger:
-        advice = paginator.page(1)
-    except EmptyPage:
-        advice = paginator.page(paginator.num_pages)
     result = {
-        'student_advices': advice,
+        'student_advices': student_advices,
         'student_predictions': predictions,
         'student_recommendations': recommendations
     }
@@ -50,6 +42,18 @@ def index(request):
     # return JsonResponse(test_result, safe=False)
 
 
+@require_POST
+def get_student_advices(request):
+    # Getting the page
+    page = request.POST.get('page')
+
+    # Student Advices
+    student_advices = student_logic.get_student_advices(student_id=user.id, page=page)
+
+    return JsonResponse(list(student_advices.values()), safe=False)
+
+
+@require_GET
 def student_courses(request):
     # Student Current Courses Predictions
     predictions = student_logic.get_student_predictions(student_id=user.id)
@@ -63,17 +67,6 @@ def student_courses(request):
     # Student All Courses
     courses = student_logic.get_student_courses(student_id=user.id, is_all=True)
 
-    # Show 6 results per page
-    paginator = Paginator(courses, 6)
-
-    page = request.GET.get('page')
-    try:
-        course = paginator.page(page)
-    except PageNotAnInteger:
-        course = paginator.page(1)
-    except EmptyPage:
-        course = paginator.page(paginator.num_pages)
-    courses = course
     result = {
         'student_predictions': predictions,
         'years': years,
@@ -93,6 +86,18 @@ def student_courses(request):
     # return JsonResponse(test_result, safe=False)
 
 
+@require_POST
+def get_student_courses(request):
+    # Getting the page
+    page = request.POST.get('page')
+
+    # Student All Courses
+    courses = student_logic.get_student_courses(student_id=user.id, is_all=True, page=page)
+
+    return JsonResponse(list(courses.values()), safe=False)
+
+
+@require_GET
 def educator_profile(request, educator_id):
     # Educator Info
     educator_info = educator_logic.get_educator_info(educator_id)

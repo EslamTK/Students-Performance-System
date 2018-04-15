@@ -1,3 +1,5 @@
+from django.core.paginator import Paginator
+
 from machine_learning import api as ml_api
 from .unit_of_work import UnitOfWork
 from .utilities import convert_boolean_to_yes_no
@@ -8,14 +10,19 @@ class StudentLogic:
     def __init__(self):
         self.unit_of_work = UnitOfWork()
 
-    def get_student_advices(self, student_id):
+    def get_student_advices(self, student_id, page=1, page_size=6):
         advices = self.unit_of_work.educators_advices.get_student_advices(student=student_id)
+
+        advices = Paginator(advices, page_size).get_page(page)
 
         return advices
 
-    def get_student_courses(self, student_id, is_all=False, year=None, term=None):
+    def get_student_courses(self, student_id, is_all=False, year=None, term=None,
+                            page=1, page_size=6):
         courses = self.unit_of_work.students_courses. \
             get_student_courses(student=student_id, is_all=is_all, year=year, term=term)
+
+        courses = Paginator(courses, page_size).get_page(page)
 
         return courses
 
