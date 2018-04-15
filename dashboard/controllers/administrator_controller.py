@@ -1,11 +1,11 @@
 from django.contrib.auth import authenticate
-from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
+from django.forms.models import model_to_dict
 from django.shortcuts import render
+
 from dashboard.logic.administrator_logic import AdministratorLogic
 from dashboard.logic.educator_logic import EducatorLogic
 from dashboard.logic.general_logic import GeneralLogic
 from dashboard.logic.student_logic import StudentLogic
-from django.forms.models import model_to_dict
 
 user = authenticate(username='admin', password='a1$$m2IN12')
 
@@ -34,7 +34,6 @@ def index(request):
         'years_counts': years_counts,
         'students': students
     }
-    
 
     # For Testing Only
     # test_result = {
@@ -144,9 +143,9 @@ def educator_profile(request, educator_id):
 
     educator_info = model_to_dict(educator_info)
     educator_info['photo'] = educator_info['photo'].url
-    
+
     educator_accounts = []
-    
+
     for i in accounts:
         account = {
             'id': i.id,
@@ -163,7 +162,6 @@ def educator_profile(request, educator_id):
         'educator_reviews_years': educator_reviews_years,
         'educator_reviews_departments': educator_reviews_departments
     }
-    
 
     return render(request, 'administrator/admin_educator_profile.html', result)
     # For Testing Only

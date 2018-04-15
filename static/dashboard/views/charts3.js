@@ -4,13 +4,13 @@ $(function () {
     var randomScalingFactor = function () {
         return Math.round(Math.random() * 10)
     };
-    
+
     var my_data = document.getElementById("myVar").value;
-    
+
     //formating data to valid json format
-    var data = my_data.slice(10,my_data.length,my_data)
-    data = data.replace('>','');
-    data = data.replace(/'/g,'"');
+    var data = my_data.slice(10, my_data.length, my_data)
+    data = data.replace('>', '');
+    data = data.replace(/'/g, '"');
     data = JSON.parse(data);
 
     console.log(data);
@@ -21,9 +21,9 @@ $(function () {
     var finalPass = [];
     var finalFail = [];
 
-    for(var i = 0; i < data.length; i++){
-        
-        if(data[i].midterm_pass == 0){
+    for (var i = 0; i < data.length; i++) {
+
+        if (data[i].midterm_pass == 0) {
             //for data to be visual remove if valid data entered
             //data[i].midterm_pass = randomScalingFactor();
             //for data to be visual remove if valid data entered
@@ -34,12 +34,12 @@ $(function () {
             midFail.push(data[i].total - data[i].midterm_pass);
             finalPass.push(data[i].final_pass);
             finalFail.push(data[i].total - data[i].final_pass);
-        }     
+        }
     }
 
 
     var lineChartData = {
-        labels: label_data ,
+        labels: label_data,
         datasets: [
             {
                 label: 'Midterm Pass',

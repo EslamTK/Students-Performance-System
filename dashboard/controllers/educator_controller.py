@@ -1,5 +1,4 @@
 from django.contrib.auth import authenticate
-from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 from django.shortcuts import render
 
 from dashboard.logic.educator_logic import EducatorLogic
@@ -94,8 +93,6 @@ def educator_students(request):
 
     # Educator Students Pass & Fail Counts
     courses_counts = educator_logic.get_educator_counts(educator_id=user.id)
-
-    
 
     result = {
         'educator_students': students,

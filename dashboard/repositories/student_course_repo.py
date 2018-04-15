@@ -25,7 +25,7 @@ class StudentCourseRepo(Repo):
                 .order_by('-created_at')
 
         elif is_current:
-            courses = courses.exclude(final_grade__isnull=True)
+            courses = courses.exclude(final_grade__isnull=False)
 
         return courses
 

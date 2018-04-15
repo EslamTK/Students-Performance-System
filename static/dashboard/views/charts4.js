@@ -9,9 +9,9 @@ $(function () {
     var my_data = document.getElementById("myData").value;
     console.log(my_data);
     //formating data to valid json format
-    var data = my_data.slice(10,my_data.length,my_data)
-    data = data.replace('>','');
-    data = data.replace(/'/g,'"');
+    var data = my_data.slice(10, my_data.length, my_data)
+    data = data.replace('>', '');
+    data = data.replace(/'/g, '"');
     data = JSON.parse(data);
     console.log(data);
 
@@ -20,11 +20,11 @@ $(function () {
     var fail = [];
 
 
-    for(var i = 0; i < data.length; i++){
-        
+    for (var i = 0; i < data.length; i++) {
+
         label_data.push(data[i].year);
         success.push(data[i].success);
-        fail.push(data[i].fail);    
+        fail.push(data[i].fail);
     }
 
     var lineChartData = {

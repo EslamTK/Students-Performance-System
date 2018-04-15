@@ -7,23 +7,23 @@ $(function () {
 
     //getting data from hidden input field
     var my_data = document.getElementById("myVar").value;
-    
+
     //transform string into valid json string
-    var data = my_data.replace(/'/g,'"');
-    
+    var data = my_data.replace(/'/g, '"');
+
     //trasnform data into json
-    data =JSON.parse(data);
+    data = JSON.parse(data);
     console.log(data);
-    
+
     //collecting data
     var label_data = [];
     var midterm = [];
     var prediction = [];
-    for(var i = 0; i < data.length; i++){
+    for (var i = 0; i < data.length; i++) {
         label_data.push(data[i].name);
         midterm.push(data[i].midterm);
         prediction.push(data[i].prediction);
-       
+
     }
     var lineChartData = {
         labels: label_data,

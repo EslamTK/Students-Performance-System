@@ -1,120 +1,121 @@
 {% extends 'base.html' %}
 {% block title %}Students{% endblock %}
 {% block body %}
-{% load static %}
+    {% load static %}
 
-<script>
-    var requireJS = [];
-    loadJS(requireJS, "{% static 'dashboard/views/charts4.js'%}");
-</script>
-    <input type="hidden" id="myData" name="variable" readonly value="{{years_counts}}">
-<main class="animated fadeIn row">
+    <script>
+        var requireJS = [];
+        loadJS(requireJS, "{% static 'dashboard/views/charts4.js'%}");
+    </script>
+    <input type="hidden" id="myData" name="variable" readonly value="{{ years_counts }}">
+    <main class="animated fadeIn row">
 
-    <div class="card" style="margin-top: 10px">
-        <div class="card-header">
-            <h3 class="card-title mb-0">Students Performance</h3>
-        </div>
-        <div class="card-body">
-            <div class="row">
+        <div class="card" style="margin-top: 10px">
+            <div class="card-header">
+                <h3 class="card-title mb-0">Students Performance</h3>
+            </div>
+            <div class="card-body">
+                <div class="row">
 
-                <div class="input-group-btn col-md-6">
-                    <button type="button" class="btn btn-light dropdown-toggle"
-                            data-toggle="dropdown">Department
-                        <span class="caret"></span>
-                    </button>
-                    <div class="dropdown-menu">
-                        {%for dep in departments%}
-                            <li><a class="dropdown-item" href="#">{{dep.name}}</a></li>
-                        {%endfor%}
+                    <div class="input-group-btn col-md-6">
+                        <button type="button" class="btn btn-light dropdown-toggle"
+                                data-toggle="dropdown">Department
+                            <span class="caret"></span>
+                        </button>
+                        <div class="dropdown-menu">
+                            {% for dep in departments %}
+                                <li><a class="dropdown-item" href="#">{{ dep.name }}</a></li>
+                            {% endfor %}
+                        </div>
                     </div>
-                </div>
 
-                <div class="col-md-6">
-                    <div class="btn-toolbar float-right" role="toolbar"
-                         aria-label="Toolbar with button groups">
-                        <div class="btn-group mr-3" data-toggle="buttons"
-                             aria-label="First group">
-                             {%for term in terms%}
-                             {%if forloop.counter == 1%}
-                                 <label class="btn btn-outline-secondary active">
-                             {%else%}
-                                 <label class="btn btn-outline-secondary">
-                             {%endif%}
-                             <input type="radio" name="options" id="option"+"{{forloop.counter}}"
-                                    > {{term.name}}
-                         </label>
-                         {%endfor%}
-                            
+                    <div class="col-md-6">
+                        <div class="btn-toolbar float-right" role="toolbar"
+                             aria-label="Toolbar with button groups">
+                            <div class="btn-group mr-3" data-toggle="buttons"
+                                 aria-label="First group">
+                                {% for term in terms %}
+                                    {% if forloop.counter == 1 %}
+                                        <label class="btn btn-outline-secondary active">
+                                    {% else %}
+                                        <label class="btn btn-outline-secondary">
+                                    {% endif %}
+                                <input type="radio" name="options" id="option" +"{{ forloop.counter }}"
+                                > {{ term.name }}
+                                </label>
+                                {% endfor %}
+
+                            </div>
                         </div>
                     </div>
                 </div>
-            </div>
 
-            <div class="chart-wrapper" style="height: 70vh;width: 80vw;">
-                <canvas id="canvas-1" class="chart"
-                        style="height: inherit;"></canvas>
+                <div class="chart-wrapper" style="height: 70vh;width: 80vw;">
+                    <canvas id="canvas-1" class="chart"
+                            style="height: inherit;"></canvas>
+                </div>
             </div>
         </div>
-    </div>
 
-    <div class="col-md-12">
-        <div class="card" style="margin-top: 10px">
-            <div class="card-header">
-                <div class="row">
-                    <div class="col-md-8 col-sm-12">
-                        <h3 class="card-title mb-0">Students</h3>
-                    </div>
+        <div class="col-md-12">
+            <div class="card" style="margin-top: 10px">
+                <div class="card-header">
+                    <div class="row">
+                        <div class="col-md-8 col-sm-12">
+                            <h3 class="card-title mb-0">Students</h3>
+                        </div>
 
-                    <div class="input-group col-md-4 col-sm-12">
-                        <input type="text" id="input1-group2"
-                               name="input1-group2"
-                               class="form-control" placeholder="Student Name">
-                        <span class=" input-group-btn ">
+                        <div class="input-group col-md-4 col-sm-12">
+                            <input type="text" id="input1-group2"
+                                   name="input1-group2"
+                                   class="form-control" placeholder="Student Name">
+                            <span class=" input-group-btn ">
                     <button type="button" class="btn btn-primary "><i
                             class="fa fa-search"></i></button>
                   </span>
 
+                        </div>
                     </div>
                 </div>
-            </div>
-            <div class="card-body">
-                <table class="table table-responsive-sm">
-                    <thead>
-                    <tr>
-                        <th>Student</th>
-                        <th>Department</th>
-                        <th>Year</th>
-                    </tr>
-                    </thead>
-                    <tbody>
+                <div class="card-body">
+                    <table class="table table-responsive-sm">
+                        <thead>
+                        <tr>
+                            <th>Student</th>
+                            <th>Department</th>
+                            <th>Year</th>
+                        </tr>
+                        </thead>
+                        <tbody>
                         {% for student in students %}
                             <tr>
-                            <td><a href="{% url 'dashboard:administrator_student_profile' student.user_id%}" target="_blank">{{student.name}}</a>
-                            </td>
-                                <td>{{student.department__name}}</td>
-                                <td>{{student.year}}</td>
+                                <td><a href="{% url 'dashboard:administrator_student_profile' student.user_id %}"
+                                       target="_blank">{{ student.name }}</a>
+                                </td>
+                                <td>{{ student.department__name }}</td>
+                                <td>{{ student.year }}</td>
                             </tr>
                         {% endfor %}
-                    </tbody>
-                </table>
-                <ul class="pagination">
-                    <li class="page-item"><a class="page-link" href="#">Prev</a>
-                    </li>
-                    <li class="page-item active">
-                        <a class="page-link" href="#">1</a>
-                    </li>
-                    <li class="page-item"><a class="page-link" href="#">2</a>
-                    </li>
-                    <li class="page-item"><a class="page-link" href="#">3</a>
-                    </li>
-                    <li class="page-item"><a class="page-link" href="#">4</a>
-                    </li>
-                    <li class="page-item"><a class="page-link" href="#">Next</a>
-                    </li>
-                </ul>
+                        </tbody>
+                    </table>
+                    <ul class="pagination">
+                        <li class="page-item"><a class="page-link" href="#">Prev</a>
+                        </li>
+                        <li class="page-item active">
+                            <a class="page-link" href="#">1</a>
+                        </li>
+                        <li class="page-item"><a class="page-link" href="#">2</a>
+                        </li>
+                        <li class="page-item"><a class="page-link" href="#">3</a>
+                        </li>
+                        <li class="page-item"><a class="page-link" href="#">4</a>
+                        </li>
+                        <li class="page-item"><a class="page-link" href="#">Next</a>
+                        </li>
+                    </ul>
+                </div>
             </div>
         </div>
-    </div>
-    </div>
-</main>
+        </div>
+    </main>
 {% endblock %}

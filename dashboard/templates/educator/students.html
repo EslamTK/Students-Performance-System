@@ -24,18 +24,18 @@
                       <div>  <button type="button" class="btn btn-light dropdown-toggle"
                                 data-toggle="dropdown" style="color:rgba(41,54,61,1);font-size: 16px;font-weight: bold;font-variant: small-caps;">Year
                             <div class="dropdown-menu" >
-                                {%for year in years%}
-                                    <li><a class="dropdown-item" href="#">{{year.name}}</a></li>
-                                {%endfor%}    
+                                {% for year in years %}
+                                    <li><a class="dropdown-item" href="#">{{ year.name }}</a></li>
+                                {% endfor %}
                             </div>
                         </button></div>
     
                         <div><button type="button" class="btn btn-light dropdown-toggle"
                                   data-toggle="dropdown" style="color:rgba(41,54,61,1);font-size: 16px;font-weight: bold;font-variant: small-caps;">Department
                                   <div class="dropdown-menu" >
-                                        {%for dep in departments%}
-                                            <li><a class="dropdown-item" href="#">{{dep.name}}</a></li>
-                                        {%endfor%}
+                                      {% for dep in departments %}
+                                          <li><a class="dropdown-item" href="#">{{ dep.name }}</a></li>
+                                      {% endfor %}
                                   </div>
                           </button></div>
     
@@ -47,16 +47,16 @@
                              aria-label="Toolbar with button groups">
                             <div class="btn-group mr-3" data-toggle="buttons"
                                  aria-label="First group">
-                                {%for term in terms%}
-                                    {%if forloop.counter == 1%}
+                                {% for term in terms %}
+                                    {% if forloop.counter == 1 %}
                                         <label class="btn btn-outline-secondary active">
-                                    {%else%}
+                                    {% else %}
                                         <label class="btn btn-outline-secondary">
-                                    {%endif%}
-                                    <input type="radio" name="options" id="option"+"{{forloop.counter}}"
-                                           > {{term.name}}
+                                    {% endif %}
+                                <input type="radio" name="options" id="option" +"{{ forloop.counter }}"
+                                > {{ term.name }}
                                 </label>
-                                {%endfor%}
+                                {% endfor %}
                             </div>
     
     

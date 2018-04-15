@@ -22,9 +22,9 @@
                             <span class="caret"></span>
                         </button>
                         <div class="dropdown-menu">
-                            {%for year in years%}
-                                <a class="dropdown-item" href="#">{{year.name}}</a>
-                            {%endfor%}
+                            {% for year in years %}
+                                <a class="dropdown-item" href="#">{{ year.name }}</a>
+                            {% endfor %}
                             
                         </div>
                     </div>
@@ -34,16 +34,16 @@
                              aria-label="Toolbar with button groups">
                             <div class="btn-group mr-3" data-toggle="buttons"
                                  aria-label="First group">
-                                {%for term in terms%}
-                                    {%if forloop.counter == 1%}
+                                {% for term in terms %}
+                                    {% if forloop.counter == 1 %}
                                         <label class="btn btn-outline-secondary active">
-                                    {%else%}
+                                    {% else %}
                                         <label class="btn btn-outline-secondary">
-                                    {%endif%}
-                                    <input type="radio" name="options" id="option"+"{{forloop.counter}}"
-                                           > {{term.name}}
+                                    {% endif %}
+                                <input type="radio" name="options" id="option" +"{{ forloop.counter }}"
+                                > {{ term.name }}
                                 </label>
-                                {%endfor%}
+                                {% endfor %}
                             </div>
                         </div>
                     </div>

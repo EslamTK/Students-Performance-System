@@ -7,7 +7,7 @@
     var requireJS = [];
     loadJS(requireJS, "{% static 'dashboard/views/charts2.js'%}");
 </script>
-<input type="hidden" id="myVar" name="variable" readonly value="{{ educator_rating }}">
+    <input type="hidden" id="myVar" name="variable" readonly value="{{ educator_rating }}">
 <main class="animated fadeIn row">
 
     <div class="card" style="margin-top: 10px">
@@ -23,9 +23,9 @@
                         <span class="caret"></span>
                     </button>
                     <div class="dropdown-menu">
-                        {%for year in educator_reviews_years%}
-                            <a class="dropdown-item" href="#">{{year.name}}</a>
-                        {%endfor%}
+                        {% for year in educator_reviews_years %}
+                            <a class="dropdown-item" href="#">{{ year.name }}</a>
+                        {% endfor %}
                     </div>
 
                 </div>
@@ -35,9 +35,9 @@
                             <span class="caret"></span>
                     </button>
                     <div class="dropdown-menu">
-                        {%for dep in educator_reviews_departments%}
-                            <a class="dropdown-item" href="#">{{dep.name}}</a>
-                        {%endfor%}
+                        {% for dep in educator_reviews_departments %}
+                            <a class="dropdown-item" href="#">{{ dep.name }}</a>
+                        {% endfor %}
                    </div>
                     </div>
 

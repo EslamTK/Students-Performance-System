@@ -8,11 +8,11 @@ $(function () {
     //getting data from hidden input field
     var my_data = document.getElementById("myData").value;
     console.log(my_data);
-    
+
     //formating data to valid json format
-    var data = my_data.slice(10,my_data.length,my_data)
-    data = data.replace('>','');
-    data = data.replace(/'/g,'"');
+    var data = my_data.slice(10, my_data.length, my_data)
+    data = data.replace('>', '');
+    data = data.replace(/'/g, '"');
     data = JSON.parse(data);
     console.log(data);
 
@@ -20,38 +20,38 @@ $(function () {
     var review_item_label = [];
     var review_item = {};
 
-    for(var i = 0; i < data.length; i++){
-        if(!label_data.includes(data[i].year)){
+    for (var i = 0; i < data.length; i++) {
+        if (!label_data.includes(data[i].year)) {
             label_data.push(data[i].year);
         }
-            if(review_item_label.includes(data[i].review_item__name)){
-                review_item[data[i].review_item__name].push(data[i].rate__avg);
+        if (review_item_label.includes(data[i].review_item__name)) {
+            review_item[data[i].review_item__name].push(data[i].rate__avg);
             }
-            else{
-                review_item_label.push(data[i].review_item__name);
-                review_item[data[i].review_item__name] = new Array();
-                review_item[data[i].review_item__name].push(data[i].rate__avg);
-
-            }
+        else {
+            review_item_label.push(data[i].review_item__name);
+            review_item[data[i].review_item__name] = new Array();
+            review_item[data[i].review_item__name].push(data[i].rate__avg);
 
         }
-               
+
+    }
+
 
     var colors = [];
-    for(var i  = 0; i < review_item_label.length; i++){
-        colors.push(''+randomScalingFactor()+','+randomScalingFactor()+','+randomScalingFactor()+',');
+    for (var i = 0; i < review_item_label.length; i++) {
+        colors.push('' + randomScalingFactor() + ',' + randomScalingFactor() + ',' + randomScalingFactor() + ',');
     }
     var datasetss = [];
-    for(var i = 0; i < review_item_label.length; i++){
+    for (var i = 0; i < review_item_label.length; i++) {
         datasetss.push({
             label: review_item_label[i],
-            backgroundColor: 'rgba('+colors[i]+'0.2)',
-            borderColor: 'rgba('+colors[i]+'1)',
-            pointBackgroundColor: 'rgba('+colors[i]+'1)',
+            backgroundColor: 'rgba(' + colors[i] + '0.2)',
+            borderColor: 'rgba(' + colors[i] + '1)',
+            pointBackgroundColor: 'rgba(' + colors[i] + '1)',
             pointBorderColor: '#fff',
             data: review_item[review_item_label[i]]
         });
-       
+
     }
 
     var lineChartData = {
