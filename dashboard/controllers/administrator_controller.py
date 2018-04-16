@@ -1,6 +1,8 @@
 from django.contrib.auth import authenticate
 from django.forms.models import model_to_dict
+from django.http import JsonResponse
 from django.shortcuts import render
+from django.views.decorators.http import require_GET
 
 from dashboard.logic.administrator_logic import AdministratorLogic
 from dashboard.logic.educator_logic import EducatorLogic
@@ -15,6 +17,7 @@ general_logic = GeneralLogic()
 administrator_logic = AdministratorLogic()
 
 
+@require_GET
 def index(request):
     # Departments
     departments = general_logic.get_departments()
@@ -26,13 +29,14 @@ def index(request):
     years_counts = administrator_logic.get_courses_pass_fail_counts()
 
     # Students
-    students = administrator_logic.get_students()
+    students, students_num_pages = administrator_logic.get_students()
 
     result = {
         'departments': departments,
         'terms': terms,
         'years_counts': years_counts,
-        'students': students
+        'students': students,
+        'students_num_pages': students_num_pages
     }
 
     # For Testing Only
@@ -46,6 +50,28 @@ def index(request):
     return render(request, 'administrator/index.html', result)
 
 
+@require_GET
+def get_students(request):
+    # Getting the page number
+    page = request.GET.get('page')
+
+    # Getting the search keyword
+    keyword = request.GET.get('keyword')
+
+    # Students
+    students, num_pages = administrator_logic.get_students(keyword=keyword, page=page)
+
+    formatted_students = list(students)
+
+    result = {
+        'students': formatted_students,
+        'num_pages': num_pages
+    }
+
+    return JsonResponse(result)
+
+
+@require_GET
 def student_profile(request, student_id):
     # Student Data
     student = student_logic.get_student_data(student_id=student_id)
@@ -75,7 +101,6 @@ def student_profile(request, student_id):
         'courses': courses
     }
 
-    print(result)
     return render(request, 'administrator/admin_student_profile.html', result)
     # For Testing Only
     # test_result = {
@@ -94,12 +119,13 @@ def student_profile(request, student_id):
     # return JsonResponse(test_result, safe=False)
 
 
+@require_GET
 def educators(request):
     # Departments
     departments = general_logic.get_departments()
 
     # Educators
-    educators_list = administrator_logic.get_educators()
+    educators_list, educators_num_pages = administrator_logic.get_educators()
 
     # Educators Rating
     educators_rating = administrator_logic.get_educators_rating()
@@ -107,10 +133,10 @@ def educators(request):
     result = {
         'departments': departments,
         'educators': educators_list,
+        'educators_num_pages': educators_num_pages,
         'educators_rating': educators_rating
     }
 
-    print(result)
     return render(request, 'administrator/admin_educators.html', result)
     # For Testing Only
     # test_result = {
@@ -122,6 +148,28 @@ def educators(request):
     # return JsonResponse(test_result, safe=False)
 
 
+@require_GET
+def get_educators(request):
+    # Getting the page number
+    page = request.GET.get('page')
+
+    # Getting the search keyword
+    keyword = request.GET.get('keyword')
+
+    # Students
+    educators_list, num_pages = administrator_logic.get_educators(keyword=keyword, page=page)
+
+    formatted_educators = list(educators_list)
+
+    result = {
+        'educators': formatted_educators,
+        'num_pages': num_pages
+    }
+
+    return JsonResponse(result)
+
+
+@require_GET
 def educator_profile(request, educator_id):
     # Educator Info
     educator_info = educator_logic.get_educator_info(educator_id=educator_id)
@@ -139,7 +187,7 @@ def educator_profile(request, educator_id):
     educator_reviews_departments = educator_logic.get_educator_reviews_departments(educator_id=educator_id)
 
     # Educator Reviews
-    educator_reviews = educator_logic.get_educator_reviews(educator_id=educator_id)
+    educator_reviews, educator_reviews_num_pages = educator_logic.get_educator_reviews(educator_id=educator_id)
 
     educator_info = model_to_dict(educator_info)
     educator_info['photo'] = educator_info['photo'].url
@@ -154,10 +202,12 @@ def educator_profile(request, educator_id):
             'url': i.url
         }
         educator_accounts.append(account)
+
     result = {
         'educator_info': educator_info,
         'educator_accounts': educator_accounts,
         'educator_reviews': educator_reviews,
+        'educator_reviews_num_pages': educator_reviews_num_pages,
         'educator_rating': educator_rating,
         'educator_reviews_years': educator_reviews_years,
         'educator_reviews_departments': educator_reviews_departments

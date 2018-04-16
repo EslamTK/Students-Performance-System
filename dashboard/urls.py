@@ -49,6 +49,10 @@ urlpatterns = [
          administrator_controller.index,
          name='administrator_index'),
 
+    path('administrator_students',
+         administrator_controller.get_students,
+         name='administrator_students_paginator'),
+
     path('administrator/student/<int:student_id>/',
          administrator_controller.student_profile,
          name='administrator_student_profile'),
@@ -56,6 +60,10 @@ urlpatterns = [
     path('administrator/educators',
          administrator_controller.educators,
          name='administrator_educators'),
+
+    path('administrator_educators',
+         administrator_controller.get_educators,
+         name='administrator_educators_paginator'),
 
     path('administrator/educator/<int:educator_id>/',
          administrator_controller.educator_profile,

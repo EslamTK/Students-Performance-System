@@ -1,3 +1,5 @@
+from django.core.paginator import Paginator
+
 from dashboard.logic.student_logic import StudentLogic
 from .unit_of_work import UnitOfWork
 
@@ -7,15 +9,23 @@ class AdministratorLogic:
     def __init__(self):
         self.unit_of_work = UnitOfWork()
 
-    def get_students(self):
-        students = self.unit_of_work.students.get_all()
+    def get_students(self, keyword=None, page=1, page_size=6):
+        students = self.unit_of_work.students.get_all(keyword=keyword)
 
-        return students
+        paginator = Paginator(students, page_size)
 
-    def get_educators(self):
-        educators = self.unit_of_work.educators.get_all()
+        students = paginator.get_page(page)
 
-        return educators
+        return students, paginator.num_pages
+
+    def get_educators(self, keyword=None, page=1, page_size=6):
+        educators = self.unit_of_work.educators.get_all(keyword=keyword)
+
+        paginator = Paginator(educators, page_size)
+
+        educators = paginator.get_page(page)
+
+        return educators, paginator.num_pages
 
     def get_educators_rating(self, department=None):
         rating = self.unit_of_work.students_review_items.get_educators_rating(department=department)
