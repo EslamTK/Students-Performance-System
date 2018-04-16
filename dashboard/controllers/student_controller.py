@@ -54,7 +54,7 @@ def get_student_advices(request):
 
     formatted_advices = []
 
-    for i in student_advices.object_list:
+    for i in student_advices:
         advice = {
             'id': i.id,
             'educator_id': i.educator_id,
@@ -121,7 +121,7 @@ def get_student_courses(request):
 
     formatted_courses = []
 
-    for i in courses.object_list:
+    for i in courses:
         course = {
             'id': i.id,
             'course_name': i.course.name,
@@ -134,7 +134,7 @@ def get_student_courses(request):
 
     result = {
         'courses': formatted_courses,
-        'courses_num_pages': courses_num_pages
+        'num_pages': courses_num_pages
     }
 
     return JsonResponse(result)

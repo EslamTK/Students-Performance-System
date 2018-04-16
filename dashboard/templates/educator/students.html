@@ -119,10 +119,10 @@
                             <td>{{student.course__name}}</td>
                             <td>{{student.student__department__name}}</td>
                             <td>{{student.course__year__name}}</td>
-                            {%if student.final_grade is None%}
+                            {% if student.prediction_grade is None %}
                                 <td>--</td>
                             {%else%}
-                                {%if student.final_grade >= 50%}
+                                {% if student.prediction_grade >= 50 %}
                                 <td>
                                     <span class="badge badge-success">Pass</span>
                                 </td>

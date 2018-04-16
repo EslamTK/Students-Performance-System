@@ -1,3 +1,5 @@
+from django.core.paginator import Paginator
+
 from .unit_of_work import UnitOfWork
 
 
@@ -32,15 +34,23 @@ class EducatorLogic:
 
         return rating
 
-    def get_educator_reviews(self, educator_id):
+    def get_educator_reviews(self, educator_id, page=1, page_size=6):
         reviews = self.unit_of_work.students_reviews.get_educator_reviews(educator_id)
 
-        return reviews
+        paginator = Paginator(reviews, page_size)
 
-    def get_educator_students(self, educator_id):
-        students = self.unit_of_work.students_courses.get_educator_students(educator=educator_id)
+        reviews = paginator.get_page(page)
 
-        return students
+        return reviews, paginator.num_pages
+
+    def get_educator_students(self, educator_id, keyword=None, page=1, page_size=2):
+        students = self.unit_of_work.students_courses.get_educator_students(educator=educator_id, keyword=keyword)
+
+        paginator = Paginator(students, page_size)
+
+        students = paginator.get_page(page)
+
+        return students, paginator.num_pages
 
     def get_educator_counts(self, educator_id, department=None, year=None, term=None):
         counts = self.unit_of_work.students_courses. \

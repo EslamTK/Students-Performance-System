@@ -32,12 +32,19 @@ class StudentCourseRepo(Repo):
 
         return courses
 
-    def get_educator_students(self, educator):
+    def get_educator_students(self, educator, keyword=None):
 
-        students = self._model.objects.filter(educator=educator) \
+        filters = {
+            'educator': educator
+        }
+
+        if keyword:
+            filters['student__name__icontains'] = keyword
+
+        students = self._model.objects.filter(**filters) \
             .values('student', 'student__name', 'student__department', 'student__department__name',
                     'course', 'course__name', 'course__year', 'course__year__name', 'final_grade',
-                    'prediction_grade').order_by('-created_at')
+                    'prediction_grade').order_by('-created_at').exclude(final_grade__isnull=False)
 
         return students
 
