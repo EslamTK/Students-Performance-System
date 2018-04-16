@@ -8,7 +8,8 @@ class StudentCourseRepo(Repo):
     def __init__(self):
         super().__init__(StudentCourse)
 
-    def get_student_courses(self, student, is_current=True, is_all=False, year=None, term=None):
+    def get_student_courses(self, student, is_current=True, is_all=False, keyword=None,
+                            year=None, term=None):
 
         filters = {
             'student': student
@@ -18,11 +19,13 @@ class StudentCourseRepo(Repo):
             filters['course__year'] = year
             filters['course__term'] = term
 
-        courses = self._model.objects.filter(**filters)
+        if keyword:
+            filters['course__name__icontains'] = keyword
+
+        courses = self._model.objects.filter(**filters).order_by('-created_at')
 
         if is_all:
-            courses = courses.select_related('course', 'course__year', 'course__term', 'educator') \
-                .order_by('-created_at')
+            courses = courses.select_related('course', 'course__year', 'course__term', 'educator')
 
         elif is_current:
             courses = courses.exclude(final_grade__isnull=False)

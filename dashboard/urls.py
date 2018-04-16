@@ -6,7 +6,9 @@ app_name = 'dashboard'
 
 urlpatterns = [
     path('student/', student_controller.index, name='student_index'),
+    path('student_advices/', student_controller.get_student_advices, name='student_advices_paginator'),
     path('student/courses/', student_controller.student_courses, name='student_courses'),
+    path('student_courses/', student_controller.get_student_courses, name='student_courses_paginator'),
     path('student/educator/<int:educator_id>/', student_controller.educator_profile, name='student_educator_profile'),
     path('educator/', educator_controller.index, name='educator_index'),
     path('educator/student/<int:student_id>/', educator_controller.student_profile, name='educator_student_profile'),

@@ -1,7 +1,7 @@
 from django.contrib.auth import authenticate
 from django.http import JsonResponse
 from django.shortcuts import render
-from django.views.decorators.http import require_GET, require_POST
+from django.views.decorators.http import require_GET
 
 from dashboard.logic.educator_logic import EducatorLogic
 from dashboard.logic.general_logic import GeneralLogic
@@ -16,8 +16,9 @@ general_logic = GeneralLogic()
 
 @require_GET
 def index(request):
+
     # Student Advices
-    student_advices = student_logic.get_student_advices(student_id=user.id)
+    student_advices, student_advices_num_pages = student_logic.get_student_advices(student_id=user.id)
 
     # Student Courses Predictions
     predictions = student_logic.get_student_predictions(student_id=user.id)
@@ -27,6 +28,7 @@ def index(request):
 
     result = {
         'student_advices': student_advices,
+        'student_advices_num_pages': student_advices_num_pages,
         'student_predictions': predictions,
         'student_recommendations': recommendations
     }
@@ -42,15 +44,33 @@ def index(request):
     # return JsonResponse(test_result, safe=False)
 
 
-@require_POST
+@require_GET
 def get_student_advices(request):
-    # Getting the page
-    page = request.POST.get('page')
+    # Getting the page number
+    page = request.GET.get('page')
 
     # Student Advices
-    student_advices = student_logic.get_student_advices(student_id=user.id, page=page)
+    student_advices, num_pages = student_logic.get_student_advices(student_id=user.id, page=page)
 
-    return JsonResponse(list(student_advices.values()), safe=False)
+    formatted_advices = []
+
+    for i in student_advices.object_list:
+        advice = {
+            'id': i.id,
+            'educator_id': i.educator_id,
+            'educator_name': i.educator.name,
+            'educator_photo_url': i.educator.photo.url,
+            'created_at': i.created_at,
+            'content': i.content
+        }
+        formatted_advices.append(advice)
+
+    result = {
+        'advices': formatted_advices,
+        'num_pages': num_pages
+    }
+
+    return JsonResponse(result)
 
 
 @require_GET
@@ -65,13 +85,14 @@ def student_courses(request):
     terms = general_logic.get_terms()
 
     # Student All Courses
-    courses = student_logic.get_student_courses(student_id=user.id, is_all=True)
+    courses, courses_num_pages = student_logic.get_student_courses(student_id=user.id, is_all=True)
 
     result = {
         'student_predictions': predictions,
         'years': years,
         'terms': terms,
-        'student_courses': courses
+        'student_courses': courses,
+        'student_courses_num_pages': courses_num_pages
     }
 
     return render(request, 'student/courses.html', result)
@@ -86,15 +107,37 @@ def student_courses(request):
     # return JsonResponse(test_result, safe=False)
 
 
-@require_POST
+@require_GET
 def get_student_courses(request):
-    # Getting the page
-    page = request.POST.get('page')
+    # Getting the page number
+    page = request.GET.get('page')
+
+    # Getting the search keyword
+    keyword = request.GET.get('keyword')
 
     # Student All Courses
-    courses = student_logic.get_student_courses(student_id=user.id, is_all=True, page=page)
+    courses, courses_num_pages = student_logic.get_student_courses(student_id=user.id, is_all=True,
+                                                                   keyword=keyword, page=page)
 
-    return JsonResponse(list(courses.values()), safe=False)
+    formatted_courses = []
+
+    for i in courses.object_list:
+        course = {
+            'id': i.id,
+            'course_name': i.course.name,
+            'year_name': i.course.year.name,
+            'educator_id': i.educator_id,
+            'educator_name': i.educator.name,
+            'final_grade': i.final_grade,
+        }
+        formatted_courses.append(course)
+
+    result = {
+        'courses': formatted_courses,
+        'courses_num_pages': courses_num_pages
+    }
+
+    return JsonResponse(result)
 
 
 @require_GET

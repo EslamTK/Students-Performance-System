@@ -90,8 +90,9 @@
                         {% for course in student_courses %}
                             <tr>
                                 <td>{{course.course.name}}</td>
-                                <td>{{course.course.term.name}}</td>
-                                <td><a href="{% url 'dashboard:student_educator_profile' course.course.educator_id %}" target="_blank">{{course.educator.name}}</a>
+                                <td>{{ course.course.year.name }}</td>
+                                <td><a href="{% url 'dashboard:student_educator_profile' course.educator_id %}"
+                                       target="_blank">{{ course.educator.name }}</a>
                                 </td>
                                 {% if course.final_grade is None%}
                                     <td>--</td>
