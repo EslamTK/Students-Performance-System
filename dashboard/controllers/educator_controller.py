@@ -1,7 +1,8 @@
 from django.contrib.auth import authenticate
-from django.http import JsonResponse
+from django.http import JsonResponse, HttpResponse, HttpResponseBadRequest, HttpResponseForbidden
 from django.shortcuts import render
-from django.views.decorators.http import require_GET
+from django.views.decorators.csrf import csrf_exempt
+from django.views.decorators.http import require_GET, require_POST
 
 from dashboard.logic.educator_logic import EducatorLogic
 from dashboard.logic.general_logic import GeneralLogic
@@ -160,3 +161,41 @@ def get_educator_students(request):
     }
 
     return JsonResponse(result)
+
+
+@require_POST
+@csrf_exempt
+def add_student_advice(request):
+    content = request.POST.get('content', None)
+    student_id = request.POST.get('student_id', None)
+
+    if not content or not student_id:
+        return HttpResponseBadRequest('The required content or the student_id is not given')
+
+    try:
+        educator_logic.add_student_advice(student_id=student_id, educator_id=user.id, content=content)
+
+    except ValueError as value_error:
+        return HttpResponseBadRequest(str(value_error))
+
+    return HttpResponse('The advice content added successfully')
+
+
+@require_POST
+@csrf_exempt
+def add_review_report(request):
+    review_id = request.POST.get('review_id', None)
+
+    if not review_id:
+        return HttpResponseBadRequest('The required review_id is not given')
+
+    try:
+        educator_logic.add_review_report(educator_id=user.id, review_id=review_id)
+
+    except ValueError as value_error:
+        return HttpResponseBadRequest(str(value_error))
+
+    except PermissionError as permission_error:
+        return HttpResponseForbidden(str(permission_error))
+
+    return HttpResponse('The review report added successfully')

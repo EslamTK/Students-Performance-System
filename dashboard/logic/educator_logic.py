@@ -1,6 +1,7 @@
 from django.core.paginator import Paginator
 
 from .unit_of_work import UnitOfWork
+from .utilities import item_not_found_message
 
 
 class EducatorLogic:
@@ -57,3 +58,30 @@ class EducatorLogic:
             get_educator_students_counts(educator=educator_id, department=department, year=year, term=term)
 
         return counts
+
+    def is_student_exist(self, student_id):
+        return self.unit_of_work.students.is_exist(student_id)
+
+    def is_educator_exist(self, educator_id):
+        return self.unit_of_work.educators.is_exist(educator_id)
+
+    def add_student_advice(self, student_id, educator_id, content):
+
+        if not self.is_student_exist(student_id=student_id):
+            raise ValueError(item_not_found_message('student'))
+
+        self.unit_of_work.educators_advices. \
+            add_student_advice(student=student_id, educator=educator_id, content=content)
+
+    def add_review_report(self, review_id, educator_id):
+
+        try:
+            review = self.unit_of_work.students_reviews.get_one(review_id)
+
+        except:
+            raise ValueError(item_not_found_message('review'))
+
+        if review.educator_id != educator_id:
+            raise PermissionError('The specified review is not owned by the given educator')
+
+        self.unit_of_work.reports.add_report(review_id=review_id)
