@@ -6,7 +6,28 @@
     
     var requireJS = [];
     loadJS(requireJS, "{% static 'dashboard/views/charts2.js'%}");
+    
 </script>
+<script type="text/javascript">
+        
+        var i = "bomb";
+        
+        
+        function lod(){
+            var xhttp = new XMLHttpRequest();
+  xhttp.onreadystatechange = function() {
+    if (this.readyState == 4 && this.status == 200) {
+        data = JSON.parse(this.responseText);
+        console.log(data);
+
+    }
+  };
+  xhttp.open("GET", "{% url 'dashboard:educator_advices_paginator' %}", true);
+  console.log(something);
+  xhttp.send(document.getElementById("lis").value);
+        }
+    
+    </script>
     <input type="hidden" id="myVar" name="variable" readonly value="{{ educator_rating }}">
 <main class="animated fadeIn row">
 

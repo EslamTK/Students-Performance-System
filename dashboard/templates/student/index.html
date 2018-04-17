@@ -2,10 +2,68 @@
 {% block title %}Student{% endblock %}
 {% block body %}
 
+
     {% load static %}
     <script>
-        var requireJS = [];
-        loadJS(requireJS, "{% static 'dashboard/views/charts.js'%}");
+    
+            var requireJS = [];
+            loadJS(requireJS, "{% static 'dashboard/views/charts.js'%}");
+            
+        </script>
+    <script>
+        
+        
+        
+        function lod(){
+            var xhttp = new XMLHttpRequest();
+            xhttp.onreadystatechange = function() {
+                if (this.readyState == 4 && this.status == 200) {
+                    datas = JSON.parse(this.responseText);
+                    console.log(datas);
+                    
+                    document.getElementById("advices").innerHTML="";
+                    for(var i = 0; i < datas.advices.length; i++){
+                        var url = datas.advices[i].educator_photo_url;
+                        console.log(url);
+                        
+
+                        var id = datas.advices[i].educator_id;
+                        console.log(id);
+                        
+                        var name = datas.advices[i].educator_name
+                        
+                        var cont = datas.advices[i].content;
+                        console.log(cont);
+                        document.getElementById("advices").innerHTML+=`
+                        <div class="media mb-4">
+                            <img class="d-flex mr-3 rounded-circle"  id="img_`+(i+1)+`"
+                                 src="`+url+`" width="50" height="50"
+                                 alt="">
+                            <div class="media-body">
+                                <h5 class="mt-0" style="margin-bottom: 2px;"><a
+                                        target="_blank"
+                                        id= "a_`+(i+1)+`">`+name+`
+                                </h5>
+                                <p id="cont_`+(i+1)+`">`+cont+`</p>
+                            </div>
+                            <ul class="pagination" style="margin-top: 25px">
+                            </div>
+                        `;
+                        var total = {{student_advices.student_courses_num_pages}};
+                        for(var i = 0; i < total;i++){}
+
+                        
+                        
+                        document.getElementById("a_"+String(i+1)).href= "/student/educator/"+id;
+
+                    }
+                }
+            };
+            xhttp.open("GET", "{% url 'dashboard:student_advices_paginator' %}", true);
+            
+            xhttp.send();
+        }
+    
     </script>
     <input type="hidden" id="myVar" name="variable" readonly value="{{ student_predictions.courses }}">
     <main class="animated fadeIn row">
@@ -60,41 +118,37 @@
                 <div class="card-header">
                     <h3 class="card-title mb-0">Educators Advices</h3>
                 </div>
-                <div class="card-body">
+                <div class="card-body" id = "advices">
                     {% for advice in student_advices %}
                         <div class="media mb-4">
-                            <img class="d-flex mr-3 rounded-circle"
+                            <img class="d-flex mr-3 rounded-circle"  id="img_{{forloop.counter}}"
                                  src="{{ advice.educator.photo.url }}" width="50" height="50"
                                  alt="">
                             <div class="media-body">
                                 <h5 class="mt-0" style="margin-bottom: 2px;"><a
                                         target="_blank"
+                                        id= "a_{{forloop.counter}}"
                                         href="{% url 'dashboard:student_educator_profile' advice.educator_id %}">{{ advice.educator.name }}</a>
                                 </h5>
-                                {{ advice.content }}
+                                <p id="cont_{{forloop.counter}}">{{ advice.content }}</p>
                             </div>
                         </div>
-                    {% endfor %}
+                        {% endfor %}
                     <ul class="pagination" style="margin-top: 25px">
-                        <li class="page-item"><a class="page-link" href="#">Prev</a>
-                        </li>
-                        <li class="page-item active">
-                            <a class="page-link" href="#">1</a>
-                        </li>
-                        <li class="page-item"><a class="page-link" href="#">2</a>
-                        </li>
-                        <li class="page-item"><a class="page-link" href="#">3</a>
-                        </li>
-                        <li class="page-item"><a class="page-link" href="#">4</a>
-                        </li>
-                        <li class="page-item"><a class="page-link" href="#">Next</a>
-                        </li>
+                            {% with ''|center:student_advices_num_pages as range %}
+                            {% for i in range %}
+                            <li class="page-item " >
+                                    <a id="lis_{{forloop.counter}}" class="page-link" href="{% url 'dashboard:student_advices_paginator' %}?page={{ forloop.counter }}" onclick="lod()" >{{forloop.counter}}</a>
+                            </li>
+                            {% endfor %}
+                            {% endwith %}
+                        
                     </ul>
+                    
 
                 </div>
             </div>
 
         </div>
     </main>
-
 {% endblock %}
