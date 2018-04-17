@@ -14,58 +14,52 @@
         
         
         
-        function lod(){
+        function load(event){
             var xhttp = new XMLHttpRequest();
             xhttp.onreadystatechange = function() {
                 if (this.readyState == 4 && this.status == 200) {
-                    datas = JSON.parse(this.responseText);
-                    console.log(datas);
+                    data = JSON.parse(this.responseText);
+                    console.log(data);
                     
                     document.getElementById("advices").innerHTML="";
-                    for(var i = 0; i < datas.advices.length; i++){
-                        var url = datas.advices[i].educator_photo_url;
-                        console.log(url);
-                        
-
-                        var id = datas.advices[i].educator_id;
-                        console.log(id);
-                        
-                        var name = datas.advices[i].educator_name
-                        
-                        var cont = datas.advices[i].content;
+                    var str =``;
+                    for(var i = 0; i < data.advices.length; i++){
+                        var url = data.advices[i].educator_photo_url;
+                        var id = data.advices[i].educator_id;
+                        var name = data.advices[i].educator_name;
+                        var cont = data.advices[i].content;
                         console.log(cont);
-                        document.getElementById("advices").innerHTML+=`
-                        <div class="media mb-4">
-                            <img class="d-flex mr-3 rounded-circle"  id="img_`+(i+1)+`"
-                                 src="`+url+`" width="50" height="50"
-                                 alt="">
-                            <div class="media-body">
-                                <h5 class="mt-0" style="margin-bottom: 2px;"><a
-                                        target="_blank"
-                                        id= "a_`+(i+1)+`">`+name+`
-                                </h5>
-                                <p id="cont_`+(i+1)+`">`+cont+`</p>
-                            </div>
-                            <ul class="pagination" style="margin-top: 25px">
-                            </div>
-                        `;
-                        var total = {{student_advices.student_courses_num_pages}};
-                        for(var i = 0; i < total;i++){}
+                        str+='<div class="media mb-4"><img class="d-flex mr-3 rounded-circle"  id="img_"'+(i+1)+'"  src="'+url+'" width="50" height="50"alt="">';
+                        str+='<div class="media-body"><h5 class="mt-0" style="margin-bottom: 2px;"><a id= "a_'+(i+1)+'">'+name+'</h5>';
+                        str+= '<p id="cont_+(i+1)+">'+cont+'</p></div></div>';
 
-                        
-                        
-                        document.getElementById("a_"+String(i+1)).href= "/student/educator/"+id;
 
                     }
+                    str += '<ul class="pagination" style="margin-top: 25px">';
+                    element = document.getElementById("total").value;
+                    for(var i = 1; i <= element; i++){
+                        str+='<li class="page-item" id="li_'+i+'"><a id="lis_'+i+'" class="page-link" href="#" onclick="load(event)" >1</a></li>';
+                    }
+                    str+="</ul></div>";
+                    document.getElementById("advices").innerHTML = str;
+                    document.getElementById("li_"+data.num_pages).classList.add("active");
+                    
+                    for(var i = 0; i < data.advices.length; i++)
+                        document.getElementById("a_"+String(i+1)).href= "/student/educator/"+id;
                 }
+                
+                
             };
-            xhttp.open("GET", "{% url 'dashboard:student_advices_paginator' %}", true);
+            var page = document.getElementById(event.target.id).innerHTML;
+            
+            xhttp.open("GET", "{% url 'dashboard:student_advices_paginator' %}?page="+page, true);
             
             xhttp.send();
         }
     
     </script>
     <input type="hidden" id="myVar" name="variable" readonly value="{{ student_predictions.courses }}">
+    <input type="hidden" id="total" name="variable" readonly value="{{ student_advices_num_pages }}">
     <main class="animated fadeIn row">
         <div class="col-md-8 col-sm-12">
             <div class="card" style="margin-top: 10px">
@@ -135,22 +129,15 @@
                         </div>
                         {% endfor %}
                     <ul class="pagination" style="margin-top: 25px">
-<<<<<<< HEAD
-                        <li class="page-item"><a class="page-link"
-                                                 href="{% url 'dashboard:student_advices_paginator' %}?page={{ student_advices_num_pages }}">Prev</a>
-                        </li>
-=======
                             {% with ''|center:student_advices_num_pages as range %}
                             {% for i in range %}
                             <li class="page-item " >
-                                    <a id="lis_{{forloop.counter}}" class="page-link" href="{% url 'dashboard:student_advices_paginator' %}?page={{ forloop.counter }}" onclick="lod()" >{{forloop.counter}}</a>
+                                    <a id="lis_{{forloop.counter}}" class="page-link" href="#" onclick="load(event)" >{{forloop.counter}}</a>
                             </li>
                             {% endfor %}
                             {% endwith %}
                         
->>>>>>> pagination/ajax
                     </ul>
-                    
 
                 </div>
             </div>
