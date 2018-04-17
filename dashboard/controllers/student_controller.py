@@ -108,6 +108,39 @@ def student_courses(request):
 
 
 @require_GET
+def get_student_courses_grades(request):
+    # Getting the year
+    year_id = request.GET.get('year_id')
+
+    # Getting the term
+    term_id = request.GET.get('term_id')
+
+    # Getting the student
+    student_id = request.GET.get('student_id', user.id)
+
+    # Student Courses Grades
+    courses_grades = student_logic.get_student_courses(student_id=student_id, is_current=False,
+                                                       year=year_id, term=term_id)
+
+    formatted_courses = []
+
+    for i in courses_grades:
+        course = {
+            'id': i.course_id,
+            'name': i.course.name,
+            'midterm': i.midterm_grade,
+            'final': i.final_grade
+        }
+        formatted_courses.append(course)
+
+    result = {
+        'result': formatted_courses,
+    }
+
+    return JsonResponse(result)
+
+
+@require_GET
 def get_student_courses(request):
     # Getting the page number
     page = request.GET.get('page')

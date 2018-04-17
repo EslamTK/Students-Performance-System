@@ -5,16 +5,7 @@ $(function () {
         return Math.round(Math.random() * 255)
     };
 
-    //getting data from hidden input field
-    var my_data = document.getElementById("myData").value;
-    console.log(my_data);
-
-    //formating data to valid json format
-    var data = my_data.slice(10, my_data.length, my_data)
-    data = data.replace('>', '');
-    data = data.replace(/'/g, '"');
-    data = JSON.parse(data);
-    console.log(data);
+    var data = educatorsRatingData;
 
     var label_data = [];
     var review_item_label = [];

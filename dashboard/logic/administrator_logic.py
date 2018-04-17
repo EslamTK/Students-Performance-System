@@ -27,8 +27,9 @@ class AdministratorLogic:
 
         return educators, paginator.num_pages
 
-    def get_educators_rating(self, department=None):
-        rating = self.unit_of_work.students_review_items.get_educators_rating(department=department)
+    def get_educators_rating(self, department_id=None, year_id=None):
+        rating = self.unit_of_work.students_review_items.get_educators_rating(department=department_id,
+                                                                              year=year_id)
 
         return rating
 
@@ -37,9 +38,9 @@ class AdministratorLogic:
 
         return accounts
 
-    def get_courses_pass_fail_counts(self, department=None, term=None):
+    def get_courses_pass_fail_counts(self, department_id=None, year_id=None, term_id=None):
         counts = self.unit_of_work.students_courses. \
-            get_courses_success_fail_counts(department=department, term=term)
+            get_courses_success_fail_counts(department=department_id, year=year_id, term=term_id)
 
         return counts
 

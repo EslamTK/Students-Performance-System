@@ -50,6 +50,28 @@ def index(request):
 
 
 @require_GET
+def get_educator_rating(request):
+    # Getting the department
+    department_id = request.GET.get('department_id')
+
+    # Getting the year
+    year = request.GET.get('year')
+
+    # Getting the educator
+    educator_id = request.GET.get('educator_id', user.id)
+
+    # Educator Rating
+    educator_rating = educator_logic.get_educator_rating(educator_id=educator_id,
+                                                         department_id=department_id, year=year)
+
+    result = {
+        'result': list(educator_rating),
+    }
+
+    return JsonResponse(result)
+
+
+@require_GET
 def get_educator_reviews(request):
     # Getting the page number
     page = request.GET.get('page')
@@ -139,6 +161,28 @@ def educator_students(request):
     # }
     #
     # return JsonResponse(test_result, safe=False)
+
+
+@require_GET
+def get_educator_courses_counts(request):
+    # Getting the department
+    department_id = request.GET.get('department_id')
+
+    # Getting the year
+    year_id = request.GET.get('year_id')
+
+    # Getting the term
+    term_id = request.GET.get('term_id')
+
+    # Educator Courses Counts
+    educator_counts = educator_logic.get_educator_counts(educator_id=user.id, department_id=department_id,
+                                                         year_id=year_id, term_id=term_id)
+
+    result = {
+        'result': list(educator_counts),
+    }
+
+    return JsonResponse(result)
 
 
 @require_GET

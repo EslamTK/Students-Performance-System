@@ -1,4 +1,7 @@
+import json
+
 from django.contrib.auth import authenticate
+from django.core.serializers.json import DjangoJSONEncoder
 from django.forms.models import model_to_dict
 from django.http import JsonResponse
 from django.shortcuts import render
@@ -22,6 +25,9 @@ def index(request):
     # Departments
     departments = general_logic.get_departments()
 
+    # Years
+    years = general_logic.get_years()
+
     # Terms
     terms = general_logic.get_terms()
 
@@ -33,6 +39,7 @@ def index(request):
 
     result = {
         'departments': departments,
+        'years': years,
         'terms': terms,
         'years_counts': years_counts,
         'students': students,
@@ -48,6 +55,28 @@ def index(request):
     # }
     # return JsonResponse(test_result, safe=False)
     return render(request, 'administrator/index.html', result)
+
+
+@require_GET
+def get_years_counts(request):
+    # Getting the department
+    department_id = request.GET.get('department_id')
+
+    # Getting the year
+    year_id = request.GET.get('year_id')
+
+    # Getting the term
+    term_id = request.GET.get('term_id')
+
+    # Years Success And Fail Counts
+    years_counts = administrator_logic.get_courses_pass_fail_counts(department_id=department_id,
+                                                                    year_id=year_id, term_id=term_id)
+
+    result = {
+        'result': list(years_counts),
+    }
+
+    return JsonResponse(result)
 
 
 @require_GET
@@ -124,14 +153,19 @@ def educators(request):
     # Departments
     departments = general_logic.get_departments()
 
+    # Years
+    years = general_logic.get_years()
+
     # Educators
     educators_list, educators_num_pages = administrator_logic.get_educators()
 
     # Educators Rating
     educators_rating = administrator_logic.get_educators_rating()
+    educators_rating = json.dumps(list(educators_rating), cls=DjangoJSONEncoder)
 
     result = {
         'departments': departments,
+        'years': years,
         'educators': educators_list,
         'educators_num_pages': educators_num_pages,
         'educators_rating': educators_rating
@@ -146,6 +180,24 @@ def educators(request):
     # }
     #
     # return JsonResponse(test_result, safe=False)
+
+
+@require_GET
+def get_educators_rating(request):
+    # Getting the department
+    department_id = request.GET.get('department_id')
+
+    # Getting the year
+    year_id = request.GET.get('year_id')
+
+    # Educators Rating
+    educators_rating = administrator_logic.get_educators_rating(department_id=department_id,
+                                                                year_id=year_id)
+    result = {
+        'result': list(educators_rating),
+    }
+
+    return JsonResponse(result)
 
 
 @require_GET

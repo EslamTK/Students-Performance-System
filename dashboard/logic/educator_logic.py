@@ -29,9 +29,9 @@ class EducatorLogic:
 
         return departments
 
-    def get_educator_rating(self, educator_id, year=None, department=None):
+    def get_educator_rating(self, educator_id, year=None, department_id=None):
         rating = self.unit_of_work.students_review_items. \
-            get_educator_rating(educator=educator_id, year=year, department=department)
+            get_educator_rating(educator=educator_id, year=year, department=department_id)
 
         return rating
 
@@ -53,9 +53,10 @@ class EducatorLogic:
 
         return students, paginator.num_pages
 
-    def get_educator_counts(self, educator_id, department=None, year=None, term=None):
+    def get_educator_counts(self, educator_id, department_id=None, year_id=None, term_id=None):
         counts = self.unit_of_work.students_courses. \
-            get_educator_students_counts(educator=educator_id, department=department, year=year, term=term)
+            get_educator_students_counts(educator=educator_id, department=department_id, year=year_id,
+                                         term=term_id)
 
         return counts
 

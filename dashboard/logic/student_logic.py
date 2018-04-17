@@ -19,19 +19,19 @@ class StudentLogic:
 
         return advices, paginator.num_pages
 
-    def get_student_courses(self, student_id, is_all=False, keyword=None, year=None, term=None,
-                            page=1, page_size=6):
+    def get_student_courses(self, student_id, is_current=True, is_all=False, keyword=None,
+                            year=None, term=None, page=1, page_size=6):
         courses = self.unit_of_work.students_courses. \
-            get_student_courses(student=student_id, is_all=is_all, keyword=keyword,
-                                year=year, term=term)
-        num_pages = None
+            get_student_courses(student=student_id, is_current=is_current, is_all=is_all,
+                                keyword=keyword, year=year, term=term)
 
         if is_all:
             paginator = Paginator(courses, page_size)
             num_pages = paginator.num_pages
             courses = paginator.get_page(page)
+            return courses, num_pages
 
-        return courses, num_pages
+        return courses
 
     def get_student_predictions(self, student_id):
         student_data = self.__get_student_formatted_data(student_id)
@@ -52,7 +52,7 @@ class StudentLogic:
 
     def __get_student_formatted_data(self, student_id):
         student = self.get_student_data(student_id)
-        student_courses, num_pages = self.get_student_courses(student_id)
+        student_courses = self.get_student_courses(student_id)
 
         student_data = {
             "sex": student.gender,
