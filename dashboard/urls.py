@@ -17,6 +17,10 @@ urlpatterns = [
          student_controller.student_courses,
          name='student_courses'),
 
+    path('student_courses_grades/',
+         student_controller.get_student_courses_grades,
+         name='student_courses_grades'),
+
     path('student_courses/',
          student_controller.get_student_courses,
          name='student_courses_paginator'),
@@ -29,6 +33,10 @@ urlpatterns = [
          educator_controller.index,
          name='educator_index'),
 
+    path('educator_rating/',
+         educator_controller.get_educator_rating,
+         name='educator_rating'),
+
     path('educator_reviews',
          educator_controller.get_educator_reviews,
          name='educator_reviews_paginator'),
@@ -40,6 +48,10 @@ urlpatterns = [
     path('educator/students/',
          educator_controller.educator_students,
          name='educator_students'),
+
+    path('educator_courses_counts/',
+         educator_controller.get_educator_courses_counts,
+         name='educator_courses_counts'),
 
     path('educator_students/',
          educator_controller.get_educator_students,
@@ -57,6 +69,10 @@ urlpatterns = [
          administrator_controller.index,
          name='administrator_index'),
 
+    path('administrator_years_counts/',
+         administrator_controller.get_years_counts,
+         name='administrator_years_counts'),
+
     path('administrator_students',
          administrator_controller.get_students,
          name='administrator_students_paginator'),
@@ -68,6 +84,10 @@ urlpatterns = [
     path('administrator/educators',
          administrator_controller.educators,
          name='administrator_educators'),
+
+    path('administrator_educators_rating/',
+         administrator_controller.get_educators_rating,
+         name='administrator_educators_rating'),
 
     path('administrator_educators',
          administrator_controller.get_educators,

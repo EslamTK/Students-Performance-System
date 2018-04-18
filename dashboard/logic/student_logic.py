@@ -1,37 +1,25 @@
-from django.core.paginator import Paginator
-
 from machine_learning import api as ml_api
-from .unit_of_work import UnitOfWork
-from .utilities import convert_boolean_to_yes_no
+from .logic import Logic
+from .utilities import convert_boolean_to_yes_no, get_paginated_result_and_num_pages
 
 
-class StudentLogic:
+class StudentLogic(Logic):
 
-    def __init__(self):
-        self.unit_of_work = UnitOfWork()
+    def get_student_advices(self, student_id, page=1, page_size=3):
+        advices = self._unit_of_work.educators_advices.get_student_advices(student=student_id)
 
-    def get_student_advices(self, student_id, page=1, page_size=6):
-        advices = self.unit_of_work.educators_advices.get_student_advices(student=student_id)
+        return get_paginated_result_and_num_pages(result=advices, page_size=page_size, page=page)
 
-        paginator = Paginator(advices, page_size)
-
-        advices = paginator.get_page(page)
-
-        return advices, paginator.num_pages
-
-    def get_student_courses(self, student_id, is_all=False, keyword=None, year=None, term=None,
-                            page=1, page_size=6):
-        courses = self.unit_of_work.students_courses. \
-            get_student_courses(student=student_id, is_all=is_all, keyword=keyword,
-                                year=year, term=term)
-        num_pages = None
+    def get_student_courses(self, student_id, is_current=True, is_all=False, keyword=None,
+                            year=None, term=None, page=1, page_size=6):
+        courses = self._unit_of_work.students_courses. \
+            get_student_courses(student=student_id, is_current=is_current, is_all=is_all,
+                                keyword=keyword, year=year, term=term)
 
         if is_all:
-            paginator = Paginator(courses, page_size)
-            num_pages = paginator.num_pages
-            courses = paginator.get_page(page)
+            return get_paginated_result_and_num_pages(result=courses, page_size=page_size, page=page)
 
-        return courses, num_pages
+        return courses
 
     def get_student_predictions(self, student_id):
         student_data = self.__get_student_formatted_data(student_id)
@@ -46,13 +34,13 @@ class StudentLogic:
         return recommendations
 
     def get_student_data(self, student_id):
-        student = self.unit_of_work.students.get_one(student_id)
+        student = self._unit_of_work.students.get_one(student_id)
 
         return student
 
     def __get_student_formatted_data(self, student_id):
         student = self.get_student_data(student_id)
-        student_courses, num_pages = self.get_student_courses(student_id)
+        student_courses = self.get_student_courses(student_id)
 
         student_data = {
             "sex": student.gender,

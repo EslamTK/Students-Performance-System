@@ -4,11 +4,12 @@
     {% load static %}
 
 
-    <script>
+    <script type='text/javascript'>
         var requireJS = [];
+        var educatorsRatingData = {{ educators_rating|safe }};
         loadJS(requireJS, "{% static 'dashboard/views/charts5.js'%}");
     </script>
-    <input type="hidden" id="myData" name="variable" readonly value="{{ educators_rating }}">
+
     <main class="animated fadeIn row">
 
         <div class="card" style="margin-top: 10px">

@@ -27,8 +27,8 @@ class StudentCourseRepo(Repo):
         if is_all:
             courses = courses.select_related('course', 'course__year', 'course__term', 'educator')
 
-        elif is_current:
-            courses = courses.exclude(final_grade__isnull=False)
+        else:
+            courses = courses.exclude(final_grade__isnull=not is_current)
 
         return courses
 
@@ -72,7 +72,7 @@ class StudentCourseRepo(Repo):
 
         return counts
 
-    def get_courses_success_fail_counts(self, department=None, term=None):
+    def get_courses_success_fail_counts(self, department=None, year=None, term=None):
 
         filters = {
         }
@@ -82,6 +82,9 @@ class StudentCourseRepo(Repo):
 
         if term:
             filters['course__term'] = term
+
+        if year:
+            filters['course__year'] = year
 
         years_counts = self._model.objects.exclude(final_grade__isnull=True) \
             .filter(**filters) \

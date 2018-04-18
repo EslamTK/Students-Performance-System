@@ -4,38 +4,32 @@ from django.shortcuts import render
 from django.views.decorators.csrf import csrf_exempt
 from django.views.decorators.http import require_GET, require_POST
 
-from dashboard.logic.educator_logic import EducatorLogic
-from dashboard.logic.general_logic import GeneralLogic
-from dashboard.logic.student_logic import StudentLogic
+from dashboard.logic import *
 
 user = authenticate(username='educator', password='3$81jkjjSA')
-
-student_logic = StudentLogic()
-educator_logic = EducatorLogic()
-general_logic = GeneralLogic()
 
 
 @require_GET
 def index(request):
 
     # Educator Reviews Rating
-    educator_rating = educator_logic.get_educator_rating(educator_id=user.id)
+    educator_rating = educator.get_educator_rating(educator_id=user.id)
 
     # Educator Reviews Years
-    educator_reviews_years = educator_logic.get_educator_reviews_years(educator_id=user.id)
+    educator_reviews_years = educator.get_educator_reviews_years(educator_id=user.id)
 
     # Educator Reviews Departments
-    educator_reviews_departments = educator_logic.get_educator_reviews_departments(educator_id=user.id)
+    educator_reviews_departments = educator.get_educator_reviews_departments(educator_id=user.id)
 
     # Educator Reviews
-    educator_reviews, educator_reviews_num_pages = educator_logic.get_educator_reviews(educator_id=user.id)
+    educator_reviews, educator_reviews_num_pages = educator.get_educator_reviews(educator_id=user.id)
 
     result = {
         'educator_rating': educator_rating,
         'educator_reviews_years': educator_reviews_years,
         'educator_reviews_departments': educator_reviews_departments,
         'educator_reviews': educator_reviews,
-        'educator_reviews_num_pages': educator_reviews_num_pages,
+        'educator_reviews_num_pages': educator_reviews_num_pages
     }
     
     return render(request, 'educator/index.html', result)
@@ -50,36 +44,66 @@ def index(request):
 
 
 @require_GET
-def get_educator_reviews(request):
-    # Getting the page number
-    page = request.GET.get('page')
+def get_educator_rating(request):
+    # Getting the department
+    department_id = request.GET.get('department_id')
 
-    # Educator Reviews
-    educator_reviews, num_pages = educator_logic.get_educator_reviews(educator_id=user.id, page=page)
+    # Getting the year
+    year = request.GET.get('year')
 
-    formatted_reviews = list(educator_reviews)
+    # Getting the educator
+    educator_id = request.GET.get('educator_id', user.id)
+
+    # Educator Rating
+    educator_rating = educator.get_educator_rating(educator_id=educator_id,
+                                                   department_id=department_id, year=year)
 
     result = {
-        'reviews': formatted_reviews,
-        'num_pages': num_pages
+        'result': list(educator_rating)
     }
 
     return JsonResponse(result)
 
 
 @require_GET
+def get_educator_reviews(request):
+    # Getting the page number
+    page = request.GET.get('page')
+
+    # Getting the page size
+    page_size = request.GET.get('page_size', 4)
+
+    # Educator Reviews
+    educator_reviews, educator_reviews_num_pages = educator.get_educator_reviews(educator_id=user.id,
+                                                                                 page=page, page_size=page_size)
+
+    result = {
+        'educator_reviews': educator_reviews,
+        'educator_reviews_num_pages': educator_reviews_num_pages
+    }
+
+    # For Testing Only
+    # test_result = {
+    #     'educator_reviews': list(educator_reviews),
+    #     'educator_reviews_num_pages': educator_reviews_num_pages
+    # }
+    #
+    # return JsonResponse(test_result)
+
+
+@require_GET
 def student_profile(request, student_id):
     # Student Current Courses Predictions
-    predictions = student_logic.get_student_predictions(student_id=student_id)
+    predictions = student.get_student_predictions(student_id=student_id)
 
     # Years
-    years = general_logic.get_years()
+    years = general.get_years()
 
     # Terms
-    terms = general_logic.get_terms()
+    terms = general.get_terms()
 
     # Student Advices
-    student_advices, student_advices_num_pages = student_logic.get_student_advices(student_id=student_id)
+    student_advices, student_advices_num_pages = student.get_student_advices(student_id=student_id)
     
     result = {
         'student_predictions': predictions,
@@ -105,19 +129,19 @@ def student_profile(request, student_id):
 @require_GET
 def educator_students(request):
     # Educator Students
-    students, students_num_pages = educator_logic.get_educator_students(educator_id=user.id)
+    students, students_num_pages = educator.get_educator_students(educator_id=user.id)
 
     # Departments
-    departments = general_logic.get_departments()
+    departments = general.get_departments()
 
     # Years
-    years = general_logic.get_years()
+    years = general.get_years()
 
     # Terms
-    terms = general_logic.get_terms()
+    terms = general.get_terms()
 
     # Educator Students Pass & Fail Counts
-    courses_counts = educator_logic.get_educator_counts(educator_id=user.id)
+    courses_counts = educator.get_educator_counts(educator_id=user.id)
 
     result = {
         'educator_students': students,
@@ -142,25 +166,55 @@ def educator_students(request):
 
 
 @require_GET
+def get_educator_courses_counts(request):
+    # Getting the department
+    department_id = request.GET.get('department_id')
+
+    # Getting the year
+    year_id = request.GET.get('year_id')
+
+    # Getting the term
+    term_id = request.GET.get('term_id')
+
+    # Educator Courses Counts
+    educator_counts = educator.get_educator_counts(educator_id=user.id, department_id=department_id,
+                                                   year_id=year_id, term_id=term_id)
+
+    result = {
+        'result': list(educator_counts)
+    }
+
+    return JsonResponse(result)
+
+
+@require_GET
 def get_educator_students(request):
     # Getting the page number
     page = request.GET.get('page')
+
+    # Getting the page size
+    page_size = request.GET.get('page_size', 6)
 
     # Getting the search keyword
     keyword = request.GET.get('keyword')
 
     # Educator Students
-    students, students_num_pages = educator_logic.get_educator_students(educator_id=user.id,
-                                                                        keyword=keyword, page=page)
-
-    formatted_students = list(students)
+    students, students_num_pages = educator.get_educator_students(educator_id=user.id,
+                                                                  keyword=keyword, page=page,
+                                                                  page_size=page_size)
 
     result = {
-        'students': formatted_students,
-        'num_pages': students_num_pages
+        'educator_students': students,
+        'educator_students_num_pages': students_num_pages,
     }
 
-    return JsonResponse(result)
+    # For Testing Only
+    # test_result = {
+    #     'educator_students': list(students),
+    #     'educator_students_num_pages': students_num_pages
+    # }
+    #
+    # return JsonResponse(test_result)
 
 
 @require_POST
@@ -173,7 +227,7 @@ def add_student_advice(request):
         return HttpResponseBadRequest('The required content or the student_id is not given')
 
     try:
-        educator_logic.add_student_advice(student_id=student_id, educator_id=user.id, content=content)
+        educator.add_student_advice(student_id=student_id, educator_id=user.id, content=content)
 
     except ValueError as value_error:
         return HttpResponseBadRequest(str(value_error))
@@ -190,7 +244,7 @@ def add_review_report(request):
         return HttpResponseBadRequest('The required review_id is not given')
 
     try:
-        educator_logic.add_review_report(educator_id=user.id, review_id=review_id)
+        educator.add_review_report(educator_id=user.id, review_id=review_id)
 
     except ValueError as value_error:
         return HttpResponseBadRequest(str(value_error))

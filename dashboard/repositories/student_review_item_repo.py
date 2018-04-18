@@ -25,14 +25,20 @@ class StudentReviewItemRepo(Repo):
 
         return rating
 
-    def get_educators_rating(self, department=None):
+    def get_educators_rating(self, department=None, year=None):
 
-        rating = self._model.objects \
-            .extra(select={'year': "EXTRACT(year FROM dashboard_studentreview.created_at)"},
-                   tables=['dashboard_studentreview']) \
-            .values('review_item', 'review_item__name', 'year').annotate(Avg('rate'))
+        filters = {
+        }
 
         if department:
-            rating = rating.filter(student_review__student__department=department)
+            filters['student_review__student__department'] = department
+
+        if year:
+            filters['student_review__student_year'] = year
+
+        rating = self._model.objects.filter(**filters) \
+            .extra(select={'year': "EXTRACT(year FROM created_at)"}) \
+            .values('review_item', 'review_item__name', 'year', 'student_review__created_at') \
+            .annotate(Avg('rate'))
 
         return rating
