@@ -7,35 +7,27 @@ from django.http import JsonResponse
 from django.shortcuts import render
 from django.views.decorators.http import require_GET
 
-from dashboard.logic.administrator_logic import AdministratorLogic
-from dashboard.logic.educator_logic import EducatorLogic
-from dashboard.logic.general_logic import GeneralLogic
-from dashboard.logic.student_logic import StudentLogic
+from dashboard.logic import *
 
 user = authenticate(username='admin', password='a1$$m2IN12')
-
-student_logic = StudentLogic()
-educator_logic = EducatorLogic()
-general_logic = GeneralLogic()
-administrator_logic = AdministratorLogic()
 
 
 @require_GET
 def index(request):
     # Departments
-    departments = general_logic.get_departments()
+    departments = general.get_departments()
 
     # Years
-    years = general_logic.get_years()
+    years = general.get_years()
 
     # Terms
-    terms = general_logic.get_terms()
+    terms = general.get_terms()
 
     # Years Success And Fail Counts
-    years_counts = administrator_logic.get_courses_pass_fail_counts()
+    years_counts = administrator.get_courses_pass_fail_counts()
 
     # Students
-    students, students_num_pages = administrator_logic.get_students()
+    students, students_num_pages = administrator.get_students()
 
     result = {
         'departments': departments,
@@ -69,8 +61,8 @@ def get_years_counts(request):
     term_id = request.GET.get('term_id')
 
     # Years Success And Fail Counts
-    years_counts = administrator_logic.get_courses_pass_fail_counts(department_id=department_id,
-                                                                    year_id=year_id, term_id=term_id)
+    years_counts = administrator.get_courses_pass_fail_counts(department_id=department_id,
+                                                              year_id=year_id, term_id=term_id)
 
     result = {
         'result': list(years_counts),
@@ -88,7 +80,7 @@ def get_students(request):
     keyword = request.GET.get('keyword')
 
     # Students
-    students, num_pages = administrator_logic.get_students(keyword=keyword, page=page)
+    students, num_pages = administrator.get_students(keyword=keyword, page=page)
 
     formatted_students = list(students)
 
@@ -103,27 +95,27 @@ def get_students(request):
 @require_GET
 def student_profile(request, student_id):
     # Student Data
-    student = student_logic.get_student_data(student_id=student_id)
+    student_data = student.get_student_data(student_id=student_id)
 
     # Departments
-    departments = general_logic.get_departments()
+    departments = general.get_departments()
 
     # Years
-    years = general_logic.get_years()
+    years = general.get_years()
 
     # Available Courses For The Student Year
-    courses = administrator_logic.get_available_student_courses(student_id=student_id)
+    courses = administrator.get_available_student_courses(student_id=student_id)
 
     # Student Courses
-    student_courses = student_logic.get_student_courses(student_id=student_id)
+    student_courses = student.get_student_courses(student_id=student_id)
 
     result = {
-        'student': student,
-        'genders': student.gender_choices,
-        'jobs': student.job_choices,
-        'family_sizes': student.family_size_choices,
-        'parents_status': student.parent_status_choices,
-        'guardians': student.guardian_choices,
+        'student': student_data,
+        'genders': student_data.gender_choices,
+        'jobs': student_data.job_choices,
+        'family_sizes': student_data.family_size_choices,
+        'parents_status': student_data.parent_status_choices,
+        'guardians': student_data.guardian_choices,
         'departments': departments,
         'years': years,
         'student_courses': student_courses,
@@ -151,16 +143,16 @@ def student_profile(request, student_id):
 @require_GET
 def educators(request):
     # Departments
-    departments = general_logic.get_departments()
+    departments = general.get_departments()
 
     # Years
-    years = general_logic.get_years()
+    years = general.get_years()
 
     # Educators
-    educators_list, educators_num_pages = administrator_logic.get_educators()
+    educators_list, educators_num_pages = administrator.get_educators()
 
     # Educators Rating
-    educators_rating = administrator_logic.get_educators_rating()
+    educators_rating = administrator.get_educators_rating()
     educators_rating = json.dumps(list(educators_rating), cls=DjangoJSONEncoder)
 
     result = {
@@ -191,8 +183,8 @@ def get_educators_rating(request):
     year_id = request.GET.get('year_id')
 
     # Educators Rating
-    educators_rating = administrator_logic.get_educators_rating(department_id=department_id,
-                                                                year_id=year_id)
+    educators_rating = administrator.get_educators_rating(department_id=department_id,
+                                                          year_id=year_id)
     result = {
         'result': list(educators_rating),
     }
@@ -209,7 +201,7 @@ def get_educators(request):
     keyword = request.GET.get('keyword')
 
     # Students
-    educators_list, num_pages = administrator_logic.get_educators(keyword=keyword, page=page)
+    educators_list, num_pages = administrator.get_educators(keyword=keyword, page=page)
 
     formatted_educators = list(educators_list)
 
@@ -224,22 +216,22 @@ def get_educators(request):
 @require_GET
 def educator_profile(request, educator_id):
     # Educator Info
-    educator_info = educator_logic.get_educator_info(educator_id=educator_id)
+    educator_info = educator.get_educator_info(educator_id=educator_id)
 
     # All the accounts including url if the educator has the account
-    accounts = administrator_logic.get_educator_accounts(educator_id=educator_id)
+    accounts = administrator.get_educator_accounts(educator_id=educator_id)
 
     # Educator Reviews Rating
-    educator_rating = educator_logic.get_educator_rating(educator_id=educator_id)
+    educator_rating = educator.get_educator_rating(educator_id=educator_id)
 
     # Educator Reviews Years
-    educator_reviews_years = educator_logic.get_educator_reviews_years(educator_id=educator_id)
+    educator_reviews_years = educator.get_educator_reviews_years(educator_id=educator_id)
 
     # Educator Reviews Departments
-    educator_reviews_departments = educator_logic.get_educator_reviews_departments(educator_id=educator_id)
+    educator_reviews_departments = educator.get_educator_reviews_departments(educator_id=educator_id)
 
     # Educator Reviews
-    educator_reviews, educator_reviews_num_pages = educator_logic.get_educator_reviews(educator_id=educator_id)
+    educator_reviews, educator_reviews_num_pages = educator.get_educator_reviews(educator_id=educator_id)
 
     educator_info = model_to_dict(educator_info)
     educator_info['photo'] = educator_info['photo'].url
