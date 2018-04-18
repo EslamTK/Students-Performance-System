@@ -297,16 +297,5 @@
 
         </div>
     </main>
-    <script type="text/javascript">
-        var articles = [
-            {% for course in courses %}
-                {% if not forloop.first %},{% endif %}
-                {
-                    name: "{{ course.Paid }}"
-                }
-            {% endfor %}
-        ]
-        console.log(articles);
-    </script>
 
 {% endblock %}        

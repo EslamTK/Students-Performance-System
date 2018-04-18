@@ -54,7 +54,7 @@ def get_student_advices(request):
         'student_advices': student_advices,
         'student_advices_num_pages': student_advices_num_pages
     }
-
+    return(student_advices)
     # For Testing Only
     # formatted_advices = []
     #
