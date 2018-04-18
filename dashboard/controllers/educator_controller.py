@@ -29,7 +29,7 @@ def index(request):
         'educator_reviews_years': educator_reviews_years,
         'educator_reviews_departments': educator_reviews_departments,
         'educator_reviews': educator_reviews,
-        'educator_reviews_num_pages': educator_reviews_num_pages,
+        'educator_reviews_num_pages': educator_reviews_num_pages
     }
     
     return render(request, 'educator/index.html', result)
@@ -59,7 +59,7 @@ def get_educator_rating(request):
                                                    department_id=department_id, year=year)
 
     result = {
-        'result': list(educator_rating),
+        'result': list(educator_rating)
     }
 
     return JsonResponse(result)
@@ -70,17 +70,25 @@ def get_educator_reviews(request):
     # Getting the page number
     page = request.GET.get('page')
 
-    # Educator Reviews
-    educator_reviews, num_pages = educator.get_educator_reviews(educator_id=user.id, page=page)
+    # Getting the page size
+    page_size = request.GET.get('page_size', 4)
 
-    formatted_reviews = list(educator_reviews)
+    # Educator Reviews
+    educator_reviews, educator_reviews_num_pages = educator.get_educator_reviews(educator_id=user.id,
+                                                                                 page=page, page_size=page_size)
 
     result = {
-        'reviews': formatted_reviews,
-        'num_pages': num_pages
+        'educator_reviews': educator_reviews,
+        'educator_reviews_num_pages': educator_reviews_num_pages
     }
 
-    return JsonResponse(result)
+    # For Testing Only
+    # test_result = {
+    #     'educator_reviews': list(educator_reviews),
+    #     'educator_reviews_num_pages': educator_reviews_num_pages
+    # }
+    #
+    # return JsonResponse(test_result)
 
 
 @require_GET
@@ -173,7 +181,7 @@ def get_educator_courses_counts(request):
                                                    year_id=year_id, term_id=term_id)
 
     result = {
-        'result': list(educator_counts),
+        'result': list(educator_counts)
     }
 
     return JsonResponse(result)
@@ -184,21 +192,29 @@ def get_educator_students(request):
     # Getting the page number
     page = request.GET.get('page')
 
+    # Getting the page size
+    page_size = request.GET.get('page_size', 6)
+
     # Getting the search keyword
     keyword = request.GET.get('keyword')
 
     # Educator Students
     students, students_num_pages = educator.get_educator_students(educator_id=user.id,
-                                                                  keyword=keyword, page=page)
-
-    formatted_students = list(students)
+                                                                  keyword=keyword, page=page,
+                                                                  page_size=page_size)
 
     result = {
-        'students': formatted_students,
-        'num_pages': students_num_pages
+        'educator_students': students,
+        'educator_students_num_pages': students_num_pages,
     }
 
-    return JsonResponse(result)
+    # For Testing Only
+    # test_result = {
+    #     'educator_students': list(students),
+    #     'educator_students_num_pages': students_num_pages
+    # }
+    #
+    # return JsonResponse(test_result)
 
 
 @require_POST

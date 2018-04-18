@@ -30,7 +30,7 @@ class EducatorLogic(Logic):
 
         return rating
 
-    def get_educator_reviews(self, educator_id, page=1, page_size=6):
+    def get_educator_reviews(self, educator_id, page=1, page_size=4):
         reviews = self._unit_of_work.students_reviews.get_educator_reviews(educator_id)
 
         return get_paginated_result_and_num_pages(result=reviews, page_size=page_size, page=page)

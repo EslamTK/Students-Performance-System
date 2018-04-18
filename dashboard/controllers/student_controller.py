@@ -56,7 +56,6 @@ def get_student_advices(request):
     }
 
     # For Testing Only
-    #
     # formatted_advices = []
     #
     # for i in student_advices:

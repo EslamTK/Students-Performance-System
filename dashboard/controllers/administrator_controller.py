@@ -76,20 +76,28 @@ def get_students(request):
     # Getting the page number
     page = request.GET.get('page')
 
+    # Getting the page size
+    page_size = request.GET.get('page_size', 6)
+
     # Getting the search keyword
     keyword = request.GET.get('keyword')
 
     # Students
-    students, num_pages = administrator.get_students(keyword=keyword, page=page)
-
-    formatted_students = list(students)
+    students, students_num_pages = administrator.get_students(keyword=keyword, page=page,
+                                                              page_size=page_size)
 
     result = {
-        'students': formatted_students,
-        'num_pages': num_pages
+        'students': students,
+        'students_num_pages': students_num_pages
     }
 
-    return JsonResponse(result)
+    # For Testing Only
+    # test_result = {
+    #     'students': list(students),
+    #     'students_num_pages': students_num_pages
+    # }
+    #
+    # return JsonResponse(test_result)
 
 
 @require_GET
@@ -197,20 +205,28 @@ def get_educators(request):
     # Getting the page number
     page = request.GET.get('page')
 
+    # Getting the page size
+    page_size = request.GET.get('page_size', 6)
+
     # Getting the search keyword
     keyword = request.GET.get('keyword')
 
     # Students
-    educators_list, num_pages = administrator.get_educators(keyword=keyword, page=page)
-
-    formatted_educators = list(educators_list)
+    educators_list, educators_num_pages = administrator.get_educators(keyword=keyword, page=page,
+                                                                      page_size=page_size)
 
     result = {
-        'educators': formatted_educators,
-        'num_pages': num_pages
+        'educators': educators_list,
+        'educators_num_pages': educators_num_pages,
     }
 
-    return JsonResponse(result)
+    # For Testing Only
+    # test_result = {
+    #     'educators': list(educators_list),
+    #     'educators_num_pages': educators_num_pages
+    # }
+    #
+    # return JsonResponse(test_result)
 
 
 @require_GET
