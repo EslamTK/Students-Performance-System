@@ -7,6 +7,25 @@
     var requireJS = [];
     loadJS(requireJS, "{% static 'dashboard/views/charts.js'%}");
 </script>
+<script>
+                
+                    
+        function loadResults(event){
+            page = document.getElementById(event.target.id).innerHTML;
+            
+            $.ajax({        
+                type: "GET",
+                url: "/dashboard/student_advices/?page="+page,
+                success: function(data) {
+                    $('#advices').html(data);
+                },
+    
+                error: function(response, error) {
+                    alert(response.responseText);  
+                }
+            });
+        }
+</script>
     <input type="hidden" id="myVar" name="variable" readonly value="{{ student_predictions.courses }}">
 <main class="animated fadeIn row">
         <div class="col-md-12">
@@ -76,36 +95,8 @@
                             <h3 class="card-title mb-0">Educators Reviews</h3>
                         </div>
         
-                          <div class="card-body">
-                                {% for advice in student_advices %}
-                                <div class="media mb-4">
-                                    <img class="d-flex mr-3 rounded-circle"
-                                         src="{{ advice.educator.photo.url }}" width="50" height="50"
-                                         alt="">
-                                    <div class="media-body">
-                                        <h5 class="mt-0" style="margin-bottom: 2px;"><a
-                                                target="_blank"
-                                                href="{% url 'dashboard:student_educator_profile' advice.educator_id %}">{{ advice.educator.name }}</a>
-                                        </h5>
-                                        {{ advice.content }}
-                                    </div>
-                                </div>
-                            {% endfor %}
-                              <ul class="pagination" style="margin-top: 25px">
-                                  <li class="page-item"><a class="page-link" href="#">Prev</a>
-                                  </li>
-                                  <li class="page-item active">
-                                      <a class="page-link" href="#">1</a>
-                                  </li>
-                                  <li class="page-item"><a class="page-link" href="#">2</a>
-                                  </li>
-                                  <li class="page-item"><a class="page-link" href="#">3</a>
-                                  </li>
-                                  <li class="page-item"><a class="page-link" href="#">4</a>
-                                  </li>
-                                  <li class="page-item"><a class="page-link" href="#">Next</a>
-                                  </li>
-                              </ul>
+                          <div class="card-body" id="educator_advices">
+                                {%include './student_profile_pagination.html'%}
                           </div>
                       </div>
         

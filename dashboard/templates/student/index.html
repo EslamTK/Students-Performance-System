@@ -4,115 +4,34 @@
 
 
     {% load static %}
+    
     <script>
     
             var requireJS = [];
             loadJS(requireJS, "{% static 'dashboard/views/charts.js'%}");
             
         </script>
-    <script>
-        $("document").ready(function(){
-            /*function lod(){
-            var xhttp = new XMLHttpRequest();
-            xhttp.onreadystatechange = function() {
-                if (this.readyState == 4 && this.status == 200) {
-                    datas = JSON.parse(this.responseText);
-                    console.log(datas);
+        <script>
+                
                     
-                    document.getElementById("advices").innerHTML="";
-                    for(var i = 0; i < datas.advices.length; i++){
-                        var url = datas.advices[i].educator_photo_url;
-                        console.log(url);
-                        
-
-                        var id = datas.advices[i].educator_id;
-                        console.log(id);
-                        
-                        var name = datas.advices[i].educator_name
-                        
-                        var cont = datas.advices[i].content;
-                        console.log(cont);
-                        document.getElementById("advices").innerHTML+=`
-                        <div class="media mb-4">
-                            <img class="d-flex mr-3 rounded-circle"  id="img_`+(i+1)+`"
-                                 src="`+url+`" width="50" height="50"
-                                 alt="">
-                            <div class="media-body">
-                                <h5 class="mt-0" style="margin-bottom: 2px;"><a
-                                        target="_blank"
-                                        id= "a_`+(i+1)+`">`+name+`
-                                </h5>
-                                <p id="cont_`+(i+1)+`">`+cont+`</p>
-                            </div>
-                            <ul class="pagination" style="margin-top: 25px">
-                            </div>
-                        `;
-                        var total = {{student_advices.student_courses_num_pages}};
-                        for(var i = 0; i < total;i++){}
-
-                        
-                        
-                        document.getElementById("a_"+String(i+1)).href= "/student/educator/"+id;
-
-                    }
-                }
-            };
-            xhttp.open("GET", "{% url 'dashboard:student_advices_paginator' %}", true);
-            
-            xhttp.send();*/
-        });
-        /*
-        function lod(){
-            var xhttp = new XMLHttpRequest();
-            xhttp.onreadystatechange = function() {
-                if (this.readyState == 4 && this.status == 200) {
-                    datas = JSON.parse(this.responseText);
-                    console.log(datas);
+                function loadResults(event){
                     
-                    document.getElementById("advices").innerHTML="";
-                    for(var i = 0; i < datas.advices.length; i++){
-                        var url = datas.advices[i].educator_photo_url;
-                        console.log(url);
-                        
-
-                        var id = datas.advices[i].educator_id;
-                        console.log(id);
-                        
-                        var name = datas.advices[i].educator_name
-                        
-                        var cont = datas.advices[i].content;
-                        console.log(cont);
-                        document.getElementById("advices").innerHTML+=`
-                        <div class="media mb-4">
-                            <img class="d-flex mr-3 rounded-circle"  id="img_`+(i+1)+`"
-                                 src="`+url+`" width="50" height="50"
-                                 alt="">
-                            <div class="media-body">
-                                <h5 class="mt-0" style="margin-bottom: 2px;"><a
-                                        target="_blank"
-                                        id= "a_`+(i+1)+`">`+name+`
-                                </h5>
-                                <p id="cont_`+(i+1)+`">`+cont+`</p>
-                            </div>
-                            <ul class="pagination" style="margin-top: 25px">
-                            </div>
-                        `;
-                        var total = {{student_advices.student_courses_num_pages}};
-                        for(var i = 0; i < total;i++){}
-
-                        
-                        
-                        document.getElementById("a_"+String(i+1)).href= "/student/educator/"+id;
-
-                    }
-                }
-            };
-            xhttp.open("GET", "{% url 'dashboard:student_advices_paginator' %}", true);
+                    page = document.getElementById(event.target.id).innerHTML;
+                    $.ajax({        
+                        type: "GET",
+                        url: "/dashboard/student_advices/?page="+page,
+                        success: function(data) {
+                            $('#advices').html(data);
+                        },
             
-            xhttp.send();*/
-        
+                        error: function(response, error) {
+                            alert(response.responseText);  
+                        }
+                    });
+                }
+                
+</script>
     
-    </script>
     <input type="hidden" id="myVar" name="variable" readonly value="{{ student_predictions.courses }}">
     <main class="animated fadeIn row">
         <div class="col-md-8 col-sm-12">
@@ -161,7 +80,7 @@
                 </div>
             </div>
         </div>
-        <div class="col-md-12">
+        <div class="col-md-12" id = "advices">
             {%include "./pagination.html"%}
 
         </div>

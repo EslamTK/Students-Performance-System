@@ -4,7 +4,8 @@ from django.contrib.auth import authenticate
 from django.core.serializers.json import DjangoJSONEncoder
 from django.forms.models import model_to_dict
 from django.http import JsonResponse
-from django.shortcuts import render
+from django.template import RequestContext
+from django.shortcuts import render, render_to_response
 from django.views.decorators.http import require_GET
 
 from dashboard.logic import *
@@ -90,6 +91,10 @@ def get_students(request):
         'students': students,
         'students_num_pages': students_num_pages
     }
+    template = 'administrator/pagination.html'
+
+    
+    return render_to_response(template,result,content_type=RequestContext(request))
 
     # For Testing Only
     # test_result = {
@@ -129,6 +134,7 @@ def student_profile(request, student_id):
         'student_courses': student_courses,
         'courses': courses
     }
+    print(result)
 
     return render(request, 'administrator/admin_student_profile.html', result)
     # For Testing Only
@@ -219,6 +225,10 @@ def get_educators(request):
         'educators': educators_list,
         'educators_num_pages': educators_num_pages,
     }
+    template = 'administrator/educators_pagination.html'
+
+    
+    return render_to_response(template,result,content_type=RequestContext(request))
 
     # For Testing Only
     # test_result = {
@@ -273,6 +283,7 @@ def educator_profile(request, educator_id):
         'educator_reviews_departments': educator_reviews_departments
     }
 
+    print(result)
     return render(request, 'administrator/admin_educator_profile.html', result)
     # For Testing Only
     # educator_info = model_to_dict(educator_info)

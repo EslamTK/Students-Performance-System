@@ -1,9 +1,9 @@
 
-<div class="card" style="margin-top: 10px">
+<div class="card" style="margin-top: 10px" >
         <div class="card-header">
             <h3 class="card-title mb-0">Educators Advices</h3>
         </div>
-        <div class="card-body" id = "advices">
+        <div class="card-body" >
             {% for advice in student_advices %}
                 <div class="media mb-4">
                     <img class="d-flex mr-3 rounded-circle"  id="img_{{forloop.counter}}"
@@ -19,11 +19,12 @@
                     </div>
                 </div>
                 {% endfor %}
+                
             <ul class="pagination" style="margin-top: 25px">
                     {% with ''|center:student_advices_num_pages as range %}
                     {% for i in range %}
                     <li class="page-item " >
-                            <a id="lis_{{forloop.counter}}" class="page-link" href="#" onclick="loadResults()" >{{forloop.counter}}</a>
+                            <a id="lis_{{forloop.counter}}" class="page-link" href="#"  onclick="loadResults(event)">{{forloop.counter}}</a>
                     </li>
                     {% endfor %}
                     {% endwith %}
