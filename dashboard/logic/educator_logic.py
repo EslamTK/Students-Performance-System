@@ -35,7 +35,7 @@ class EducatorLogic(Logic):
 
         return get_paginated_result_and_num_pages(result=reviews, page_size=page_size, page=page)
 
-    def get_educator_students(self, educator_id, keyword=None, page=1, page_size=2):
+    def get_educator_students(self, educator_id, keyword=None, page=1, page_size=6):
         students = self._unit_of_work.students_courses.get_educator_students(educator=educator_id, keyword=keyword)
 
         return get_paginated_result_and_num_pages(result=students, page_size=page_size, page=page)
@@ -47,19 +47,11 @@ class EducatorLogic(Logic):
 
         return counts
 
-    def is_student_exist(self, student_id):
-        return self._unit_of_work.students.is_exist(student_id)
-
-    def is_educator_exist(self, educator_id):
-        return self._unit_of_work.educators.is_exist(educator_id)
-
-    def add_student_advice(self, student_id, educator_id, content):
-
-        if not self.is_student_exist(student_id=student_id):
-            raise ValueError(item_not_found_message('student'))
-
-        self._unit_of_work.educators_advices. \
-            add_student_advice(student=student_id, educator=educator_id, content=content)
+    def add_student_advice(self, student_id, educator_id, form):
+        advice = form.save(commit=False)
+        advice.student_id = student_id
+        advice.educator_id = educator_id
+        advice.save()
 
     def add_review_report(self, review_id, educator_id):
 
