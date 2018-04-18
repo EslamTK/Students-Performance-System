@@ -7,8 +7,78 @@
         var requireJS = [];
         loadJS(requireJS, "{% static 'dashboard/views/charts3.js'%}");
 </script>
-    <input type="hidden" id="myVar" name="variable" readonly value="{{ courses_counts }}">
+<script>
+        function search(){
+            
+            var xhttp = new XMLHttpRequest();
+            xhttp.onreadystatechange = function() {
+                if (this.readyState == 4 && this.status == 200) {
+                    data = JSON.parse(this.responseText);
+                    console.log(data);
+                    
+                    document.getElementById("students_results").innerHTML="";
+                    var str =``;
+                    str+= '<table class="table table-responsive-sm">';
+                    str+= '<thead>';
+                    str+='<tr>';
+                    str+='<th>Student</th>';
+                    str+='<th>Course</th>';
+                    str+='<th>Department</th>';
+                    str+='<th>Year</th>';
+                    str+='<th>Result/Expected</th>';
+                    str+='</tr>';
+                    str+='</thead>';
+                    str+='<tbody >';
+                    for(var i = 0; i < data.students.length; i++){
+                        console.log(data.students.length);
+                        var course_name = data.students[i].course_name;
+                        var id = data.students[i].student;
+                        var dep = data.students[i].student__department__name;
+                        var year_name = data.students[i].course__year__name;
+                        var student_name = data.students[i].student__name;
+                        var final_grade = data.students[i].final_grade;
+                        
+                        str+=   '<tr>';
+                        str+=   '<td><a href="http://127.0.0.1:8000/dashboard/educator/student/'+id+'/" target="_blank">'+student_name+'</a></td>';
+                        str+=   '<td>'+course_name+'</td>';
+                        str+=   '<td>'+dep+'</td>';
+                        str+=   '<td>'+year_name+'</td>';
+                        
+                        if (final_grade == null){
+                            str += '<td>--</td>';
+                        }
+                        
+                        str +='</tr>';
+                        
 
+
+                    }
+                }
+                    str += '</tbody></table><ul class="pagination" style="margin-top: 25px">';
+                    element = document.getElementById("total").value;
+                    for(var i = 1; i <= data.num_pages; i++){
+                        str+='<li class="page-item" id="li_'+i+'"><a id="lis_'+i+'" class="page-link" href="#" onclick="load(event)" >'+i+'</a></li>';
+                    }
+                    str+="</ul></div>";
+                    document.getElementById("students_results").innerHTML = str;
+                    //document.getElementById("li_"+data.num_pages).classList.add("active");
+                    
+                   
+                
+                
+            
+            
+            };
+            var query = document.getElementsByTagName("input")[4].value;
+            
+            
+            xhttp.open("GET", "{% url 'dashboard:educator_students_paginator' %}?keyword="+query, true);
+            
+            xhttp.send();   
+        }     
+    </script>
+    <input type="hidden" id="myVar" name="variable" readonly value="{{ courses_counts }}">
+    <input type="hidden" id="total" name="variable" readonly value="{{ student_courses_num_pages }}">
     <main class="animated fadeIn row">
       <div class="col-md-12">
     
@@ -89,18 +159,18 @@
                             <h3 class="card-title mb-0">Students</h3>
                         </div>
                         <div class="input-group col-md-4 col-sm-12">
-                            <input type="text" id="input1-group2"
-                                   name="input1-group2"
+                            <input type="text" id="search_1"
+                                   name="search_1"
                                    class="form-control" placeholder="Student Name">
                             <span class=" input-group-btn ">
-                        <button type="button" class="btn btn-primary "><i
+                        <button type="button" class="btn btn-primary " onclick="search()"><i
                                 class="fa fa-search"></i></button>
                       </span>
     
                         </div>
                     </div>
                 </div>
-                <div class="card-body">
+                <div class="card-body" id="students_results">
                     <table class="table table-responsive-sm">
                         <thead>
                         <tr>
@@ -138,20 +208,15 @@
                         
                         </tbody>
                     </table>
-                    <ul class="pagination">
-                        <li class="page-item"><a class="page-link" href="#">Prev</a>
-                        </li>
-                        <li class="page-item active">
-                            <a class="page-link" href="#">1</a>
-                        </li>
-                        <li class="page-item"><a class="page-link" href="#">2</a>
-                        </li>
-                        <li class="page-item"><a class="page-link" href="#">3</a>
-                        </li>
-                        <li class="page-item"><a class="page-link" href="#">4</a>
-                        </li>
-                        <li class="page-item"><a class="page-link" href="#">Next</a>
-                        </li>
+                    <ul class="pagination" style="margin-top: 25px">
+                            {% with ''|center:educator_students_num_pages as range %}
+                            {% for i in range %}
+                            <li class="page-item " >
+                                    <a id="lis_{{forloop.counter}}" class="page-link" href="#" onclick="loadPage()" >{{forloop.counter}}</a>
+                            </li>
+                            {% endfor %}
+                            {% endwith %}
+                        
                     </ul>
                 </div>
             </div>

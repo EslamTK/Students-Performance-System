@@ -6,7 +6,81 @@
         var requireJS = [];
         loadJS(requireJS, "{% static 'dashboard/views/charts.js'%}");
     </script>
+    <script>
+        function search(){
+            var xhttp = new XMLHttpRequest();
+            xhttp.onreadystatechange = function() {
+                if (this.readyState == 4 && this.status == 200) {
+                    data = JSON.parse(this.responseText);
+                    console.log(data);
+                    
+                    document.getElementById("courses_results").innerHTML="";
+                    var str =``;
+                    str+= '<table class="table table-responsive-sm">';
+                    str+= '<thead>';
+                    str+='<tr>';
+                    str+='<th>Course Name</th>';
+                    str+='<th>Year</th>';
+                    str+='<th>Doctor</th>';
+                    str+='<th>Grade</th>';
+                    str+='<th>Status</th>';
+                    str+='</tr>';
+                    str+='</thead>';
+                    str+='<tbody >';
+                    for(var i = 0; i < data.courses.length; i++){
+                        console.log(data.courses.length);
+                        var course_name = data.courses[i].course_name;
+                        var id = data.courses[i].educator_id;
+                        var year_name = data.courses[i].year_name;
+                        var educator_name = data.courses[i].educator_name;
+                        var final_grade = data.courses[i].final_grade;
+                        
+                        str+=   '<tr>';
+                        str+=   '<td>'+course_name+'</td>';
+                        str+=   '<td>'+year_name+'</td>';
+                        str+=   '<td><a href="http://127.0.0.1:8000/dashboard/student/educator/'+id+'/" target="_blank">'+educator_name+'</a></td>';
+                        if (final_grade == null){
+                            str += '<td>--</td>';
+                            str += '<td>--</td>';
+                        }
+                        else{
+                            str +='<td>'+final_grade+'</td>'
+                            if (final_grade >= 50)
+                                str +='<td><span class="badge badge-success">Pass</span></td>';
+                            else
+                                str +='<td><span class="badge badge-danger">Fail</span></td>'
+                        str +='</tr>';
+                        
+
+
+                    }
+                }
+                    str += '</tbody></table><ul class="pagination" style="margin-top: 25px">';
+                    element = document.getElementById("total").value;
+                    for(var i = 1; i <= data.num_pages; i++){
+                        str+='<li class="page-item" id="li_'+i+'"><a id="lis_'+i+'" class="page-link" href="#" onclick="load(event)" >'+i+'</a></li>';
+                    }
+                    str+="</ul></div>";
+                    document.getElementById("courses_results").innerHTML = str;
+                    document.getElementById("li_"+data.num_pages).classList.add("active");
+                    
+                   
+                }
+                
+            
+            };
+            
+            var query = document.getElementsByTagName("input")[4].value;
+            
+            
+            xhttp.open("GET", "{% url 'dashboard:student_courses_paginator' %}?keyword="+query, true);
+            
+            xhttp.send();   
+        }     
+    </script>
     <input type="hidden" id="myVar" name="variable" readonly value="{{ student_predictions.courses }}">
+
+    <input type="hidden" id="total" name="variable" readonly value="{{ student_courses_num_pages }}">
     <main class="animated fadeIn row">
 
         <div class="card" style="margin-top: 10px">
@@ -64,18 +138,18 @@
                             <h3 class="card-title mb-0">Courses</h3>
                         </div>
                         <div class="input-group col-md-4 col-sm-12">
-                            <input type="text" id="input1-group2"
-                                   name="input1-group2"
-                                   class="form-control" placeholder="Course Name">
+                            <input type="text" id="search_1"
+                                   name="search_1"
+                                    placeholder="Course Name">
                             <span class=" input-group-btn ">
-                        <button type="button" class="btn btn-primary "><i
+                        <button type="button" class="btn btn-primary " onclick="search()"><i
                                 class="fa fa-search"></i></button>
                       </span>
 
                         </div>
                     </div>
                 </div>
-                <div class="card-body">
+                <div class="card-body" id ="courses_results">
                     <table class="table table-responsive-sm">
                         <thead>
                         <tr>
@@ -86,7 +160,7 @@
                             <th>Status</th>
                         </tr>
                         </thead>
-                        <tbody>
+                        <tbody >
                         {% for course in student_courses %}
                             <tr>
                                 <td>{{course.course.name}}</td>
@@ -116,17 +190,16 @@
                     </tbody>
                     </table>
                     <ul class="pagination" style="margin-top: 25px">
+                            {% with ''|center:student_courses_num_pages as range %}
+                            {% for i in range %}
+                            <li class="page-item " >
+                                    <a id="lis_{{forloop.counter}}" class="page-link" href="#" onclick="loadPage()" >{{forloop.counter}}</a>
+                            </li>
+                            {% endfor %}
+                            {% endwith %}
                         
-                        <li class="page-item active">
-                            <a class="page-link" href="#">1</a>
-                        </li>
-                        <li class="page-item"><a class="page-link" href="#">2</a>
-                        </li>
-                        <li class="page-item"><a class="page-link" href="#">3</a>
-                        </li>
-                        <li class="page-item"><a class="page-link" href="#">4</a>
-                        </li>
                     </ul>
+                    
                 </div>
             </div>
         </div>

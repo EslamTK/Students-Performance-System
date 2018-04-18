@@ -10,6 +10,11 @@
             loadJS(requireJS, "{% static 'dashboard/views/charts.js'%}");
             
         </script>
+        <script>
+            $(document).ready(function() {
+                console.log("something");
+            });
+        </script>
     <script>
         
         
@@ -19,7 +24,7 @@
             xhttp.onreadystatechange = function() {
                 if (this.readyState == 4 && this.status == 200) {
                     data = JSON.parse(this.responseText);
-                    console.log(data);
+                    
                     
                     document.getElementById("advices").innerHTML="";
                     var str =``;
@@ -28,7 +33,7 @@
                         var id = data.advices[i].educator_id;
                         var name = data.advices[i].educator_name;
                         var cont = data.advices[i].content;
-                        console.log(cont);
+                        
                         str+='<div class="media mb-4"><img class="d-flex mr-3 rounded-circle"  id="img_"'+(i+1)+'"  src="'+url+'" width="50" height="50"alt="">';
                         str+='<div class="media-body"><h5 class="mt-0" style="margin-bottom: 2px;"><a id= "a_'+(i+1)+'">'+name+'</h5>';
                         str+= '<p id="cont_+(i+1)+">'+cont+'</p></div></div>';

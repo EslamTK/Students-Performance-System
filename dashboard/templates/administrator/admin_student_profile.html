@@ -223,11 +223,11 @@
                         </tr>
                         </thead>
                         <tbody>
-                        {% for course in courses %}
+                        {% for course in student_courses %}
                             <tr>
                             <td>
                                 <div class="form-group">
-                                    <input type="text" class="form-control " value="{{ course.name }}" id="course1">
+                                    <input type="text" class="form-control " value="{{ course.course.name }}" id="course1">
                                 </div>
                             </td>
                             <td>
@@ -297,16 +297,6 @@
 
         </div>
     </main>
-    <script type="text/javascript">
-        var articles = [
-            {% for course in courses %}
-                {% if not forloop.first %},{% endif %}
-                {
-                    name: "{{ course.Paid }}"
-                }
-            {% endfor %}
-        ]
-        console.log(articles);
-    </script>
+    
 
 {% endblock %}        
