@@ -13,13 +13,7 @@
         <script>
             $(document).ready(function() {
                 console.log("something");
-            });
-        </script>
-    <script>
-        
-        
-        
-        function load(event){
+                function load(event){
             var xhttp = new XMLHttpRequest();
             xhttp.onreadystatechange = function() {
                 if (this.readyState == 4 && this.status == 200) {
@@ -57,10 +51,17 @@
             };
             var page = document.getElementById(event.target.id).innerHTML;
             
-            xhttp.open("GET", "{% url 'dashboard:student_advices_paginator' %}?page="+page, true);
+            xhttp.open("GET",document.getElementById("lis_1").href, true);
             
             xhttp.send();
         }
+            });
+        </script>
+    <script>
+        
+        
+        
+        
     
     </script>
     <input type="hidden" id="myVar" name="variable" readonly value="{{ student_predictions.courses }}">
@@ -137,7 +138,7 @@
                             {% with ''|center:student_advices_num_pages as range %}
                             {% for i in range %}
                             <li class="page-item " >
-                                    <a id="lis_{{forloop.counter}}" class="page-link" href="#" onclick="load(event)" >{{forloop.counter}}</a>
+                                    <a id="lis_{{forloop.counter}}" class="page-link" href="{% url 'dashboard:student_advices_paginator' %}?page={{forloop.counter}}" onclick="load(event)" >{{forloop.counter}}</a>
                             </li>
                             {% endfor %}
                             {% endwith %}
