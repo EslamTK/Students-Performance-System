@@ -9,6 +9,39 @@
         var educatorsRatingData = {{ educators_rating|safe }};
         loadJS(requireJS, "{% static 'dashboard/views/charts5.js'%}");
     </script>
+    <script>
+    
+            function loadResults(event){
+                    var key = document.getElementById("search_input").value;
+                    page = document.getElementById(event.target.id).innerHTML;
+                    $.ajax({        
+                        type: "GET",
+                        url: "/dashboard/administrator_educators/?page="+page+"&keyword="+key,
+                        success: function(data) {
+                            $('#search_results').html(data);
+                        },
+            
+                        error: function(response, error) {
+                            alert(response.responseText);  
+                        }
+                    });
+                }
+            function searchResults(e){
+                var key = document.getElementById("search_input").value;
+                    console.log(key);
+                    $.ajax({        
+                        type: "GET",
+                        url: "/dashboard/administrator_educators/?keyword="+key,
+                        success: function(data) {
+                            $('#search_results').html(data);
+                        },
+            
+                        error: function(response, error) {
+                            alert(response.responseText);  
+                        }
+                    });
+            }
+        </script>
 
     <main class="animated fadeIn row">
 
@@ -25,11 +58,11 @@
                             <span class="caret"></span>
                         </button>
                         <div class="dropdown-menu">
-                            <div class="dropdown-menu">
+                            
                                 {% for dep in departments %}
                                     <li><a class="dropdown-item" href="#">{{ dep.name }}</a></li>
                                 {% endfor %}
-                            </div>
+                            
                         </div>
                     </div>
 
@@ -62,57 +95,19 @@
                         </div>
 
                         <div class="input-group col-md-4 col-sm-12">
-                            <input type="text" id="input1-group2"
+                            <input type="text" id="search_input"
                                    name="input1-group2"
                                    class="form-control" placeholder="Educator Name">
                             <span class=" input-group-btn ">
-                        <button type="button" class="btn btn-primary "><i
+                        <button type="button" class="btn btn-primary " onclick="searchResults()"><i
                                 class="fa fa-search"></i></button>
                       </span>
 
                         </div>
                     </div>
                 </div>
-                <div class="card-body">
-                    <table class="table table-responsive-sm">
-                        <thead>
-                        <tr>
-                            <th>Educator</th>
-                            <th>Courses</th>
-                            <th>Number Of Students</th>
-                            <th>Expected Fail</th>
-
-                        </tr>
-                        </thead>
-                        <tbody>
-                        {% for educator in educators %}
-                            <tr>
-                                <td><a href="{% url 'dashboard:administrator_educator_profile' educator.user_id %}"
-                                       target="_blank">{{ educator.name }}</a>
-                                </td>
-                                <td>{{ educator.courses }}</td>
-                                <td>{{ educator.students }}</td>
-                                <td>{{ educator.prediction_fail }}</td>
-                            </tr>
-                        {% endfor %}
-
-                        </tbody>
-                    </table>
-                    <ul class="pagination">
-                        <li class="page-item"><a class="page-link" href="#">Prev</a>
-                        </li>
-                        <li class="page-item active">
-                            <a class="page-link" href="#">1</a>
-                        </li>
-                        <li class="page-item"><a class="page-link" href="#">2</a>
-                        </li>
-                        <li class="page-item"><a class="page-link" href="#">3</a>
-                        </li>
-                        <li class="page-item"><a class="page-link" href="#">4</a>
-                        </li>
-                        <li class="page-item"><a class="page-link" href="#">Next</a>
-                        </li>
-                    </ul>
+                <div class="card-body" id="search_results">
+                    {%include './educators_pagination.html'%}
                 </div>
             </div>
         </div>

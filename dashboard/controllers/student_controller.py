@@ -1,6 +1,7 @@
 from django.contrib.auth import authenticate
 from django.http import JsonResponse
-from django.shortcuts import render
+from django.template import RequestContext
+from django.shortcuts import render, render_to_response
 from django.views.decorators.http import require_GET
 
 from dashboard.logic import *
@@ -26,7 +27,7 @@ def index(request):
         'student_predictions': predictions,
         'student_recommendations': recommendations
     }
-
+    
     return render(request, 'student/index.html', result)
 
     # For Testing Only
@@ -50,31 +51,36 @@ def get_student_advices(request):
     student_advices, student_advices_num_pages = student.get_student_advices(student_id=user.id,
                                                                              page=page, page_size=page_size)
 
+    
+
     result = {
         'student_advices': student_advices,
         'student_advices_num_pages': student_advices_num_pages
     }
+    template = 'student/pagination.html'
 
+    
+    return render_to_response(template,result,content_type=RequestContext(request))
     # For Testing Only
-    # formatted_advices = []
+    #formatted_advices = []
     #
-    # for i in student_advices:
-    #     advice = {
-    #         'id': i.id,
-    #         'educator_id': i.educator_id,
-    #         'educator_name': i.educator.name,
-    #         'educator_photo_url': i.educator.photo.url,
-    #         'created_at': i.created_at,
-    #         'content': i.content
-    #     }
-    #     formatted_advices.append(advice)
-    #
-    # test_result = {
-    #     'advices': formatted_advices,
-    #     'num_pages': student_advices_num_pages
-    # }
-    #
-    # return JsonResponse(test_result)
+    #for i in student_advices:
+    #    advice = {
+    #        'id': i.id,
+    #        'educator_id': i.educator_id,
+    #        'educator_name': i.educator.name,
+    #        'educator_photo_url': i.educator.photo.url,
+    #        'created_at': i.created_at,
+    #        'content': i.content
+    #   }
+    #    formatted_advices.append(advice)
+    
+    #test_result = {
+    #    'advices': formatted_advices,
+    #    'num_pages': student_advices_num_pages
+    #}
+    
+    #return JsonResponse(test_result)
 
 
 @require_GET
@@ -98,7 +104,7 @@ def student_courses(request):
         'student_courses': courses,
         'student_courses_num_pages': courses_num_pages
     }
-
+    print(result)
     return render(request, 'student/courses.html', result)
 
     # For Testing Only
@@ -127,6 +133,7 @@ def get_student_courses_grades(request):
     courses_grades = student.get_student_courses(student_id=student_id, is_current=False,
                                                  year=year_id, term=term_id)
 
+    
     formatted_courses = []
 
     for i in courses_grades:
@@ -164,6 +171,10 @@ def get_student_courses(request):
         'student_courses': courses,
         'student_courses_num_pages': courses_num_pages
     }
+    template = 'student/courses_pagination.html'
+
+    
+    return render_to_response(template,result,content_type=RequestContext(request))
 
     # For Testing Only
     # formatted_courses = []

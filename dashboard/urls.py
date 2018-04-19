@@ -74,7 +74,7 @@ urlpatterns = [
          administrator_controller.get_years_counts,
          name='administrator_years_counts'),
 
-    path('administrator_students',
+    path('administrator_students/',
          administrator_controller.get_students,
          name='administrator_students_paginator'),
 
@@ -90,7 +90,7 @@ urlpatterns = [
          administrator_controller.get_educators_rating,
          name='administrator_educators_rating'),
 
-    path('administrator_educators',
+    path('administrator_educators/',
          administrator_controller.get_educators,
          name='administrator_educators_paginator'),
 

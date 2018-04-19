@@ -7,6 +7,38 @@
         var requireJS = [];
         loadJS(requireJS, "{% static 'dashboard/views/charts4.js'%}");
     </script>
+    <script>
+        function loadPage(event){
+            var key = document.getElementById("search_input").value;
+            page = document.getElementById(event.target.id).innerHTML;
+            $.ajax({        
+                type: "GET",
+                url: "/dashboard/administrator_students/?page="+page+"&keyword="+key,
+                success: function(data) {
+                    $('#students_results').html(data);
+                },
+    
+                error: function(response, error) {
+                    alert(response.responseText);  
+                }
+            });
+        }
+    function searchResults(e){
+        var key = document.getElementById("search_input").value;
+            
+            $.ajax({        
+                type: "GET",
+                url: "/dashboard/administrator_students/?keyword="+key,
+                success: function(data) {
+                    $('#students_results').html(data);
+                },
+    
+                error: function(response, error) {
+                    alert(response.responseText);  
+                }
+            });
+    }
+    </script>
     <input type="hidden" id="myData" name="variable" readonly value="{{ years_counts }}">
     <main class="animated fadeIn row">
 
@@ -66,53 +98,19 @@
                         </div>
 
                         <div class="input-group col-md-4 col-sm-12">
-                            <input type="text" id="input1-group2"
+                            <input type="text" id="search_input"
                                    name="input1-group2"
                                    class="form-control" placeholder="Student Name">
                             <span class=" input-group-btn ">
-                    <button type="button" class="btn btn-primary "><i
+                    <button type="button" class="btn btn-primary " onclick="searchResults()"><i
                             class="fa fa-search"></i></button>
                   </span>
 
                         </div>
                     </div>
                 </div>
-                <div class="card-body">
-                    <table class="table table-responsive-sm">
-                        <thead>
-                        <tr>
-                            <th>Student</th>
-                            <th>Department</th>
-                            <th>Year</th>
-                        </tr>
-                        </thead>
-                        <tbody>
-                        {% for student in students %}
-                            <tr>
-                                <td><a href="{% url 'dashboard:administrator_student_profile' student.user_id %}"
-                                       target="_blank">{{ student.name }}</a>
-                                </td>
-                                <td>{{ student.department__name }}</td>
-                                <td>{{ student.year__name }}</td>
-                            </tr>
-                        {% endfor %}
-                        </tbody>
-                    </table>
-                    <ul class="pagination">
-                        <li class="page-item"><a class="page-link" href="#">Prev</a>
-                        </li>
-                        <li class="page-item active">
-                            <a class="page-link" href="#">1</a>
-                        </li>
-                        <li class="page-item"><a class="page-link" href="#">2</a>
-                        </li>
-                        <li class="page-item"><a class="page-link" href="#">3</a>
-                        </li>
-                        <li class="page-item"><a class="page-link" href="#">4</a>
-                        </li>
-                        <li class="page-item"><a class="page-link" href="#">Next</a>
-                        </li>
-                    </ul>
+                <div class="card-body" id="students_results">
+                    {%include './pagination.html'%}
                 </div>
             </div>
         </div>

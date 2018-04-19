@@ -6,9 +6,31 @@
     
     var requireJS = [];
     loadJS(requireJS, "{% static 'dashboard/views/charts2.js'%}");
+    
+</script>
+<script>
+                
+                    
+        function loadReviews(event){
+            
+            page = document.getElementById(event.target.id).innerHTML;
+            $.ajax({        
+                type: "GET",
+                url: "/dashboard/educator_reviews/?page="+page,
+                success: function(data) {
+                    $('#educator_rev').html(data);
+                },
+    
+                error: function(response, error) {
+                    alert(response.responseText);  
+                }
+            });
+        }
+    
 </script>
     <input type="hidden" id="myVar" name="variable" readonly value="{{ educator_rating }}">
-<main class="animated fadeIn row">
+    <input type="hidden" id="total" name="variable" readonly value="{{ educator_reviews_num_pages }}">
+    <main class="animated fadeIn row">
 
     <div class="card" style="margin-top: 10px">
         <div class="card-header">
@@ -24,7 +46,7 @@
                     </button>
                     <div class="dropdown-menu">
                         {% for year in educator_reviews_years %}
-                            <a class="dropdown-item" href="#">{{ year.name }}</a>
+                            <a class="dropdown-item" href="#">{{ year.year }}</a>
                         {% endfor %}
                     </div>
 
@@ -36,7 +58,7 @@
                     </button>
                     <div class="dropdown-menu">
                         {% for dep in educator_reviews_departments %}
-                            <a class="dropdown-item" href="#">{{ dep.name }}</a>
+                            <a class="dropdown-item" href="#">{{ dep.student__department__name }}</a>
                         {% endfor %}
                    </div>
                     </div>
@@ -55,47 +77,8 @@
             <div class="card-header">
                 <h3 class="card-title mb-0">Student Reviews</h3>
             </div>
-            <div class="card-body">
-                {%for rev in educator_reviews%}
-                <div class="media mb-4">
-                    {%if rev.is_anonymous%}
-                    <img class="d-flex mr-3 rounded-circle"
-                         src="{% static 'imgs/anonymous.png'%}" width="50" height="50"
-                         alt="">
-                    <div class="media-body">
-                        <h5 class="mt-0" style="margin-bottom: 2px;">Anonymous</h5>
-                    {%else%}
-                    <img class="d-flex mr-3 rounded-circle"
-                    src="{% static 'dashboard\img\profile-pictures.png'%}" width="50" height="50"
-                    alt="">
-                    <div class="media-body">
-                        <h5 class="mt-0" style="margin-bottom: 2px;"><a href="{% url 'dashboard:educator_student_profile' rev.student_id %}">{{rev.student__name}}</a></h5>
-                    
-                    {%endif%}
-                        <p>{{rev.content}}</p>
-                        <div class="btn-group btn-group-justified">
-                        <button type="button" class="btn btn-link">Report Abuse</button>
-                        </div>
-
-                    </div>
-                </div>
-                {%endfor%}
-                <ul class="pagination" style="margin-top: 25px">
-                    <li class="page-item"><a class="page-link" href="#">Prev</a>
-                    </li>
-                    <li class="page-item active">
-                        <a class="page-link" href="#">1</a>
-                    </li>
-                    <li class="page-item"><a class="page-link" href="#">2</a>
-                    </li>
-                    <li class="page-item"><a class="page-link" href="#">3</a>
-                    </li>
-                    <li class="page-item"><a class="page-link" href="#">4</a>
-                    </li>
-                    <li class="page-item"><a class="page-link" href="#">Next</a>
-                    </li>
-                </ul>
-                
+            <div class="card-body" id = "educator_rev">
+                {%include "./pagination.html"%}
             </div>
         </div>
 

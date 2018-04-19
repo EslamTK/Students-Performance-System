@@ -1,8 +1,14 @@
 from django.contrib.auth import authenticate
+from django.http import JsonResponse, HttpResponse, HttpResponseBadRequest, HttpResponseForbidden
+from django.shortcuts import render, render_to_response
+from django.template import RequestContext
+from django.views.decorators.csrf import csrf_exempt
+from django.views.decorators.http import require_GET, require_POST
 from django.db import IntegrityError
 from django.http import JsonResponse, HttpResponseBadRequest, HttpResponseRedirect
 from django.shortcuts import render
 from django.views.decorators.http import require_GET, require_http_methods
+
 
 from dashboard.forms.educator_advice_form import EducatorAdviceForm
 from dashboard.logic import *
@@ -82,6 +88,10 @@ def get_educator_reviews(request):
         'educator_reviews': educator_reviews,
         'educator_reviews_num_pages': educator_reviews_num_pages
     }
+    template = 'educator/pagination.html'
+
+    
+    return render_to_response(template,result,content_type=RequestContext(request))
 
     # For Testing Only
     # test_result = {
@@ -172,17 +182,18 @@ def educator_students(request):
         'terms': terms,
         'courses_counts': courses_counts
     }
-
-    return render(request, 'educator/students.html', result)
-    # For Testing Only
-    # test_result = {
+    
+    
+    #For Testing Only
+    #test_result = {
     #     'educator_students': list(students),
     #     'departments': list(departments.values()),
     #     'years': list(years.values()),
     #     'terms': list(terms.values()),
     #     'courses_counts': list(courses_counts)
-    # }
-    #
+    #}
+    #print(test_result)
+    return render(request, 'educator/students.html', result)
     # return JsonResponse(test_result, safe=False)
 
 
@@ -228,13 +239,16 @@ def get_educator_students(request):
         'educator_students': students,
         'educator_students_num_pages': students_num_pages,
     }
-
+    
+    template = 'educator/students_pagination.html'
+    return render_to_response(template,result,content_type=RequestContext(request))
+    
     # For Testing Only
-    # test_result = {
+    #test_result = {
     #     'educator_students': list(students),
     #     'educator_students_num_pages': students_num_pages
-    # }
-    #
+    #}
+    #print(test_result)
     # return JsonResponse(test_result)
 
 # def add_review_report(request):
