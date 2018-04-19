@@ -6,7 +6,46 @@
         var requireJS = [];
         loadJS(requireJS, "{% static 'dashboard/views/charts.js'%}");
     </script>
+    <script>
+                
+                    
+            function loadResults(event){
+                
+                var key = document.getElementById("search_input").value;
+                
+                page = document.getElementById(event.target.id).innerHTML;
+                url = "/dashboard/student_courses/?page="+page+"&keyword="+key;
+                $.ajax({        
+                    type: "GET",
+                    url: url,
+                    success: function(data) {
+                        $('#courses_results').html(data);
+                    },
+        
+                    error: function(response, error) {
+                        alert(response.responseText);  
+                    }
+                });
+            }
+        function searchResults(e){
+        var key = document.getElementById("search_input").value;
+            console.log(key);
+            $.ajax({        
+                type: "GET",
+                url: "/dashboard/student_courses/?keyword="+key,
+                success: function(data) {
+                    $('#courses_results').html(data);
+                },
+    
+                error: function(response, error) {
+                    alert(response.responseText);  
+                }
+            });
+    }
+    </script>
     <input type="hidden" id="myVar" name="variable" readonly value="{{ student_predictions.courses }}">
+
+    <input type="hidden" id="total" name="variable" readonly value="{{ student_courses_num_pages }}">
     <main class="animated fadeIn row">
 
         <div class="card" style="margin-top: 10px">
@@ -64,74 +103,22 @@
                             <h3 class="card-title mb-0">Courses</h3>
                         </div>
                         <div class="input-group col-md-4 col-sm-12">
-                            <input type="text" id="input1-group2"
+                            <input type="text" id="search_input"
                                    name="input1-group2"
                                    class="form-control" placeholder="Course Name">
                             <span class=" input-group-btn ">
-                        <button type="button" class="btn btn-primary "><i
+                        <button type="button" class="btn btn-primary " onclick="searchResults()"><i
                                 class="fa fa-search"></i></button>
                       </span>
 
                         </div>
                     </div>
                 </div>
-                <div class="card-body">
-                    <table class="table table-responsive-sm">
-                        <thead>
-                        <tr>
-                            <th>Course Name</th>
-                            <th>Year</th>
-                            <th>Doctor</th>
-                            <th>Grade</th>
-                            <th>Status</th>
-                        </tr>
-                        </thead>
-                        <tbody>
-                        {% for course in student_courses %}
-                            <tr>
-                                <td>{{course.course.name}}</td>
-                                <td>{{ course.course.year.name }}</td>
-                                <td><a href="{% url 'dashboard:student_educator_profile' course.educator_id %}"
-                                       target="_blank">{{ course.educator.name }}</a>
-                                </td>
-                                {% if course.final_grade is None%}
-                                    <td>--</td>
-                                    <td>--</td>
-                                {%else%}
-                                    <td>{{course.final_grade}}</td>
-                                
-                                    {%if course.final_grade >= 50%}
-                                    <td>
-                                        <span class="badge badge-success">Pass</span>
-                                    </td>
-                                    {%else%}
-                                    <td>
-                                        <span class="badge badge-danger">Fail</span>
-                                    </td>
-                                    {%endif%}
-
-                                {%endif%}
-                            </tr>
-                        {% endfor %}
-                    </tbody>
-                    </table>
-                    <ul class="pagination" style="margin-top: 25px">
-                        <li class="page-item"><a class="page-link" href="#">Prev</a>
-                        </li>
-                        <li class="page-item active">
-                            <a class="page-link" href="#">1</a>
-                        </li>
-                        <li class="page-item"><a class="page-link" href="#">2</a>
-                        </li>
-                        <li class="page-item"><a class="page-link" href="#">3</a>
-                        </li>
-                        <li class="page-item"><a class="page-link" href="#">4</a>
-                        </li>
-                        <li class="page-item"><a class="page-link" href="#">Next</a>
-                        </li>
-                    </ul>
+                <div class="card-body" id="courses_results">
+                    {%include "./courses_pagination.html"%}
                 </div>
             </div>
         </div>
     </main>
+    
 {% endblock %}

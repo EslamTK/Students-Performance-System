@@ -1,0 +1,30 @@
+<table class="table table-responsive-sm">
+        <thead>
+        <tr>
+            <th>Student</th>
+            <th>Department</th>
+            <th>Year</th>
+        </tr>
+        </thead>
+        <tbody>
+        {% for student in students %}
+            <tr>
+                <td><a href="{% url 'dashboard:administrator_student_profile' student.user_id %}"
+                       target="_blank">{{ student.name }}</a>
+                </td>
+                <td>{{ student.department__name }}</td>
+                <td>{{ student.year__name }}</td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+    <ul class="pagination" style="margin-top: 25px">
+            {% with ''|center:students_num_pages as range %}
+            {% for i in range %}
+            <li class="page-item " >
+                    <li class="page-item " ><a id="lis_{{forloop.counter}}" class="page-link" href="#" onclick="loadPage(event)" >{{forloop.counter}}</a></li>
+            </li>
+            {% endfor %}
+            {% endwith %}
+        
+    </ul>
