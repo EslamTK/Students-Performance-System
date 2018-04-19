@@ -37,7 +37,7 @@ urlpatterns = [
          educator_controller.get_educator_rating,
          name='educator_rating'),
 
-    path('educator_reviews',
+    path('educator_reviews/',
          educator_controller.get_educator_reviews,
          name='educator_reviews_paginator'),
 
