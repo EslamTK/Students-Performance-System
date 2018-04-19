@@ -44,6 +44,33 @@
 
     <input type="hidden" id="myVar" name="variable" readonly value="{{ courses_counts }}">
 
+                    }
+                }
+                    str += '</tbody></table><ul class="pagination" style="margin-top: 25px">';
+                    element = document.getElementById("total").value;
+                    for(var i = 1; i <= data.num_pages; i++){
+                        str+='<li class="page-item" id="li_'+i+'"><a id="lis_'+i+'" class="page-link" href="#" onclick="load(event)" >'+i+'</a></li>';
+                    }
+                    str+="</ul></div>";
+                    document.getElementById("students_results").innerHTML = str;
+                    //document.getElementById("li_"+data.num_pages).classList.add("active");
+                    
+                   
+                
+                
+            
+            
+            };
+            var query = document.getElementsByTagName("input")[4].value;
+            
+            
+            xhttp.open("GET", "{% url 'dashboard:educator_students_paginator' %}?keyword="+query, true);
+            
+            xhttp.send();   
+        }     
+    </script>
+    <input type="hidden" id="myVar" name="variable" readonly value="{{ courses_counts }}">
+    <input type="hidden" id="total" name="variable" readonly value="{{ student_courses_num_pages }}">
     <main class="animated fadeIn row">
       <div class="col-md-12">
     
@@ -124,19 +151,78 @@
                             <h3 class="card-title mb-0">Students</h3>
                         </div>
                         <div class="input-group col-md-4 col-sm-12">
+<<<<<<< HEAD
                             <input type="text" id="search_input"
                                    name="input1-group2"
                                    class="form-control" placeholder="Student Name">
                             <span class=" input-group-btn ">
                         <button type="button" class="btn btn-primary " onclick="searchResults(event)"><i
+=======
+                            <input type="text" id="search_1"
+                                   name="search_1"
+                                   class="form-control" placeholder="Student Name">
+                            <span class=" input-group-btn ">
+                        <button type="button" class="btn btn-primary " onclick="search()"><i
+>>>>>>> pagination/ajax
                                 class="fa fa-search"></i></button>
                       </span>
     
                         </div>
                     </div>
                 </div>
+<<<<<<< HEAD
                 <div class="card-body" id ="students_results">
                     {%include './students_pagination.html'%}
+=======
+                <div class="card-body" id="students_results">
+                    <table class="table table-responsive-sm">
+                        <thead>
+                        <tr>
+                            <th>Student</th>
+                            <th>Course</th>
+                            <th>Department</th>
+                            <th>Year</th>
+                            <th>Result/Expected</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        {%for student in educator_students%}
+                        <tr>
+                          <td><a href="{% url 'dashboard:educator_student_profile' student.student %}" target="_blank">{{student.student__name}}</a>
+                          </td>
+                            <td>{{student.course__name}}</td>
+                            <td>{{student.student__department__name}}</td>
+                            <td>{{student.course__year__name}}</td>
+                            {% if student.prediction_grade is None %}
+                                <td>--</td>
+                            {%else%}
+                                {% if student.prediction_grade >= 50 %}
+                                <td>
+                                    <span class="badge badge-success">Pass</span>
+                                </td>
+                                {%else%}
+                                <td>
+                                    <span class="badge badge-danger">Fail</span>
+                                </td>
+                                {%endif%}
+                            {%endif%}
+
+                        </tr>
+                        {%endfor%}
+                        
+                        </tbody>
+                    </table>
+                    <ul class="pagination" style="margin-top: 25px">
+                            {% with ''|center:educator_students_num_pages as range %}
+                            {% for i in range %}
+                            <li class="page-item " >
+                                    <a id="lis_{{forloop.counter}}" class="page-link" href="#" onclick="loadPage()" >{{forloop.counter}}</a>
+                            </li>
+                            {% endfor %}
+                            {% endwith %}
+                        
+                    </ul>
+>>>>>>> pagination/ajax
                 </div>
             </div>
         </div>

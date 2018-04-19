@@ -27,7 +27,7 @@ def index(request):
         'student_predictions': predictions,
         'student_recommendations': recommendations
     }
-
+    
     return render(request, 'student/index.html', result)
 
     # For Testing Only
