@@ -1,8 +1,10 @@
 from django.contrib.auth import authenticate
+from django.core.exceptions import ObjectDoesNotExist
 from django.db import IntegrityError
-from django.http import JsonResponse, HttpResponseBadRequest, HttpResponseRedirect
+from django.http import JsonResponse, HttpResponse, \
+    HttpResponseBadRequest, HttpResponseRedirect
 from django.shortcuts import render
-from django.views.decorators.http import require_GET, require_http_methods
+from django.views.decorators.http import require_GET, require_POST, require_http_methods
 
 from dashboard.forms.educator_advice_form import EducatorAdviceForm
 from dashboard.logic import *
@@ -237,19 +239,19 @@ def get_educator_students(request):
     #
     # return JsonResponse(test_result)
 
-# def add_review_report(request):
-#     review_id = request.POST.get('review_id', None)
-#
-#     if not review_id:
-#         return HttpResponseBadRequest('The required review_id is not given')
-#
-#     try:
-#         educator.add_review_report(educator_id=user.id, review_id=review_id)
-#
-#     except ValueError as value_error:
-#         return HttpResponseBadRequest(str(value_error))
-#
-#     except PermissionError as permission_error:
-#         return HttpResponseForbidden(str(permission_error))
-#
-#     return HttpResponse('The review report added successfully')
+
+@require_POST
+def add_review_report(request):
+    # Getting the review id
+    review_id = request.POST.get('review_id')
+
+    if not review_id:
+        return HttpResponseBadRequest('The required review_id is not given')
+
+    try:
+        educator.add_review_report(educator_id=user.id, review_id=review_id)
+
+    except (ObjectDoesNotExist, ValueError, IntegrityError):
+        return HttpResponseBadRequest('The given review_id is not valid')
+
+    return HttpResponse('The review report added successfully')

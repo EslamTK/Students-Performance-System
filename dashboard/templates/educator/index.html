@@ -74,7 +74,15 @@
                     {%endif%}
                         <p>{{rev.content}}</p>
                         <div class="btn-group btn-group-justified">
-                        <button type="button" class="btn btn-link">Report Abuse</button>
+                            {% if rev.report__is_closed is not None %}
+                                {% if rev.report__is_closed %}
+                                    <p class="p-1 mb-1 bg-danger text-white">Report Refused</p>
+                                {% else %}
+                                    <p class="p-1 mb-1 bg-success text-white">Reported</p>
+                                {% endif %}
+                            {% else %}
+                                <button type="button" class="btn p-1 mb-1 bg-primary text-white">Report Abuse</button>
+                            {% endif %}
                         </div>
 
                     </div>

@@ -7,10 +7,6 @@ def convert_boolean_to_yes_no(value):
     return 'no'
 
 
-def item_not_found_message(item):
-    return 'No {0} found with the given {0} id.'.format(item)
-
-
 def get_paginated_result_and_num_pages(result, page_size, page):
     paginator = Paginator(result, page_size)
 

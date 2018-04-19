@@ -1,5 +1,5 @@
 from .logic import Logic
-from .utilities import item_not_found_message, get_paginated_result_and_num_pages
+from .utilities import get_paginated_result_and_num_pages
 
 
 class EducatorLogic(Logic):
@@ -54,14 +54,9 @@ class EducatorLogic(Logic):
         advice.save()
 
     def add_review_report(self, review_id, educator_id):
-
-        try:
-            review = self._unit_of_work.students_reviews.get_one(review_id)
-
-        except:
-            raise ValueError(item_not_found_message('review'))
+        review = self._unit_of_work.students_reviews.get_one(review_id)
 
         if review.educator_id != educator_id:
-            raise PermissionError('The specified review is not owned by the given educator')
+            raise ValueError()
 
         self._unit_of_work.reports.add_report(review_id=review_id)

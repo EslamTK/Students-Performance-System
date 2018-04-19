@@ -62,9 +62,9 @@ urlpatterns = [
          educator_controller.get_educator_students,
          name='educator_students_paginator'),
 
-    # path('educator/review_report/',
-    #      educator_controller.add_review_report,
-    #      name='educator_add_review_report'),
+    path('educator/review_report/',
+         educator_controller.add_review_report,
+         name='educator_add_review_report'),
 
     path('administrator/',
          administrator_controller.index,
