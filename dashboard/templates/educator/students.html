@@ -8,15 +8,20 @@
         loadJS(requireJS, "{% static 'dashboard/views/charts3.js'%}");
 </script>
 <script>
-    
+    var search_val = "";    
     function loadPage(event){
-            var key = document.getElementById("search_input").value;
             page = document.getElementById(event.target.id).innerHTML;
+            url = "/dashboard/educator_students/?page="+page;
+            if(search_val != ""){
+                url += "&keyword="+search_val;
+            }
             $.ajax({        
                 type: "GET",
-                url: "/dashboard/educator_students/?page="+page+"&keyword="+key,
+                url: url,
                 success: function(data) {
                     $('#students_results').html(data);
+                    document.getElementById(event.target.id).parentElement.classList.add("disabled")
+                    
                 },
     
                 error: function(response, error) {
@@ -24,12 +29,13 @@
                 }
             });
         }
+        
     function searchResults(e){
-        var key = document.getElementById("search_input").value;
-            console.log(key);
+        search_val = $("#search_input").val();
+        
             $.ajax({        
                 type: "GET",
-                url: "/dashboard/educator_students/?keyword="+key,
+                url: "/dashboard/educator_students/?keyword="+search_val,
                 success: function(data) {
                     $('#students_results').html(data);
                 },
@@ -38,7 +44,29 @@
                     alert(response.responseText);  
                 }
             });
+            
     }
+    $(document).ready(function(){
+        var input_val;
+        $("#search_btn").click(function(e){
+            input_val = $("#search_input").val();
+            if(input_val !== search_val){
+                searchResults();
+            }
+        });
+        $("#search_input").keypress(function(e){
+            input_val = $("#search_input").val();
+            if(input_val != "" && input_val !== search_val){
+                var key_pressed = e.which;
+                if(key_pressed == 13){
+                    searchResults();
+                }
+            }
+        });
+    });
+    
+
+    
 </script>
     <input type="hidden" id="myVar" name="variable" readonly value="{{ courses_counts }}">
     <input type="hidden" id="total" name="variable" readonly value="{{ student_courses_num_pages }}">
@@ -126,8 +154,8 @@
                                    name="input1-group2"
                                    class="form-control" placeholder="Student Name">
                             <span class=" input-group-btn ">
-                        <button type="button" class="btn btn-primary " onclick="searchResults(event)"><i
-                                class="fa fa-search"></i></button>
+                        <button type="button" class="btn btn-primary " id ="search_btn" ><i
+                                class="fa fa-search" ></i></button>
                       </span>
     
                         </div>
