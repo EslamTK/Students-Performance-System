@@ -1,36 +1,37 @@
 <table class="table table-responsive-sm">
-        <thead>
-        <tr>
-            <th>Educator</th>
-            <th>Courses</th>
-            <th>Number Of Students</th>
-            <th>Expected Fail</th>
+    <thead>
+    <tr>
+        <th>Educator</th>
+        <th>Courses</th>
+        <th>Number Of Students</th>
+        <th>Expected Fail</th>
 
+    </tr>
+    </thead>
+    <tbody>
+    {% for educator in educators %}
+        <tr>
+            <td><a href="{% url 'dashboard:administrator_educator_profile' educator.user_id %}"
+                   target="_blank">{{ educator.name }}</a>
+            </td>
+            <td>{{ educator.courses }}</td>
+            <td>{{ educator.students }}</td>
+            <td>{{ educator.prediction_fail }}</td>
         </tr>
-        </thead>
-        <tbody>
-        {% for educator in educators %}
-            <tr>
-                <td><a href="{% url 'dashboard:administrator_educator_profile' educator.user_id %}"
-                       target="_blank">{{ educator.name }}</a>
-                </td>
-                <td>{{ educator.courses }}</td>
-                <td>{{ educator.students }}</td>
-                <td>{{ educator.prediction_fail }}</td>
-            </tr>
+    {% endfor %}
+
+    </tbody>
+</table>
+<ul class="pagination" style="margin-top: 25px">
+    {% with ''|center:educators_num_pages as range %}
+
+        {% for i in range %}
+            <li class="page-item ">
+            <li class="page-item "><a id="lis_{{ forloop.counter }}" class="page-link" href="#"
+                                      onclick="loadResults(event)">{{ forloop.counter }}</a></li>
+            </li>
         {% endfor %}
 
-        </tbody>
-    </table>
-    <ul class="pagination" style="margin-top: 25px">
-            {% with ''|center:educators_num_pages as range %}
-            
-            {% for i in range %}
-            <li class="page-item " >
-                    <li class="page-item " ><a id="lis_{{forloop.counter}}" class="page-link" href="#" onclick="loadResults(event)" >{{forloop.counter}}</a></li>
-            </li>
-            {% endfor %}
-            
-            {% endwith %}
-        
-    </ul>
+    {% endwith %}
+
+</ul>

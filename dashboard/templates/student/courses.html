@@ -38,9 +38,9 @@
                 success: function(data) {
                     $('#courses_results').html(data);
                 },
-    
-                error: function(response, error) {
-                    alert(response.responseText);  
+
+                error: function (response, error) {
+                    alert(response.responseText);
                 }
             });
     }
@@ -135,10 +135,10 @@
                     </div>
                 </div>
                 <div class="card-body" id="courses_results">
-                    {%include "./courses_pagination.html"%}
+                    {% include "./courses_pagination.html" %}
                 </div>
             </div>
         </div>
     </main>
-    
+
 {% endblock %}

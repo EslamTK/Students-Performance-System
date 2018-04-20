@@ -124,7 +124,8 @@
                             <div class="dropdown-menu">
                                 <div class="dropdown-menu">
                                     {% for dep in educator_reviews_departments %}
-                                        <li><a class="dropdown-item" href="#">{{ dep.student__department__name }}</a></li>
+                                        <li><a class="dropdown-item" href="#">{{ dep.student__department__name }}</a>
+                                        </li>
                                     {% endfor %}
                                 </div>
 
@@ -152,7 +153,7 @@
                         <h3 class="card-title mb-0">Student Reviews</h3>
                     </div>
                     <div class="card-body" id="educator_reviews">
-                        {%include './educator_pagination.html'%}
+                        {% include './educator_pagination.html' %}
                         </div>
                     </div>
 

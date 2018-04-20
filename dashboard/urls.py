@@ -6,7 +6,7 @@ app_name = 'dashboard'
 
 urlpatterns = [
 
-    # path('form/<int:student_id>/',
+    # path('form/',
     #      forms_testing.index,
     #      name='form'),
 

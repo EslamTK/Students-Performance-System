@@ -23,9 +23,9 @@
                     document.getElementById(event.target.id).parentElement.classList.add("disabled")
                     
                 },
-    
-                error: function(response, error) {
-                    alert(response.responseText);  
+
+                error: function (response, error) {
+                    alert(response.responseText);
                 }
             });
         }
@@ -39,9 +39,9 @@
                 success: function(data) {
                     $('#students_results').html(data);
                 },
-    
-                error: function(response, error) {
-                    alert(response.responseText);  
+
+                error: function (response, error) {
+                    alert(response.responseText);
                 }
             });
             
@@ -161,8 +161,8 @@
                         </div>
                     </div>
                 </div>
-                <div class="card-body" id ="students_results">
-                    {%include './students_pagination.html'%}
+                <div class="card-body" id="students_results">
+                    {% include './students_pagination.html' %}
                 </div>
             </div>
         </div>

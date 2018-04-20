@@ -4,8 +4,8 @@ from django.contrib.auth import authenticate
 from django.core.serializers.json import DjangoJSONEncoder
 from django.forms.models import model_to_dict
 from django.http import JsonResponse
-from django.template import RequestContext
 from django.shortcuts import render, render_to_response
+from django.template import RequestContext
 from django.views.decorators.http import require_GET
 
 from dashboard.logic import *
@@ -93,8 +93,7 @@ def get_students(request):
     }
     template = 'administrator/pagination.html'
 
-    
-    return render_to_response(template,result,content_type=RequestContext(request))
+    return render_to_response(template, result, content_type=RequestContext(request))
 
     # For Testing Only
     # test_result = {
@@ -227,8 +226,7 @@ def get_educators(request):
     }
     template = 'administrator/educators_pagination.html'
 
-    
-    return render_to_response(template,result,content_type=RequestContext(request))
+    return render_to_response(template, result, content_type=RequestContext(request))
 
     # For Testing Only
     # test_result = {

@@ -1,3 +1,6 @@
+from django.db import transaction
+
+from dashboard.forms.student_review_form import StudentReviewForm
 from machine_learning import api as ml_api
 from .logic import Logic
 from .utilities import convert_boolean_to_yes_no, get_paginated_result_and_num_pages
@@ -78,3 +81,31 @@ class StudentLogic(Logic):
             student_data['courses'].append(course)
 
         return student_data
+
+    def get_review_forms(self, request_data=None):
+
+        review_items = self._unit_of_work.review_items.get_all()
+
+        review_form = StudentReviewForm(request_data, review_items=review_items)
+
+        return review_form
+
+    @transaction.atomic
+    def add_review(self, student_id, educator_id, review_form):
+
+        student = self._unit_of_work.students.get_one(student_id)
+
+        educator = self._unit_of_work.educators.get_one(educator_id)
+
+        review_items = review_form.review_items
+
+        review = review_form.save(commit=False)
+        review.student = student
+        review.student_year = student.year
+        review.educator = educator
+        review.save()
+
+        for item in review_items:
+            saved_item = item.save(commit=False)
+            saved_item.student_review = review
+            saved_item.save()
