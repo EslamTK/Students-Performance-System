@@ -4,33 +4,33 @@
 
 
     {% load static %}
-    
+
     <script>
-    
-            var requireJS = [];
-            loadJS(requireJS, "{% static 'dashboard/views/charts.js'%}");
-            
-        </script>
-        <script>
-                
-                    
-                function loadResults(event){
-                    
-                    page = document.getElementById(event.target.id).innerHTML;
-                    $.ajax({        
-                        type: "GET",
-                        url: "/dashboard/student_advices/?page="+page,
-                        success: function(data) {
-                            $('#advices').html(data);
-                        },
-            
-                        error: function(response, error) {
-                            alert(response.responseText);  
-                        }
-                    });
+
+        var requireJS = [];
+        loadJS(requireJS, "{% static 'dashboard/views/charts.js'%}");
+
+    </script>
+    <script>
+
+
+        function loadResults(event) {
+
+            page = document.getElementById(event.target.id).innerHTML;
+            $.ajax({
+                type: "GET",
+                url: "/dashboard/student_advices/?page=" + page,
+                success: function (data) {
+                    $('#advices').html(data);
+                },
+
+                error: function (response, error) {
+                    alert(response.responseText);
                 }
-                
-</script>
+            });
+        }
+
+    </script>
     
     <input type="hidden" id="myVar" name="variable" readonly value="{{ student_predictions.courses }}">
     <input type="hidden" id="total" name="variable" readonly value="{{ student_advices_num_pages }}">
@@ -81,8 +81,8 @@
                 </div>
             </div>
         </div>
-        <div class="col-md-12" id = "advices">
-            {%include "./pagination.html"%}
+        <div class="col-md-12" id="advices">
+            {% include "./pagination.html" %}
 
         </div>
     </main>

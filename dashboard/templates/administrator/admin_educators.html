@@ -10,38 +10,39 @@
         loadJS(requireJS, "{% static 'dashboard/views/charts5.js'%}");
     </script>
     <script>
-    
-            function loadResults(event){
-                    var key = document.getElementById("search_input").value;
-                    page = document.getElementById(event.target.id).innerHTML;
-                    $.ajax({        
-                        type: "GET",
-                        url: "/dashboard/administrator_educators/?page="+page+"&keyword="+key,
-                        success: function(data) {
-                            $('#search_results').html(data);
-                        },
-            
-                        error: function(response, error) {
-                            alert(response.responseText);  
-                        }
-                    });
+
+        function loadResults(event) {
+            var key = document.getElementById("search_input").value;
+            page = document.getElementById(event.target.id).innerHTML;
+            $.ajax({
+                type: "GET",
+                url: "/dashboard/administrator_educators/?page=" + page + "&keyword=" + key,
+                success: function (data) {
+                    $('#search_results').html(data);
+                },
+
+                error: function (response, error) {
+                    alert(response.responseText);
                 }
-            function searchResults(e){
-                var key = document.getElementById("search_input").value;
-                    console.log(key);
-                    $.ajax({        
-                        type: "GET",
-                        url: "/dashboard/administrator_educators/?keyword="+key,
-                        success: function(data) {
-                            $('#search_results').html(data);
-                        },
-            
-                        error: function(response, error) {
-                            alert(response.responseText);  
-                        }
-                    });
-            }
-        </script>
+            });
+        }
+
+        function searchResults(e) {
+            var key = document.getElementById("search_input").value;
+            console.log(key);
+            $.ajax({
+                type: "GET",
+                url: "/dashboard/administrator_educators/?keyword=" + key,
+                success: function (data) {
+                    $('#search_results').html(data);
+                },
+
+                error: function (response, error) {
+                    alert(response.responseText);
+                }
+            });
+        }
+    </script>
 
     <main class="animated fadeIn row">
 
@@ -58,11 +59,11 @@
                             <span class="caret"></span>
                         </button>
                         <div class="dropdown-menu">
-                            
-                                {% for dep in departments %}
+
+                            {% for dep in departments %}
                                     <li><a class="dropdown-item" href="#">{{ dep.name }}</a></li>
                                 {% endfor %}
-                            
+
                         </div>
                     </div>
 
@@ -107,7 +108,7 @@
                     </div>
                 </div>
                 <div class="card-body" id="search_results">
-                    {%include './educators_pagination.html'%}
+                    {% include './educators_pagination.html' %}
                 </div>
             </div>
         </div>

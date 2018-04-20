@@ -1,35 +1,45 @@
-{%load static%}
-{%for rev in educator_reviews%}
-                <div class="media mb-4">
-                    {%if rev.is_anonymous%}
-                    <img class="d-flex mr-3 rounded-circle"
-                         src="{% static 'imgs/anonymous.png'%}" width="50" height="50"
-                         alt="">
-                    <div class="media-body">
-                        <h5 class="mt-0" style="margin-bottom: 2px;">Anonymous</h5>
-                    {%else%}
-                    <img class="d-flex mr-3 rounded-circle"
-                    src="{% static 'dashboard\img\profile-pictures.png'%}" width="50" height="50"
-                    alt="">
-                    <div class="media-body">
-                        <h5 class="mt-0" style="margin-bottom: 2px;"><a href="{% url 'dashboard:educator_student_profile' rev.student_id %}">{{rev.student__name}}</a></h5>
-                    
-                    {%endif%}
-                        <p>{{rev.content}}</p>
-                        <div class="btn-group btn-group-justified">
-                        <button type="button" class="btn btn-link">Report Abuse</button>
-                        </div>
+{% load static %}
+{% for rev in educator_reviews %}
+    <div class="media mb-4">
+    {% if rev.is_anonymous %}
+        <img class="d-flex mr-3 rounded-circle"
+             src="{% static 'imgs/anonymous.png' %}" width="50" height="50"
+             alt="">
+        <div class="media-body">
+        <h5 class="mt-0" style="margin-bottom: 2px;">Anonymous</h5>
+    {% else %}
+        <img class="d-flex mr-3 rounded-circle"
+             src="{% static 'dashboard\img\profile-pictures.png' %}" width="50" height="50"
+             alt="">
+        <div class="media-body">
+        <h5 class="mt-0" style="margin-bottom: 2px;"><a
+                href="{% url 'dashboard:educator_student_profile' rev.student_id %}">{{ rev.student__name }}</a></h5>
 
-                    </div>
-                </div>
-                {%endfor%}
-                <ul class="pagination" style="margin-top: 25px">
-                        {% with ''|center:educator_reviews_num_pages as range %}
-                        {% for i in range %}
-                        <li class="page-item " >
-                                <a id="lis_{{forloop.counter}}" class="page-link" href="#" onclick="loadReviews(event)" >{{forloop.counter}}</a>
-                        </li>
-                        {% endfor %}
-                        {% endwith %}
-                    
-                </ul>
+    {% endif %}
+<p>{{ rev.content }}</p>
+<div class="btn-group btn-group-justified">
+    {% if rev.report__is_closed is not None %}
+        {% if rev.report__is_closed %}
+            <p class="p-1 mb-1 bg-danger text-white">Report Refused</p>
+        {% else %}
+            <p class="p-1 mb-1 bg-success text-white">Reported</p>
+        {% endif %}
+    {% else %}
+        <button type="button" class="btn p-1 mb-1 bg-primary text-white">Report Abuse</button>
+    {% endif %}
+</div>
+
+</div>
+</div>
+{% endfor %}
+<ul class="pagination" style="margin-top: 25px">
+    {% with ''|center:educator_reviews_num_pages as range %}
+        {% for i in range %}
+            <li class="page-item ">
+                <a id="lis_{{ forloop.counter }}" class="page-link" href="#"
+                   onclick="loadReviews(event)">{{ forloop.counter }}</a>
+            </li>
+        {% endfor %}
+    {% endwith %}
+
+</ul>

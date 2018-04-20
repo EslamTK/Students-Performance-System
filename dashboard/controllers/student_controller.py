@@ -1,7 +1,9 @@
 from django.contrib.auth import authenticate
-from django.http import JsonResponse
-from django.template import RequestContext
+from django.core.exceptions import ObjectDoesNotExist
+from django.db import IntegrityError
+from django.http import JsonResponse, HttpResponseRedirect, HttpResponseBadRequest
 from django.shortcuts import render, render_to_response
+from django.template import RequestContext
 from django.views.decorators.http import require_GET
 
 from dashboard.logic import *
@@ -27,7 +29,7 @@ def index(request):
         'student_predictions': predictions,
         'student_recommendations': recommendations
     }
-    
+
     return render(request, 'student/index.html', result)
 
     # For Testing Only
@@ -51,20 +53,17 @@ def get_student_advices(request):
     student_advices, student_advices_num_pages = student.get_student_advices(student_id=user.id,
                                                                              page=page, page_size=page_size)
 
-    
-
     result = {
         'student_advices': student_advices,
         'student_advices_num_pages': student_advices_num_pages
     }
     template = 'student/pagination.html'
 
-    
-    return render_to_response(template,result,content_type=RequestContext(request))
+    return render_to_response(template, result, content_type=RequestContext(request))
     # For Testing Only
-    #formatted_advices = []
+    # formatted_advices = []
     #
-    #for i in student_advices:
+    # for i in student_advices:
     #    advice = {
     #        'id': i.id,
     #        'educator_id': i.educator_id,
@@ -74,12 +73,12 @@ def get_student_advices(request):
     #        'content': i.content
     #   }
     #    formatted_advices.append(advice)
-    
-    #test_result = {
+
+    # test_result = {
     #    'advices': formatted_advices,
     #    'num_pages': student_advices_num_pages
-    #}
-    
+    # }
+
     #return JsonResponse(test_result)
 
 
@@ -133,7 +132,6 @@ def get_student_courses_grades(request):
     courses_grades = student.get_student_courses(student_id=student_id, is_current=False,
                                                  year=year_id, term=term_id)
 
-    
     formatted_courses = []
 
     for i in courses_grades:
@@ -173,8 +171,7 @@ def get_student_courses(request):
     }
     template = 'student/courses_pagination.html'
 
-    
-    return render_to_response(template,result,content_type=RequestContext(request))
+    return render_to_response(template, result, content_type=RequestContext(request))
 
     # For Testing Only
     # formatted_courses = []
@@ -200,19 +197,34 @@ def get_student_courses(request):
 
 @require_GET
 def educator_profile(request, educator_id):
+    # Student Review Form Submission
+    if request.method == 'POST':
+        review = student.get_review_forms(request.POST)
+
+        if review.is_valid() and review.review_items.is_valid():
+            try:
+                student.add_review(student_id=user.id, educator_id=educator_id, review_form=review)
+
+                return HttpResponseRedirect('')
+
+            except (ObjectDoesNotExist, IntegrityError):
+                return HttpResponseBadRequest()
+
     # Educator Info
     educator_info = educator.get_educator_info(educator_id)
 
     # Educator Accounts
     educator_accounts = educator.get_educator_accounts(educator_id)
 
-    # Review Items
-    review_items = general.get_review_items()
+    # Review Forms
+    review = student.get_review_forms()
 
     result = {
         'educator_info': educator_info,
         'educator_accounts': educator_accounts,
-        'review_items': review_items
+        'educator_id': educator_id,
+        'review_form': review,
+        'review_items_form': review.review_items
     }
 
     return render(request, 'student/educator_profile.html', result)

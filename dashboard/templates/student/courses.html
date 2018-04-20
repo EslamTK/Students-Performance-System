@@ -7,41 +7,42 @@
         loadJS(requireJS, "{% static 'dashboard/views/charts.js'%}");
     </script>
     <script>
-                
-                    
-            function loadResults(event){
-                
-                var key = document.getElementById("search_input").value;
-                
-                page = document.getElementById(event.target.id).innerHTML;
-                url = "/dashboard/student_courses/?page="+page+"&keyword="+key;
-                $.ajax({        
-                    type: "GET",
-                    url: url,
-                    success: function(data) {
-                        $('#courses_results').html(data);
-                    },
-        
-                    error: function(response, error) {
-                        alert(response.responseText);  
-                    }
-                });
-            }
-        function searchResults(e){
-        var key = document.getElementById("search_input").value;
-            console.log(key);
-            $.ajax({        
+
+
+        function loadResults(event) {
+
+            var key = document.getElementById("search_input").value;
+
+            page = document.getElementById(event.target.id).innerHTML;
+            url = "/dashboard/student_courses/?page=" + page + "&keyword=" + key;
+            $.ajax({
                 type: "GET",
-                url: "/dashboard/student_courses/?keyword="+key,
-                success: function(data) {
+                url: url,
+                success: function (data) {
                     $('#courses_results').html(data);
                 },
-    
-                error: function(response, error) {
-                    alert(response.responseText);  
+
+                error: function (response, error) {
+                    alert(response.responseText);
                 }
             });
-    }
+        }
+
+        function searchResults(e) {
+            var key = document.getElementById("search_input").value;
+            console.log(key);
+            $.ajax({
+                type: "GET",
+                url: "/dashboard/student_courses/?keyword=" + key,
+                success: function (data) {
+                    $('#courses_results').html(data);
+                },
+
+                error: function (response, error) {
+                    alert(response.responseText);
+                }
+            });
+        }
     </script>
     <input type="hidden" id="myVar" name="variable" readonly value="{{ student_predictions.courses }}">
 
@@ -115,10 +116,10 @@
                     </div>
                 </div>
                 <div class="card-body" id="courses_results">
-                    {%include "./courses_pagination.html"%}
+                    {% include "./courses_pagination.html" %}
                 </div>
             </div>
         </div>
     </main>
-    
+
 {% endblock %}

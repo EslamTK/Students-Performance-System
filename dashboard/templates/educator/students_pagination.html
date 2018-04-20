@@ -1,49 +1,51 @@
 <table class="table table-responsive-sm">
-        <thead>
+    <thead>
+    <tr>
+        <th>Student</th>
+        <th>Course</th>
+        <th>Department</th>
+        <th>Year</th>
+        <th>Result/Expected</th>
+    </tr>
+    </thead>
+    <tbody>
+    {% for student in educator_students %}
         <tr>
-            <th>Student</th>
-            <th>Course</th>
-            <th>Department</th>
-            <th>Year</th>
-            <th>Result/Expected</th>
-        </tr>
-        </thead>
-        <tbody>
-        {%for student in educator_students%}
-        <tr>
-          <td><a href="{% url 'dashboard:educator_student_profile' student.student %}" target="_blank">{{student.student__name}}</a>
-          </td>
-            <td>{{student.course__name}}</td>
-            <td>{{student.student__department__name}}</td>
-            <td>{{student.course__year__name}}</td>
+            <td><a href="{% url 'dashboard:educator_student_profile' student.student %}"
+                   target="_blank">{{ student.student__name }}</a>
+            </td>
+            <td>{{ student.course__name }}</td>
+            <td>{{ student.student__department__name }}</td>
+            <td>{{ student.course__year__name }}</td>
             {% if student.prediction_grade is None %}
                 <td>--</td>
-            {%else%}
+            {% else %}
                 {% if student.prediction_grade >= 50 %}
-                <td>
-                    <span class="badge badge-success">Pass</span>
-                </td>
-                {%else%}
-                <td>
-                    <span class="badge badge-danger">Fail</span>
-                </td>
-                {%endif%}
-            {%endif%}
+                    <td>
+                        <span class="badge badge-success">Pass</span>
+                    </td>
+                {% else %}
+                    <td>
+                        <span class="badge badge-danger">Fail</span>
+                    </td>
+                {% endif %}
+            {% endif %}
 
         </tr>
-        {%endfor%}
-        
-        </tbody>
-    </table>
-    <ul class="pagination" style="margin-top: 25px">
-            {% with ''|center:educator_students_num_pages as range %}
-            {% for i in range %}
-            
-            <li class="page-item " >
-                    <li class="page-item " ><a id="lis_{{forloop.counter}}" class="page-link" href="#" onclick="loadPage(event)" >{{forloop.counter}}</a></li>
+    {% endfor %}
+
+    </tbody>
+</table>
+<ul class="pagination" style="margin-top: 25px">
+    {% with ''|center:educator_students_num_pages as range %}
+        {% for i in range %}
+
+            <li class="page-item ">
+            <li class="page-item "><a id="lis_{{ forloop.counter }}" class="page-link" href="#"
+                                      onclick="loadPage(event)">{{ forloop.counter }}</a></li>
             </li>
-            
-            {% endfor %}
-            {% endwith %}
-        
-    </ul>
+
+        {% endfor %}
+    {% endwith %}
+
+</ul>

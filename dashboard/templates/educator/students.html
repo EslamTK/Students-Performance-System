@@ -7,38 +7,39 @@
         var requireJS = [];
         loadJS(requireJS, "{% static 'dashboard/views/charts3.js'%}");
 </script>
-<script>
-    
-    function loadPage(event){
+    <script>
+
+        function loadPage(event) {
             var key = document.getElementById("search_input").value;
             page = document.getElementById(event.target.id).innerHTML;
-            $.ajax({        
+            $.ajax({
                 type: "GET",
-                url: "/dashboard/educator_students/?page="+page+"&keyword="+key,
-                success: function(data) {
+                url: "/dashboard/educator_students/?page=" + page + "&keyword=" + key,
+                success: function (data) {
                     $('#students_results').html(data);
                 },
-    
-                error: function(response, error) {
-                    alert(response.responseText);  
+
+                error: function (response, error) {
+                    alert(response.responseText);
                 }
             });
         }
-    function searchResults(e){
-        var key = document.getElementById("search_input").value;
+
+        function searchResults(e) {
+            var key = document.getElementById("search_input").value;
             console.log(key);
-            $.ajax({        
+            $.ajax({
                 type: "GET",
-                url: "/dashboard/educator_students/?keyword="+key,
-                success: function(data) {
+                url: "/dashboard/educator_students/?keyword=" + key,
+                success: function (data) {
                     $('#students_results').html(data);
                 },
-    
-                error: function(response, error) {
-                    alert(response.responseText);  
+
+                error: function (response, error) {
+                    alert(response.responseText);
                 }
             });
-    }
+        }
 </script>
     <input type="hidden" id="myVar" name="variable" readonly value="{{ courses_counts }}">
     <input type="hidden" id="total" name="variable" readonly value="{{ student_courses_num_pages }}">
@@ -133,8 +134,8 @@
                         </div>
                     </div>
                 </div>
-                <div class="card-body" id ="students_results">
-                    {%include './students_pagination.html'%}
+                <div class="card-body" id="students_results">
+                    {% include './students_pagination.html' %}
                 </div>
             </div>
         </div>

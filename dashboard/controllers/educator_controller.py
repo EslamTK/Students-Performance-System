@@ -1,10 +1,10 @@
 from django.contrib.auth import authenticate
-from django.shortcuts import render, render_to_response
-from django.template import RequestContext
 from django.core.exceptions import ObjectDoesNotExist
 from django.db import IntegrityError
 from django.http import JsonResponse, HttpResponse, \
     HttpResponseBadRequest, HttpResponseRedirect
+from django.shortcuts import render, render_to_response
+from django.template import RequestContext
 from django.views.decorators.http import require_GET, require_POST, require_http_methods
 
 from dashboard.forms.educator_advice_form import EducatorAdviceForm
@@ -87,7 +87,7 @@ def get_educator_reviews(request):
     }
     template = 'educator/pagination.html'
 
-    return render_to_response(template,result,content_type=RequestContext(request))
+    return render_to_response(template, result, content_type=RequestContext(request))
 
     # For Testing Only
     # test_result = {
@@ -237,7 +237,7 @@ def get_educator_students(request):
     }
 
     template = 'educator/students_pagination.html'
-    return render_to_response(template,result,content_type=RequestContext(request))
+    return render_to_response(template, result, content_type=RequestContext(request))
 
     # For Testing Only
     # test_result = {
