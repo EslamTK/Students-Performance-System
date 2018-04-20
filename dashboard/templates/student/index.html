@@ -1,35 +1,28 @@
 {% extends 'base.html' %}
 {% block title %}Student{% endblock %}
 {% block body %}
+{% load static %}
 
-
-    {% load static %}
-    
-    <script>
-    
-            var requireJS = [];
-            loadJS(requireJS, "{% static 'dashboard/views/charts.js'%}");
+<script>
+    var requireJS = [];
+    loadJS(requireJS, "{% static 'dashboard/views/charts.js'%}");
+</script>
+<script>
+    function loadResults(event){
+        page = document.getElementById(event.target.id).innerHTML;
+        $.ajax({        
+            type: "GET",
+            url: "/dashboard/student_advices/?page="+page,
+            success: function(data) {
+                $('#advices').html(data);
+                document.getElementById(event.target.id).parentElement.classList.add("disabled");
+            },
             
-        </script>
-        <script>
-                
-                    
-                function loadResults(event){
-                    
-                    page = document.getElementById(event.target.id).innerHTML;
-                    $.ajax({        
-                        type: "GET",
-                        url: "/dashboard/student_advices/?page="+page,
-                        success: function(data) {
-                            $('#advices').html(data);
-                        },
-            
-                        error: function(response, error) {
-                            alert(response.responseText);  
-                        }
-                    });
-                }
-                
+            error: function(response, error) {
+                alert(response.responseText);  
+            }
+        });
+    }                
 </script>
     
     <input type="hidden" id="myVar" name="variable" readonly value="{{ student_predictions.courses }}">

@@ -16,6 +16,7 @@
                 url: "/dashboard/administrator_students/?page="+page+"&keyword="+key,
                 success: function(data) {
                     $('#students_results').html(data);
+                    document.getElementById(event.target.id).parentElement.classList.add("disabled active");
                 },
     
                 error: function(response, error) {

@@ -15,7 +15,8 @@
             type: "GET",            
             url: "/dashboard/student_advices/?page="+page,            
             success: function(data) {            
-            $('#advices').html(data);                
+                $('#advices').html(data);
+                document.getElementById(event.target.id).parentElement.classList.add("disabled");                
             },            
             
             error: function(response, error) {            

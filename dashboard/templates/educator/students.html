@@ -56,7 +56,7 @@
         });
         $("#search_input").keypress(function(e){
             input_val = $("#search_input").val();
-            if(input_val != "" && input_val !== search_val){
+            if(input_val !== search_val){
                 var key_pressed = e.which;
                 if(key_pressed == 13){
                     searchResults();

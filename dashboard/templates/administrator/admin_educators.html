@@ -19,6 +19,7 @@
                         url: "/dashboard/administrator_educators/?page="+page+"&keyword="+key,
                         success: function(data) {
                             $('#search_results').html(data);
+                            document.getElementById(event.target.id).parentElement.classList.add("disabled");
                         },
             
                         error: function(response, error) {
