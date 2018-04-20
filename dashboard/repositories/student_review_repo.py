@@ -7,9 +7,12 @@ class StudentReviewRepo(Repo):
         super().__init__(StudentReview)
 
     def get_educator_reviews(self, educator):
-        return self._model.objects.filter(educator=educator) \
-            .values('student_id', 'student__name', 'id', 'content', 'created_at', 'is_anonymous') \
+        reviews = self._model.objects.filter(educator=educator) \
+            .values('student_id', 'student__name', 'id', 'content', 'created_at',
+                    'is_anonymous', 'report__is_closed') \
             .order_by('-created_at')
+
+        return reviews
 
     def get_educator_reviews_years(self, educator):
         years = self._model.objects.filter(educator=educator) \

@@ -6,27 +6,27 @@
     
     var requireJS = [];
     loadJS(requireJS, "{% static 'dashboard/views/charts2.js'%}");
-    
+
 </script>
 <script>
-                
-                    
+
+
         function loadReviews(event){
-            
+
             page = document.getElementById(event.target.id).innerHTML;
-            $.ajax({        
+            $.ajax({
                 type: "GET",
                 url: "/dashboard/educator_reviews/?page="+page,
                 success: function(data) {
                     $('#educator_rev').html(data);
                 },
-    
+
                 error: function(response, error) {
-                    alert(response.responseText);  
+                    alert(response.responseText);
                 }
             });
         }
-    
+
 </script>
     <input type="hidden" id="myVar" name="variable" readonly value="{{ educator_rating }}">
     <input type="hidden" id="total" name="variable" readonly value="{{ educator_reviews_num_pages }}">

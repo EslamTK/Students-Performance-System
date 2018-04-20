@@ -5,7 +5,7 @@ from .utilities import convert_boolean_to_yes_no, get_paginated_result_and_num_p
 
 class StudentLogic(Logic):
 
-    def get_student_advices(self, student_id, page=1, page_size=3):
+    def get_student_advices(self, student_id, page=1, page_size=4):
         advices = self._unit_of_work.educators_advices.get_student_advices(student=student_id)
 
         return get_paginated_result_and_num_pages(result=advices, page_size=page_size, page=page)

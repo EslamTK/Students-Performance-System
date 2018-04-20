@@ -1,10 +1,13 @@
 from django.contrib.auth import authenticate
-from django.http import JsonResponse, HttpResponse, HttpResponseBadRequest, HttpResponseForbidden
 from django.shortcuts import render, render_to_response
 from django.template import RequestContext
-from django.views.decorators.csrf import csrf_exempt
-from django.views.decorators.http import require_GET, require_POST
+from django.core.exceptions import ObjectDoesNotExist
+from django.db import IntegrityError
+from django.http import JsonResponse, HttpResponse, \
+    HttpResponseBadRequest, HttpResponseRedirect
+from django.views.decorators.http import require_GET, require_POST, require_http_methods
 
+from dashboard.forms.educator_advice_form import EducatorAdviceForm
 from dashboard.logic import *
 
 user = authenticate(username='educator', password='3$81jkjjSA')
@@ -84,7 +87,6 @@ def get_educator_reviews(request):
     }
     template = 'educator/pagination.html'
 
-    
     return render_to_response(template,result,content_type=RequestContext(request))
 
     # For Testing Only
@@ -96,8 +98,26 @@ def get_educator_reviews(request):
     # return JsonResponse(test_result)
 
 
-@require_GET
+@require_http_methods(['GET', 'POST'])
 def student_profile(request, student_id):
+    # Educator Advice Form Submission
+    if request.method == 'POST':
+
+        advice_form = EducatorAdviceForm(request.POST)
+
+        if advice_form.is_valid():
+            try:
+                educator.add_student_advice(student_id=student_id, educator_id=user.id,
+                                            form=advice_form)
+
+                return HttpResponseRedirect('')
+
+            except IntegrityError:
+                return HttpResponseBadRequest()
+
+    else:
+        advice_form = EducatorAdviceForm()
+
     # Student Current Courses Predictions
     predictions = student.get_student_predictions(student_id=student_id)
 
@@ -109,11 +129,13 @@ def student_profile(request, student_id):
 
     # Student Advices
     student_advices, student_advices_num_pages = student.get_student_advices(student_id=student_id)
-    
+
     result = {
         'student_predictions': predictions,
         'years': years,
         'terms': terms,
+        'student_id': student_id,
+        'advice_form': advice_form,
         'student_advices': student_advices,
         'student_advices_num_pages': student_advices_num_pages
     }
@@ -156,18 +178,18 @@ def educator_students(request):
         'terms': terms,
         'courses_counts': courses_counts
     }
-    
-    
-    #For Testing Only
-    #test_result = {
+
+    return render(request, 'educator/students.html', result)
+
+    # For Testing Only
+    # test_result = {
     #     'educator_students': list(students),
     #     'departments': list(departments.values()),
     #     'years': list(years.values()),
     #     'terms': list(terms.values()),
     #     'courses_counts': list(courses_counts)
-    #}
-    #print(test_result)
-    return render(request, 'educator/students.html', result)
+    # }
+    #
     # return JsonResponse(test_result, safe=False)
 
 
@@ -213,41 +235,23 @@ def get_educator_students(request):
         'educator_students': students,
         'educator_students_num_pages': students_num_pages,
     }
-    
+
     template = 'educator/students_pagination.html'
     return render_to_response(template,result,content_type=RequestContext(request))
-    
+
     # For Testing Only
-    #test_result = {
+    # test_result = {
     #     'educator_students': list(students),
     #     'educator_students_num_pages': students_num_pages
-    #}
-    #print(test_result)
+    # }
+    #
     # return JsonResponse(test_result)
 
 
 @require_POST
-@csrf_exempt
-def add_student_advice(request):
-    content = request.POST.get('content', None)
-    student_id = request.POST.get('student_id', None)
-
-    if not content or not student_id:
-        return HttpResponseBadRequest('The required content or the student_id is not given')
-
-    try:
-        educator.add_student_advice(student_id=student_id, educator_id=user.id, content=content)
-
-    except ValueError as value_error:
-        return HttpResponseBadRequest(str(value_error))
-
-    return HttpResponse('The advice content added successfully')
-
-
-@require_POST
-@csrf_exempt
 def add_review_report(request):
-    review_id = request.POST.get('review_id', None)
+    # Getting the review id
+    review_id = request.POST.get('review_id')
 
     if not review_id:
         return HttpResponseBadRequest('The required review_id is not given')
@@ -255,10 +259,7 @@ def add_review_report(request):
     try:
         educator.add_review_report(educator_id=user.id, review_id=review_id)
 
-    except ValueError as value_error:
-        return HttpResponseBadRequest(str(value_error))
-
-    except PermissionError as permission_error:
-        return HttpResponseForbidden(str(permission_error))
+    except (ObjectDoesNotExist, ValueError, IntegrityError):
+        return HttpResponseBadRequest('The given review_id is not valid')
 
     return HttpResponse('The review report added successfully')
