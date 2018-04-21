@@ -4,7 +4,7 @@ from django.db import IntegrityError
 from django.http import JsonResponse, HttpResponseRedirect, HttpResponseBadRequest
 from django.shortcuts import render, render_to_response
 from django.template import RequestContext
-from django.views.decorators.http import require_GET
+from django.views.decorators.http import require_GET, require_http_methods
 
 from dashboard.logic import *
 
@@ -195,7 +195,7 @@ def get_student_courses(request):
     # return JsonResponse(test_result)
 
 
-@require_GET
+@require_http_methods(['GET', 'POST'])
 def educator_profile(request, educator_id):
     # Student Review Form Submission
     if request.method == 'POST':
