@@ -1,16 +1,88 @@
 $(function () {
     'use strict';
+    $.ajax({
+        url: 'http://127.0.0.1:8000/dashboard/student_courses_grades',
+        dataType: "json",
+        type: 'GET',
+        contentType: 'application/json',
+        data: data,
+        success: function (data) {
+            console.log(data.result);
+            /*name = data.result.map(result => result.name);
+            console.log('results: '+ name);*/
 
-    var randomScalingFactor = function () {
-        return Math.round(Math.random() * 100)
-    };
+            // transform json array to normal array 
+            var name = data.result.map(function(result) {
+            return result.name;
+           });
+            var mt = data.result.map(function(result) {
+            return result.midterm;
+           });
+            var final = data.result.map(function(result) {
+            return result.final;
+           });
+            console.log('names: '+ name);
+            console.log('mts: '+ mt);
+            console.log('finals: '+ final);
 
+/////////////// student_courses_performance barchart
+    var barChartData = {
+        labels: name,
+        datasets: [
+            {
+                label: 'MidTerm',
+                backgroundColor: 'rgba(220,220,220,0.2)',
+                borderColor: 'rgba(220,220,220,1)',
+                pointBackgroundColor: 'rgba(220,220,220,1)',
+                pointBorderColor: '#fff',
+                data: mt
+            },
+            {
+                label: 'Expected Final Grades',
+                backgroundColor: 'rgba(151,187,205,0.2)',
+                borderColor: 'rgba(151,187,205,1)',
+                pointBackgroundColor: 'rgba(151,187,205,1)',
+                pointBorderColor: '#fff',
+                data: final
+            }
+        ]
+    }
+
+
+    var ctx = document.getElementById('canvas-1');
+    var chart = new Chart(ctx, {
+        type: 'bar',
+        data: barChartData,
+        options: {
+            scales: {
+                yAxes: [{
+                    display: true,
+                    ticks: {
+                        beginAtZero: true,
+                        stepSize: 5,
+                        max: 50
+                           }
+                     }]
+                    },
+            responsive: true
+        }
+    });
+/////////
+        }
+    });
+
+        /*var randomScalingFactor = function () {
+            return Math.round(Math.random() * 100)
+        };*/
+
+////////
     //getting data from hidden input field
     var my_data = document.getElementById("myVar").value;
 
     //transform string into valid json string
     var data = my_data.replace(/'/g, '"');
-
+   
+   /* 
     //trasnform data into json
     data = JSON.parse(data);
     console.log(data);
@@ -24,41 +96,10 @@ $(function () {
         midterm.push(data[i].midterm);
         prediction.push(data[i].prediction);
 
-    }
-    var lineChartData = {
-        labels: label_data,
-        datasets: [
-            {
-                label: 'MidTerm',
-                backgroundColor: 'rgba(220,220,220,0.2)',
-                borderColor: 'rgba(220,220,220,1)',
-                pointBackgroundColor: 'rgba(220,220,220,1)',
-                pointBorderColor: '#fff',
-                data: midterm
-            },
-            {
-                label: 'Expected Final Grades',
-                backgroundColor: 'rgba(151,187,205,0.2)',
-                borderColor: 'rgba(151,187,205,1)',
-                pointBackgroundColor: 'rgba(151,187,205,1)',
-                pointBorderColor: '#fff',
-                data: prediction
-            }
-        ]
-    }
-
-
-    var ctx = document.getElementById('canvas-1');
-    var chart = new Chart(ctx, {
-        type: 'line',
-        data: lineChartData,
-        options: {
-            responsive: true
-        }
-    });
-
-
-    var randomScalingFactor = function () {
+    }*/
+    /////////////
+    
+    /*var randomScalingFactor = function () {
         return Math.round(Math.random() * 100)
     };
     var barChartData = {
@@ -87,10 +128,10 @@ $(function () {
         options: {
             responsive: true
         }
-    });
+    });*/
 
 
-    var doughnutData = {
+    /*var doughnutData = {
         labels: [
             'Red',
             'Green',
@@ -210,7 +251,7 @@ $(function () {
             'Grey',
             'Blue'
         ]
-    };
+    };*/
 
 
 });
