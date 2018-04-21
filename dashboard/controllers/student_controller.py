@@ -226,7 +226,7 @@ def educator_profile(request, educator_id):
         'review_form': review,
         'review_items_form': review.review_items
     }
-
+    
     return render(request, 'student/educator_profile.html', result)
 
     # For Testing Only

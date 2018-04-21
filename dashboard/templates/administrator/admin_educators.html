@@ -9,27 +9,7 @@
         var educatorsRatingData = {{ educators_rating|safe }};
         loadJS(requireJS, "{% static 'dashboard/views/charts5.js'%}");
     </script>
-    <script>
     
-            function loadResults(event){
-                    var key = document.getElementById("search_input").value;
-                    page = document.getElementById(event.target.id).innerHTML;
-                    $.ajax({        
-                        type: "GET",
-                        url: "/dashboard/administrator_educators/?page="+page+"&keyword="+key,
-                        success: function(data) {
-                            $('#search_results').html(data);
-                            document.getElementById(event.target.id).parentElement.classList.add("disabled");
-                        },
-            
-                        error: function(response, error) {
-                            alert(response.responseText);  
-                        }
-                    });
-                }
-            });
-        }
-    </script>
 
     <main class="animated fadeIn row">
 
@@ -87,7 +67,7 @@
                                    name="input1-group2"
                                    class="form-control" placeholder="Educator Name">
                             <span class=" input-group-btn ">
-                        <button type="button" class="btn btn-primary " onclick="searchResults()"><i
+                        <button type="button" class="btn btn-primary " id = "search_btn"><i
                                 class="fa fa-search"></i></button>
                       </span>
 
@@ -101,4 +81,58 @@
         </div>
         </div>
     </main>
+    <script>
+        var search_val = "";
+        document.getElementById("lis_1").parentElement.classList.add("active");
+        function loadResults(event){
+            if(document.getElementById(event.target.id).parentElement.classList.contains("active") != true){
+            var key = document.getElementById("search_input").value;
+            page = document.getElementById(event.target.id).innerHTML;
+            $.ajax({        
+                type: "GET",
+                url: "/dashboard/administrator_educators/?page="+page+"&keyword="+key,
+                success: function(data) {
+                    $('#search_results').html(data);
+                    document.getElementById(event.target.id).parentElement.classList.add("active");
+                },            
+                error: function(response, error) {
+                    alert(response.responseText);  
+                }
+               });
+        }
+    }
+    function searchResults(e){
+        search_val = $("#search_input").val();
+        $.ajax({        
+            type: "GET",
+            url: "/dashboard/administrator_educators/?keyword="+search_val,
+            success: function(data) {
+                $('#search_results').html(data);
+                document.getElementById("lis_1").parentElement.classList.add("active");
+            },
+            error: function (response, error) {
+                alert(response.responseText);
+            }
+        });
+                    
+    }
+            $(document).ready(function(){
+                var input_val;
+                $("#search_btn").click(function(e){
+                    input_val = $("#search_input").val();
+                    if(input_val !== search_val){
+                        searchResults();
+                    }
+                });
+                $("#search_input").keypress(function(e){
+                    input_val = $("#search_input").val();
+                    if(input_val !== search_val){
+                        var key_pressed = e.which;
+                        if(key_pressed == 13){
+                            searchResults();
+                        }
+                    }
+                });
+            });
+    </script>
 {% endblock %}

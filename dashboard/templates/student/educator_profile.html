@@ -46,26 +46,44 @@
                     </div>
 
                     <div class="container">
+                        {% comment %} <form method="POST" action="{%url 'dashboard:student_educator_profile' educator_id%}">
+                        {% csrf_token %}
                         <div class="form-group">
-                            {% for rev in review_items %}
+                            {% for rev in review_items_form %}
                                 <div class="row form-group">
                                     <div class="col-sm-3 h4">
                                         <label>{{ rev.name }}</label>
                                     </div>
                                     <div class="col-sm-9 ">
-                                        <input title="Bad" type="radio" name="{{ rev.name }}">
+                                        <input title="Bad" type="radio" name="{{ rev.name }}" id ="{{rev.id}}">
                                         <input title="Good" class="col-sm-6" type="radio" name="{{ rev.name }}">
                                         <input title="Excellent" type="radio" name="{{ rev.name }}">
                                     </div>
                                 </div>
                             {% endfor %}
-                        </div>
-                    </div>
+                        </div> {% endcomment %}
+                        <form METHOD="POST" action="{%url 'dashboard:student_educator_profile' educator_id%}">
+                            {% csrf_token %}
+                            {{ review_form }}
+                            <br>
+                        
+                            {{review_items_form}}
+                            <input type="submit" value="Ok">
+                        </form>
 
 
-                    <div class="form-group">
-                        <textarea id="textarea-input" name="textarea-input" rows="6"
-                                  class="form-control" placeholder="Content"></textarea>
+                    {% comment %} <div class="form-group">
+                            {% csrf_token %}
+                            {% for hidden in review_form_fields %}
+                                {{ hidden }}
+                            {% endfor %}
+                
+                            {% for field in review_form %}
+                                {{ field.errors }}
+                                {{ field.help_text }}
+                                {{ field }}
+                            {% endfor %}
+                
                     </div>
 
                     <div class="mr-3" data-toggle="buttons">
@@ -79,7 +97,8 @@
                             <b>Submit</b>
 
                         </button>
-
+                    </div>
+                    </form> {% endcomment %}
                     </div>
                 </div>
             </div>

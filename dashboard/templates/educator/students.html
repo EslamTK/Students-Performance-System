@@ -7,63 +7,7 @@
         var requireJS = [];
         loadJS(requireJS, "{% static 'dashboard/views/charts3.js'%}");
 </script>
-<script>
-    var search_val = "";    
-    function loadPage(event){
-            page = document.getElementById(event.target.id).innerHTML;
-            url = "/dashboard/educator_students/?page="+page;
-            if(search_val != ""){
-                url += "&keyword="+search_val;
-            }
-            $.ajax({        
-                type: "GET",
-                url: url,
-                success: function(data) {
-                    $('#students_results').html(data);
-                    document.getElementById(event.target.id).parentElement.classList.add("disabled")
-                    
-                },
 
-                error: function (response, error) {
-                    alert(response.responseText);
-                }
-            });
-        }
-        
-    function searchResults(e){
-        search_val = $("#search_input").val();
-        
-            $.ajax({        
-                type: "GET",
-                url: "/dashboard/educator_students/?keyword="+search_val,
-                success: function(data) {
-                    $('#students_results').html(data);
-                },
-
-                error: function (response, error) {
-                    alert(response.responseText);
-                }
-            });
-            
-    }
-    $(document).ready(function(){
-        var input_val;
-        $("#search_btn").click(function(e){
-            input_val = $("#search_input").val();
-            if(input_val !== search_val){
-                searchResults();
-            }
-        });
-        $("#search_input").keypress(function(e){
-            input_val = $("#search_input").val();
-            if(input_val !== search_val){
-                var key_pressed = e.which;
-                if(key_pressed == 13){
-                    searchResults();
-                }
-            }
-        });
-    });
     
 
     
@@ -168,4 +112,65 @@
         </div>
     
     </main>
+    <script>
+        document.getElementById("lis_1").parentElement.classList.add("active");
+            var search_val = "";    
+            function loadPage(event){
+                    page = document.getElementById(event.target.id).innerHTML;
+                    if(document.getElementById(event.target.id).parentElement.classList.contains("active") != true){
+                    url = "/dashboard/educator_students/?page="+page;
+                    if(search_val != ""){
+                        url += "&keyword="+search_val;
+                    }
+                    $.ajax({        
+                        type: "GET",
+                        url: url,
+                        success: function(data) {
+                            $('#students_results').html(data);
+                            document.getElementById(event.target.id).parentElement.classList.add("active")                  
+                        },
+        
+                        error: function (response, error) {
+                            alert(response.responseText);
+                        }
+                    });
+                }
+            }
+                
+            function searchResults(e){
+                search_val = $("#search_input").val();
+                
+                    $.ajax({        
+                        type: "GET",
+                        url: "/dashboard/educator_students/?keyword="+search_val,
+                        success: function(data) {
+                            $('#students_results').html(data);
+                            
+                        },
+        
+                        error: function (response, error) {
+                            alert(response.responseText);
+                        }
+                    });
+                    
+            }
+            $(document).ready(function(){
+                var input_val;
+                $("#search_btn").click(function(e){
+                    input_val = $("#search_input").val();
+                    if(input_val !== search_val){
+                        searchResults();
+                    }
+                });
+                $("#search_input").keypress(function(e){
+                    input_val = $("#search_input").val();
+                    if(input_val !== search_val){
+                        var key_pressed = e.which;
+                        if(key_pressed == 13){
+                            searchResults();
+                        }
+                    }
+                });
+            });
+            </script>
 {% endblock %}

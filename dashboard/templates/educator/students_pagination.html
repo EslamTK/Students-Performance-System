@@ -39,11 +39,10 @@
 <ul class="pagination" style="margin-top: 25px">
     {% with ''|center:educator_students_num_pages as range %}
         {% for i in range %}
-
             <li class="page-item ">
-            <li class="page-item "><a id="lis_{{ forloop.counter }}" class="page-link" href="#"
+                <a id="lis_{{ forloop.counter }}" class="page-link" href="#"
                                       onclick="loadPage(event)">{{ forloop.counter }}</a></li>
-            </li>
+            
 
         {% endfor %}
     {% endwith %}

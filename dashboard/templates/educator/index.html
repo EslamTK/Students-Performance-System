@@ -8,24 +8,7 @@
     loadJS(requireJS, "{% static 'dashboard/views/charts2.js'%}");
 
 </script>
-<script>
-    function loadReviews(event){
-        page = document.getElementById(event.target.id).innerHTML;
-        $.ajax({
-            type: "GET",
-            url: "/dashboard/educator_reviews/?page="+page,
-            success: function(data) {
-                $('#educator_rev').html(data);
-                document.getElementById(event.target.id).parentElement.classList.add("disabled");
-            },
 
-            error: function(response, error) {
-                alert(response.responseText);
-            }
-        }); 
-    }
-
-    </script>
     <input type="hidden" id="myVar" name="variable" readonly value="{{ educator_rating }}">
     <input type="hidden" id="total" name="variable" readonly value="{{ educator_reviews_num_pages }}">
     <main class="animated fadeIn row">
@@ -83,4 +66,59 @@
     </div>
 
 </main>
+<script>
+    function getCookie(name) {
+    var cookieValue = null;
+    if (document.cookie && document.cookie !== '') {
+        var cookies = document.cookie.split(';');
+        for (var i = 0; i < cookies.length; i++) {
+            var cookie = jQuery.trim(cookies[i]);
+            // Does this cookie string begin with the name we want?
+            if (cookie.substring(0, name.length + 1) === (name + '=')) {
+                cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+                break;
+            }
+        }
+    }
+    return cookieValue;
+}
+var csrftoken = getCookie('csrftoken');
+    
+
+        document.getElementById("lis_1").parentElement.classList.add("active");
+        function report(id){
+            console.log(id)
+            $.ajax({
+                type: "POST",
+                url: "/dashboard/educator/review_report/",
+                data:{'review_id' :id, 'csrfmiddlewaretoken': csrftoken},
+
+                success: function(data) {
+                    console.log("done");
+                },
+    
+                error: function(response, error) {
+                    alert(error);
+                }
+            }); 
+        }
+        function loadReviews(event){
+            if(document.getElementById(event.target.id).parentElement.classList.contains("active") != true){
+            page = document.getElementById(event.target.id).innerHTML;
+            $.ajax({
+                type: "GET",
+                url: "/dashboard/educator_reviews/?page="+page,
+                success: function(data) {
+                    $('#educator_rev').html(data);
+                    document.getElementById(event.target.id).parentElement.classList.add("active");
+                },
+    
+                error: function(response, error) {
+                    alert(response.responseText);
+                }
+            }); 
+        }
+    }
+    
+        </script>
 {% endblock %}
