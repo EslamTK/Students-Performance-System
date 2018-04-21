@@ -1,14 +1,15 @@
 from django.urls import path
 
+from dashboard.controllers import forms_testing
 from dashboard.controllers import student_controller, educator_controller, administrator_controller
 
 app_name = 'dashboard'
 
 urlpatterns = [
 
-    # path('form/',
-    #      forms_testing.index,
-    #      name='form'),
+    path('form/',
+         forms_testing.index,
+         name='form'),
 
     path('student/',
          student_controller.index,
@@ -93,6 +94,10 @@ urlpatterns = [
     path('administrator_educators/',
          administrator_controller.get_educators,
          name='administrator_educators_paginator'),
+
+    path('administrator/educator/add/',
+         administrator_controller.add_educator,
+         name='administrator_add_educator'),
 
     path('administrator/educator/<int:educator_id>/',
          administrator_controller.educator_profile,

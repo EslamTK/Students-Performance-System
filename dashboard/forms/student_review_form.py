@@ -6,7 +6,6 @@ from dashboard.models.student_review_model import StudentReview
 
 
 class StudentReviewForm(forms.ModelForm):
-    ReviewItemsFormset = None
 
     class Meta:
         model = StudentReview
