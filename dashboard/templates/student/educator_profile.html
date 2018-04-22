@@ -63,12 +63,30 @@
                             {% endfor %}
                         </div> {% endcomment %}
                         <form METHOD="POST" action="{%url 'dashboard:student_educator_profile' educator_id%}">
-                            {% csrf_token %}
-                            {{ review_form }}
-                            <br>
-                        
-                            {{review_items_form}}
-                            <input type="submit" value="Ok">
+                            
+                                {% csrf_token %}
+                                {{ review_form }}
+                                <br>
+                            
+                                {{ review_items.management_form }}
+                                {% for item in review_items_form %}
+                            
+                                    {{ item.rate.errors }}
+                            
+                                    {{ item.review_item }}
+                            
+                                    {{ item.name }}
+                                    {{ item.name.value }}
+                            
+                                    {% for choice in item.rate %}
+                                        {{ choice }}
+                                    {% endfor %}
+                            
+                                    <br>
+                                {% endfor %}
+                            
+                                <input type="submit" value="Ok">
+                            </form>
                         </form>
 
 
