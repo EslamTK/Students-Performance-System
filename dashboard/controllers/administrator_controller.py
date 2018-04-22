@@ -2,11 +2,10 @@ import json
 
 from django.contrib.auth import authenticate
 from django.core.serializers.json import DjangoJSONEncoder
-from django.forms.models import model_to_dict
-from django.http import JsonResponse
+from django.http import JsonResponse, HttpResponse
 from django.shortcuts import render, render_to_response
 from django.template import RequestContext
-from django.views.decorators.http import require_GET
+from django.views.decorators.http import require_GET, require_http_methods
 
 from dashboard.logic import *
 
@@ -133,7 +132,6 @@ def student_profile(request, student_id):
         'student_courses': student_courses,
         'courses': courses
     }
-    print(result)
 
     return render(request, 'administrator/admin_student_profile.html', result)
     # For Testing Only
@@ -237,13 +235,22 @@ def get_educators(request):
     # return JsonResponse(test_result)
 
 
-@require_GET
+@require_http_methods(['GET', 'POST'])
 def educator_profile(request, educator_id):
-    # Educator Info
-    educator_info = educator.get_educator_info(educator_id=educator_id)
+    # Educator profile and accounts forms
+    if request.method == 'POST':
+        educator_form = administrator.get_educator_form(request_data=request.POST,
+                                                        request_files=request.FILES,
+                                                        educator_id=educator_id)
 
-    # All the accounts including url if the educator has the account
-    accounts = administrator.get_educator_accounts(educator_id=educator_id)
+        accounts_formset = educator_form.accounts_formset
+        if educator_form.is_valid() and accounts_formset.is_valid():
+            administrator.update_educator(educator_id=educator_id, educator_form=educator_form,
+                                          accounts_formset=educator_form.accounts_formset)
+            return HttpResponse('Updated Successfully')
+    else:
+        educator_form = administrator.get_educator_form(educator_id=educator_id)
+        accounts_formset = educator_form.accounts_formset
 
     # Educator Reviews Rating
     educator_rating = educator.get_educator_rating(educator_id=educator_id)
@@ -257,23 +264,9 @@ def educator_profile(request, educator_id):
     # Educator Reviews
     educator_reviews, educator_reviews_num_pages = educator.get_educator_reviews(educator_id=educator_id)
 
-    educator_info = model_to_dict(educator_info)
-    educator_info['photo'] = educator_info['photo'].url
-
-    educator_accounts = []
-
-    for i in accounts:
-        account = {
-            'id': i.id,
-            'name': i.name,
-            'logo': i.logo.url,
-            'url': i.url
-        }
-        educator_accounts.append(account)
-
     result = {
-        'educator_info': educator_info,
-        'educator_accounts': educator_accounts,
+        'educator_form': educator_form,
+        'educator_accounts_form': accounts_formset,
         'educator_reviews': educator_reviews,
         'educator_reviews_num_pages': educator_reviews_num_pages,
         'educator_rating': educator_rating,
@@ -281,7 +274,6 @@ def educator_profile(request, educator_id):
         'educator_reviews_departments': educator_reviews_departments
     }
 
-    print(result)
     return render(request, 'administrator/admin_educator_profile.html', result)
     # For Testing Only
     # educator_info = model_to_dict(educator_info)
@@ -308,3 +300,33 @@ def educator_profile(request, educator_id):
     # }
     #
     # return JsonResponse(test_result, safe=False)
+
+
+@require_http_methods(['GET', 'POST'])
+def add_educator(request):
+    # Educator profile and accounts forms
+    if request.method == 'POST':
+        user_form = administrator.get_user_form(request_data=request.POST)
+
+        educator_form = administrator.get_educator_form(request_data=request.POST,
+                                                        request_files=request.FILES)
+
+        accounts_formset = educator_form.accounts_formset
+
+        if user_form.is_valid() and educator_form.is_valid() and accounts_formset.is_valid():
+            administrator.add_educator(user_form=user_form, educator_form=educator_form,
+                                       accounts_formset=accounts_formset)
+
+            return HttpResponse('Added Successfully')
+    else:
+        user_form = administrator.get_user_form()
+        educator_form = administrator.get_educator_form()
+        accounts_formset = educator_form.accounts_formset
+
+    result = {
+        'user_form': user_form,
+        'educator_form': educator_form,
+        'educator_accounts_form': accounts_formset
+    }
+
+    return render(request, 'administrator/admin_educator_profile.html', result)
