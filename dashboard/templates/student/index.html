@@ -1,36 +1,13 @@
 {% extends 'base.html' %}
 {% block title %}Student{% endblock %}
 {% block body %}
+{% load static %}
 
+<script>
+    var requireJS = [];
+    loadJS(requireJS, "{% static 'dashboard/views/charts.js'%}");
+</script>
 
-    {% load static %}
-
-    <script>
-
-        var requireJS = [];
-        loadJS(requireJS, "{% static 'dashboard/views/charts.js'%}");
-
-    </script>
-    <script>
-
-
-        function loadResults(event) {
-
-            page = document.getElementById(event.target.id).innerHTML;
-            $.ajax({
-                type: "GET",
-                url: "/dashboard/student_advices/?page=" + page,
-                success: function (data) {
-                    $('#advices').html(data);
-                },
-
-                error: function (response, error) {
-                    alert(response.responseText);
-                }
-            });
-        }
-
-    </script>
     
     <input type="hidden" id="myVar" name="variable" readonly value="{{ student_predictions.courses }}">
     <input type="hidden" id="total" name="variable" readonly value="{{ student_advices_num_pages }}">
@@ -86,4 +63,32 @@
 
         </div>
     </main>
+    <script>
+    document.getElementById("lis_1").parentElement.classList.add("active");
+    function loadResults(event){
+        var id = event.target.id;
+        if(document.getElementById(id).parentElement.classList.contains("active") != true){
+            page = document.getElementById(id).innerHTML;
+            if(isNaN(page)){
+                page = id;
+            }
+            $.ajax({        
+                type: "GET",
+                url: "/dashboard/student_advices/?page="+page,
+                success: function(data) {
+                    $('#advices').html(data);
+                    if(isNaN(id) != true)
+                        id = "lis_"+id;
+                    document.getElementById(id).parentElement.classList.add("active");
+            
+                        
+                },
+                
+                error: function(response, error) {
+                    alert(response.responseText);  
+                }
+            });
+        }
+    }                
+    </script>
 {% endblock %}
