@@ -1,6 +1,7 @@
 from django.contrib.auth.forms import UserCreationForm
 
 from dashboard.forms.educator_form import EducatorForm
+from dashboard.forms.student_form import StudentForm
 from .logic import Logic
 from .utilities import get_paginated_result_and_num_pages
 
@@ -50,7 +51,7 @@ class AdministratorLogic(Logic):
 
     def get_educator_form(self, educator_id=None, request_data=None, request_files=None):
 
-        educator, educator_accounts = None, self._unit_of_work.educators_accounts.get_none_accounts()
+        educator, educator_accounts = None, self._unit_of_work.educators_accounts.get_none()
 
         if educator_id:
             educator = self._unit_of_work.educators.get_one(educator_id)
@@ -111,3 +112,23 @@ class AdministratorLogic(Logic):
         for instance in instances:
             instance.educator_id = user.id
             instance.save()
+
+    def get_student_form(self, student_id=None, request_data=None):
+
+        student, student_courses, available_courses = None, \
+                                                      self._unit_of_work.students_courses.get_none(), \
+                                                      None
+
+        if student_id:
+            student = self._unit_of_work.students.get_one(student_id)
+
+            student_courses = self._unit_of_work.students_courses. \
+                get_student_courses(student=student_id)
+
+            available_courses = self._unit_of_work.courses. \
+                get_available_student_courses(student=student_id)
+
+        student_form = StudentForm(request_data, instance=student, student_courses=student_courses,
+                                   available_courses=available_courses)
+
+        return student_form
