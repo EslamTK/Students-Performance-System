@@ -18,17 +18,23 @@
             <div class="card-body">
                 <div class="row">
 
-                    <div class="input-group-btn col-md-6">
-                        <button type="button" class="btn btn-light dropdown-toggle"
-                                data-toggle="dropdown">Department
-                            <span class="caret"></span>
-                        </button>
-                        <div class="dropdown-menu">
-                            {% for dep in departments %}
-                                <li><a class="dropdown-item" href="#" id ="dep_{{dep.id}}">{{ dep.name }}</a></li>
+                        <div>  <button type="button" class="btn btn-light dropdown-toggle"
+                            data-toggle="dropdown" style="color:rgba(41,54,61,1);font-size: 16px;font-weight: bold;font-variant: small-caps;">Year
+                        <div class="dropdown-menu" >
+                            {% for year in years %}
+                                <li><a class="dropdown-item" href="#" value = "{{year.name}}">{{ year.name }}</a></li>
                             {% endfor %}
                         </div>
-                    </div>
+                    </button></div>
+
+                    <div><button type="button" class="btn btn-light dropdown-toggle"
+                              data-toggle="dropdown" style="color:rgba(41,54,61,1);font-size: 16px;font-weight: bold;font-variant: small-caps;">Department
+                              <div class="dropdown-menu" >
+                                  {% for dep in departments %}
+                                      <li><a class="dropdown-item" href="#" value ="{{dep.id}}">{{ dep.name }}</a></li>
+                                  {% endfor %}
+                              </div>
+                      </button></div>
 
                     <div class="col-md-6">
                         <div class="btn-toolbar float-right" role="toolbar"
@@ -41,7 +47,7 @@
                                     {% else %}
                                         <label class="btn btn-outline-secondary">
                                     {% endif %}
-                                <input type="radio" name="options" id="term_{{ forloop.counter }}"
+                                <input type="radio" name="options" value="{{term.id}}"
                                 > {{ term.name }}
                                 </label>
                                 {% endfor %}
