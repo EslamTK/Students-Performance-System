@@ -35,7 +35,11 @@
 </div>
 {% endfor %}
 <ul class="pagination" style="margin-top: 25px">
-    
+    {% if educator_reviews.has_previous %}
+        <li><a id="{{educator_reviews.previous_page_number}}" href="#"  onclick="loadReviews(event)">Prev</a></li>
+    {% else %}
+        <li class="page-item disabled"><a>Prev</a></li>
+    {% endif %}
     {% with ''|center:educator_reviews_num_pages as range %}
         {% for i in range %}
             <li class="page-item ">
@@ -44,5 +48,10 @@
             </li>
         {% endfor %}
     {% endwith %}
+    {% if educator_reviews.has_next %}
+        <li><a id="{{educator_reviews.next_page_number}}" href="#"  onclick="loadReviews(event)">Next</a></li>
+    {% else %}
+        <li class="page-item disabled"><a>Next</a></li>
+    {% endif %}
 
 </ul>

@@ -2,6 +2,7 @@
 {% block title %}Student{% endblock %}
 {% block body %}
 {% load static %}
+{% load widget_tweaks %}
 
 <script>
     var requireJS = [];
@@ -65,9 +66,15 @@
                               {%csrf_token%}
                         <div class="form-group">
                             <label for="comment">Review :</label>
-                            {%for form in advice_form%}
-                                {{form}}
-                            {%endfor%}
+                            {% for field in advice_form.visible_fields %}
+                            <div class="form-group">
+                               
+                                {{ field|add_class:'form-control' |attr:"rows:5"  }}
+                                {% for error in field.errors %}
+                                    <span class="help-block">{{ error }}</span>
+                                {% endfor %}
+                            </div>
+                            {% endfor %}
                         </div>
                         <div  class= "col-md-8 col-sm-12 " >
                              <button type="submit" class="btn btn-primary" >Submit</button>
@@ -94,14 +101,20 @@
         <script>
                 document.getElementById("lis_1").parentElement.classList.add("active");
                 function loadResults(event){
-                    page = document.getElementById(event.target.id).innerHTML;
-                    if(document.getElementById(event.target.id).parentElement.classList.contains("active") != true){
-                    $.ajax({        
+                    var id = event.target.id;
+                    page = document.getElementById(id).innerHTML;
+                    if(document.getElementById(id).parentElement.classList.contains("active") != true){
+                        if(isNaN(page)){
+                            page = id;
+                        }
+                        $.ajax({        
                         type: "GET",
                         url: "/dashboard/student_advices/?page="+page,
                         success: function(data) {
                             $('#educator_advices').html(data);
-                            document.getElementById(event.target.id).parentElement.classList.add("active");
+                            if(isNaN(id) != true)
+                                id = "lis_"+id;
+                            document.getElementById(id).parentElement.classList.add("active");
             
                         },
                 

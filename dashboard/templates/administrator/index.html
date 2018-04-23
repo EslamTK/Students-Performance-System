@@ -87,16 +87,26 @@
     </main>
     <script>
         document.getElementById("lis_1").parentElement.classList.add("active");
-            function loadPage(event) {
-                if(document.getElementById(event.target.id).parentElement.classList.contains("active") != true){
-                var key = document.getElementById("search_input").value;
-                page = document.getElementById(event.target.id).innerHTML;
+        var search_val = "";     
+        function loadPage(event) {
+                var id = event.target.id;
+                if(document.getElementById(id).parentElement.classList.contains("active") != true){
+                page = document.getElementById(id).innerHTML;
+                if(isNaN(page)){
+                    page = id;
+                }
+                url = "/dashboard/administrator_students/?page=" + page;
+                if(search_val != ""){
+                    url += "&keyword="+search_val;
+                }
                 $.ajax({
                     type: "GET",
-                    url: "/dashboard/administrator_students/?page=" + page + "&keyword=" + key,
+                    url: url,
                     success: function (data) {
                         $('#students_results').html(data);
-                        document.getElementById(event.target.id).parentElement.classList.add("active");
+                        if(isNaN(id) != true)
+                            id = "lis_"+id;
+                        document.getElementById(id).parentElement.classList.add("active");
                     },
     
                     error: function (response, error) {
@@ -107,14 +117,14 @@
         }
     
             function searchResults(e) {
-                var key = document.getElementById("search_input").value;
+                search_val = $("#search_input").val();
     
                 $.ajax({
                     type: "GET",
-                    url: "/dashboard/administrator_students/?keyword=" + key,
+                    url: "/dashboard/administrator_students/?keyword=" + search_val,
                     success: function (data) {
                         $('#students_results').html(data);
-                        document.getElementById(lis_1).parentElement.classList.add("active");
+                        document.getElementById("lis_1").parentElement.classList.add("active");
                     },
     
                     error: function (response, error) {

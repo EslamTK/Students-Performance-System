@@ -39,7 +39,7 @@
                                   data-toggle="dropdown" style="color:rgba(41,54,61,1);font-size: 16px;font-weight: bold;font-variant: small-caps;">Department
                                   <div class="dropdown-menu" >
                                       {% for dep in departments %}
-                                          <li><a class="dropdown-item" href="#">{{ dep.name }}</a></li>
+                                          <li><a class="dropdown-item" href="#" id ="{{dep.id}}">{{ dep.name }}</a></li>
                                       {% endfor %}
                                   </div>
                           </button></div>
@@ -58,7 +58,7 @@
                                     {% else %}
                                         <label class="btn btn-outline-secondary">
                                     {% endif %}
-                                <input type="radio" name="options" id="option" +"{{ forloop.counter }}"
+                                <input type="radio" name="options" id="option{{ forloop.counter }}"
                                 > {{ term.name }}
                                 </label>
                                 {% endfor %}
@@ -116,18 +116,24 @@
         document.getElementById("lis_1").parentElement.classList.add("active");
             var search_val = "";    
             function loadPage(event){
-                    page = document.getElementById(event.target.id).innerHTML;
-                    if(document.getElementById(event.target.id).parentElement.classList.contains("active") != true){
-                    url = "/dashboard/educator_students/?page="+page;
-                    if(search_val != ""){
-                        url += "&keyword="+search_val;
-                    }
+                var id = event.target.id;
+                page = document.getElementById(id).innerHTML;
+                if(isNaN(page)){
+                    page = id;
+                }
+                if(document.getElementById(id).parentElement.classList.contains("active") != true){
+                url = "/dashboard/educator_students/?page="+page;
+                if(search_val != ""){
+                    url += "&keyword="+search_val;
+                }
                     $.ajax({        
                         type: "GET",
                         url: url,
                         success: function(data) {
                             $('#students_results').html(data);
-                            document.getElementById(event.target.id).parentElement.classList.add("active")                  
+                            if(isNaN(id) != true)
+                                id = "lis_"+id;
+                            document.getElementById(id).parentElement.classList.add("active")                  
                         },
         
                         error: function (response, error) {

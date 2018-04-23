@@ -38,14 +38,24 @@
     </tbody>
 </table>
 <ul class="pagination" style="margin-top: 25px">
+    {% if student_courses.has_previous %}
+        <li><a id="{{student_courses.previous_page_number}}" href="#"  onclick="loadResults(event)">Prev</a></li>
+    {% else %}
+        <li class="page-item disabled"><a>Prev</a></li>
+    {% endif %}
     {% with ''|center:student_courses_num_pages as range %}
         {% for i in range %}
             <li class="page-item ">
                 <a id="lis_{{ forloop.counter }}" class="page-link" href="#"
                    onclick="loadResults(event)">{{ forloop.counter }}</a>
             </li>
-        {% endfor %}
+        {% endfor %}        
     {% endwith %}
+    {% if student_courses.has_next %}
+        <li><a id="{{student_courses.next_page_number}}" href="#"  onclick="loadResults(event)">Next</a></li>
+    {% else %}
+        <li class="page-item disabled"><a>Next</a></li>
+    {% endif %}
 
 </ul>
     

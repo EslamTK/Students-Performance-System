@@ -1,5 +1,6 @@
 {% extends 'base.html' %}
 {% block body %}
+{% load widget_tweaks %}
     <main class="animated fadeIn">
         <div class="row" style="margin-top: 10px;">
 
@@ -46,29 +47,12 @@
                     </div>
 
                     <div class="container">
-                        {% comment %} <form method="POST" action="{%url 'dashboard:student_educator_profile' educator_id%}">
-                        {% csrf_token %}
-                        <div class="form-group">
-                            {% for rev in review_items_form %}
-                                <div class="row form-group">
-                                    <div class="col-sm-3 h4">
-                                        <label>{{ rev.name }}</label>
-                                    </div>
-                                    <div class="col-sm-9 ">
-                                        <input title="Bad" type="radio" name="{{ rev.name }}" id ="{{rev.id}}">
-                                        <input title="Good" class="col-sm-6" type="radio" name="{{ rev.name }}">
-                                        <input title="Excellent" type="radio" name="{{ rev.name }}">
-                                    </div>
-                                </div>
-                            {% endfor %}
-                        </div> {% endcomment %}
+                        
                         <form METHOD="POST" action="{%url 'dashboard:student_educator_profile' educator_id%}">
-                            
                                 {% csrf_token %}
-                                {{ review_form }}
-                                <br>
-                            
-                                {{ review_items.management_form }}
+                                
+
+                                {{ review_items_form.management_form }}
                                 {% for item in review_items_form %}
                             
                                     {{ item.rate.errors }}
@@ -76,48 +60,44 @@
                                     {{ item.review_item }}
                             
                                     {{ item.name }}
-                                    {{ item.name.value }}
+                                    <div class="col-sm-3 h4">
+                                            <label >{{ item.name.value }}</label>
+                                    </div>
+                                    {{item.rate}}
                             
                                     {% for choice in item.rate %}
-                                        {{ choice }}
+                                    {%render_field choice.  %}
                                     {% endfor %}
                             
                                     <br>
                                 {% endfor %}
+                        </div>
+                                {% for field in review_form %}
+                                
+                                    {% if field.name == "content"%}
+                                    <div class="form-group">
+                                        {% render_field field class="form-control" placeholder="Content" rows="6" id="textarea-input" name="textarea-input"%}
+                                    </div>
+                                        {%else%}
+                                    <div class="mr-3" data-toggle="buttons">
+                                        <label class="btn btn-outline-danger">
+                                            {% render_field field type="checkbox" name="options" id="option1"%}
+                                            <b>Anonymous</b>
+                                        </label>
+                                    </div>
+                                    {%endif%}
+                                
+                                    
+                                {% endfor %}
+
+                                <div style="text-align: center;">
+                                    <button type="submit" class="btn btn-sm btn-outline-primary">
+                                        <b>Submit</b>
+                                    </button>
+                                </div>
                             
-                                <input type="submit" value="Ok">
-                            </form>
                         </form>
-
-
-                    {% comment %} <div class="form-group">
-                            {% csrf_token %}
-                            {% for hidden in review_form_fields %}
-                                {{ hidden }}
-                            {% endfor %}
-                
-                            {% for field in review_form %}
-                                {{ field.errors }}
-                                {{ field.help_text }}
-                                {{ field }}
-                            {% endfor %}
-                
-                    </div>
-
-                    <div class="mr-3" data-toggle="buttons">
-                        <label class="btn btn-outline-danger">
-                            <input type="checkbox" name="options" id="option1">
-                            <b>Anonymous</b>
-                        </label>
-                    </div>
-                    <div style="text-align: center;">
-                        <button type="submit" class="btn btn-sm btn-outline-primary">
-                            <b>Submit</b>
-
-                        </button>
-                    </div>
-                    </form> {% endcomment %}
-                    </div>
+                    
                 </div>
             </div>
         </div>
