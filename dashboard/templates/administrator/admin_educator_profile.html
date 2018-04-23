@@ -27,7 +27,7 @@
                             </button>
                             <div class="dropdown-menu">
                                 {% for year in educator_reviews_years %}
-                                    <a class="dropdown-item" href="#">{{ year.year }}</a>
+                                    <a class="dropdown-item" href="#" id="year_{{forloop.counter}}">{{ year.year }}</a>
                                 {% endfor %}
                             </div>
                         </div>
@@ -41,7 +41,7 @@
                             <div class="dropdown-menu">
                                 <div class="dropdown-menu">
                                     {% for dep in educator_reviews_departments %}
-                                        <li><a class="dropdown-item" href="#">{{ dep.student__department__name }}</a>
+                                        <li><a class="dropdown-item" href="#" id="dep_{{forloop.counter}}">{{ dep.student__department__name }}</a>
                                         </li>
                                     {% endfor %}
                                 </div>
@@ -98,7 +98,8 @@
                     document.getElementById(id).parentElement.classList.add("active");
                 },            
                 
-                error: function(response, error) {            
+                error: function(response, error) {
+                    alert("something");            
                     alert(response.responseText);              
                 }            
                 });        

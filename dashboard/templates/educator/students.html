@@ -30,7 +30,7 @@
                                 data-toggle="dropdown" style="color:rgba(41,54,61,1);font-size: 16px;font-weight: bold;font-variant: small-caps;">Year
                             <div class="dropdown-menu" >
                                 {% for year in years %}
-                                    <li><a class="dropdown-item" href="#" id = "{{year.id}}">{{ year.name }}</a></li>
+                                    <li><a class="dropdown-item" href="#" id = "year_{{year.id}}">{{ year.name }}</a></li>
                                 {% endfor %}
                             </div>
                         </button></div>
@@ -39,7 +39,7 @@
                                   data-toggle="dropdown" style="color:rgba(41,54,61,1);font-size: 16px;font-weight: bold;font-variant: small-caps;">Department
                                   <div class="dropdown-menu" >
                                       {% for dep in departments %}
-                                          <li><a class="dropdown-item" href="#" id ="{{dep.id}}">{{ dep.name }}</a></li>
+                                          <li><a class="dropdown-item" href="#" id ="dep_{{dep.id}}">{{ dep.name }}</a></li>
                                       {% endfor %}
                                   </div>
                           </button></div>
@@ -58,7 +58,7 @@
                                     {% else %}
                                         <label class="btn btn-outline-secondary">
                                     {% endif %}
-                                <input type="radio" name="options" id="option{{ forloop.counter }}"
+                                <input type="radio" name="options" id="term_{{ forloop.counter }}"
                                 > {{ term.name }}
                                 </label>
                                 {% endfor %}

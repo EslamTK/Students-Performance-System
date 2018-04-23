@@ -26,7 +26,7 @@
                             </button>
                             <div class="dropdown-menu">
                                 {% for year in years %}
-                                    <a class="dropdown-item" href="#" id="{{year.id}}">{{ year.name }}</a>
+                                    <a class="dropdown-item" href="#" id="year_{{year.id}}">{{ year.name }}</a>
                                 {% endfor %}
                             </div>
                         </div>
@@ -42,7 +42,7 @@
                                         {% else %}
                                             <label class="btn btn-outline-secondary">
                                         {% endif %}
-                                    <input type="radio" name="options" id="{{ forloop.counter }}"
+                                    <input type="radio" name="options" id="term_{{ forloop.counter }}"
                                     > {{ term.name }}
                                     </label>
                                     {% endfor %}
