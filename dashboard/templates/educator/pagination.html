@@ -17,7 +17,8 @@
 
     {% endif %}
 <p>{{ rev.content }}</p>
-<div class="btn-group btn-group-justified">
+
+<div class="btn-group btn-group-justified" id ="rep{{rev.id}}" >
     {% if rev.report__is_closed is not None %}
         {% if rev.report__is_closed %}
             <p class="p-1 mb-1 bg-danger text-white">Report Refused</p>
@@ -25,7 +26,8 @@
             <p class="p-1 mb-1 bg-success text-white">Reported</p>
         {% endif %}
     {% else %}
-        <button type="button" class="btn p-1 mb-1 bg-primary text-white">Report Abuse</button>
+        
+        <button type="button" id ="rep{{rev.id}}" class="btn p-1 mb-1 bg-primary text-white" onclick="report({{rev.id}})">Report Abuse</button>
     {% endif %}
 </div>
 
@@ -33,6 +35,11 @@
 </div>
 {% endfor %}
 <ul class="pagination" style="margin-top: 25px">
+    {% if educator_reviews.has_previous %}
+        <li><a id="{{educator_reviews.previous_page_number}}" href="#"  onclick="loadReviews(event)">Prev</a></li>
+    {% else %}
+        <li class="page-item disabled"><a>Prev</a></li>
+    {% endif %}
     {% with ''|center:educator_reviews_num_pages as range %}
         {% for i in range %}
             <li class="page-item ">
@@ -41,5 +48,10 @@
             </li>
         {% endfor %}
     {% endwith %}
+    {% if educator_reviews.has_next %}
+        <li><a id="{{educator_reviews.next_page_number}}" href="#"  onclick="loadReviews(event)">Next</a></li>
+    {% else %}
+        <li class="page-item disabled"><a>Next</a></li>
+    {% endif %}
 
 </ul>

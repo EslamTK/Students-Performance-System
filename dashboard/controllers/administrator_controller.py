@@ -265,6 +265,7 @@ def educator_profile(request, educator_id):
     educator_reviews, educator_reviews_num_pages = educator.get_educator_reviews(educator_id=educator_id)
 
     result = {
+        'educator_id':educator_id,
         'educator_form': educator_form,
         'educator_accounts_form': accounts_formset,
         'educator_reviews': educator_reviews,
@@ -329,4 +330,4 @@ def add_educator(request):
         'educator_accounts_form': accounts_formset
     }
 
-    return render(request, 'administrator/admin_educator_profile.html', result)
+    return render(request, 'administrator/admin_create_user.html', result)

@@ -7,39 +7,7 @@
         var requireJS = [];
         loadJS(requireJS, "{% static 'dashboard/views/charts4.js'%}");
     </script>
-    <script>
-        function loadPage(event) {
-            var key = document.getElementById("search_input").value;
-            page = document.getElementById(event.target.id).innerHTML;
-            $.ajax({
-                type: "GET",
-                url: "/dashboard/administrator_students/?page=" + page + "&keyword=" + key,
-                success: function (data) {
-                    $('#students_results').html(data);
-                },
-
-                error: function (response, error) {
-                    alert(response.responseText);
-                }
-            });
-        }
-
-        function searchResults(e) {
-            var key = document.getElementById("search_input").value;
-
-            $.ajax({
-                type: "GET",
-                url: "/dashboard/administrator_students/?keyword=" + key,
-                success: function (data) {
-                    $('#students_results').html(data);
-                },
-
-                error: function (response, error) {
-                    alert(response.responseText);
-                }
-            });
-        }
-    </script>
+    
     <input type="hidden" id="myData" name="variable" readonly value="{{ years_counts }}">
     <main class="animated fadeIn row">
 
@@ -50,17 +18,23 @@
             <div class="card-body">
                 <div class="row">
 
-                    <div class="input-group-btn col-md-6">
-                        <button type="button" class="btn btn-light dropdown-toggle"
-                                data-toggle="dropdown">Department
-                            <span class="caret"></span>
-                        </button>
-                        <div class="dropdown-menu">
-                            {% for dep in departments %}
-                                <li><a class="dropdown-item" href="#">{{ dep.name }}</a></li>
+                        <div>  <button type="button" class="btn btn-light dropdown-toggle"
+                            data-toggle="dropdown" style="color:rgba(41,54,61,1);font-size: 16px;font-weight: bold;font-variant: small-caps;">Year
+                        <div class="dropdown-menu" >
+                            {% for year in years %}
+                                <li><a class="dropdown-item" href="#" value = "{{year.name}}">{{ year.name }}</a></li>
                             {% endfor %}
                         </div>
-                    </div>
+                    </button></div>
+
+                    <div><button type="button" class="btn btn-light dropdown-toggle"
+                              data-toggle="dropdown" style="color:rgba(41,54,61,1);font-size: 16px;font-weight: bold;font-variant: small-caps;">Department
+                              <div class="dropdown-menu" >
+                                  {% for dep in departments %}
+                                      <li><a class="dropdown-item" href="#" value ="{{dep.id}}">{{ dep.name }}</a></li>
+                                  {% endfor %}
+                              </div>
+                      </button></div>
 
                     <div class="col-md-6">
                         <div class="btn-toolbar float-right" role="toolbar"
@@ -73,7 +47,7 @@
                                     {% else %}
                                         <label class="btn btn-outline-secondary">
                                     {% endif %}
-                                <input type="radio" name="options" id="option" +"{{ forloop.counter }}"
+                                <input type="radio" name="options" value="{{term.id}}"
                                 > {{ term.name }}
                                 </label>
                                 {% endfor %}
@@ -117,4 +91,70 @@
         </div>
         </div>
     </main>
+    <script>
+        document.getElementById("lis_1").parentElement.classList.add("active");
+        var search_val = "";     
+        function loadPage(event) {
+                var id = event.target.id;
+                if(document.getElementById(id).parentElement.classList.contains("active") != true){
+                page = document.getElementById(id).innerHTML;
+                if(isNaN(page)){
+                    page = id;
+                }
+                url = "/dashboard/administrator_students/?page=" + page;
+                if(search_val != ""){
+                    url += "&keyword="+search_val;
+                }
+                $.ajax({
+                    type: "GET",
+                    url: url,
+                    success: function (data) {
+                        $('#students_results').html(data);
+                        if(isNaN(id) != true)
+                            id = "lis_"+id;
+                        document.getElementById(id).parentElement.classList.add("active");
+                    },
+    
+                    error: function (response, error) {
+                        alert(response.responseText);
+                    }
+                });
+            }
+        }
+    
+            function searchResults(e) {
+                search_val = $("#search_input").val();
+    
+                $.ajax({
+                    type: "GET",
+                    url: "/dashboard/administrator_students/?keyword=" + search_val,
+                    success: function (data) {
+                        $('#students_results').html(data);
+                        document.getElementById("lis_1").parentElement.classList.add("active");
+                    },
+    
+                    error: function (response, error) {
+                        alert(response.responseText);
+                    }
+                });
+            }
+            $(document).ready(function(){
+                var input_val;
+                $("#search_btn").click(function(e){
+                    input_val = $("#search_input").val();
+                    if(input_val !== search_val){
+                        searchResults();
+                    }
+                });
+                $("#search_input").keypress(function(e){
+                    input_val = $("#search_input").val();
+                    if(input_val !== search_val){
+                        var key_pressed = e.which;
+                        if(key_pressed == 13){
+                            searchResults();
+                        }
+                    }
+                });
+            });
+        </script>
 {% endblock %}
