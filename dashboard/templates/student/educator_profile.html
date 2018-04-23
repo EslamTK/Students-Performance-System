@@ -63,10 +63,10 @@
                                     <div class="col-sm-3 h4">
                                             <label >{{ item.name.value }}</label>
                                     </div>
-                                    {{item.rate}}
+                                    
                             
                                     {% for choice in item.rate %}
-                                    {%render_field choice.  %}
+                                        {{choice}}
                                     {% endfor %}
                             
                                     <br>

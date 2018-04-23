@@ -27,7 +27,7 @@
                     </button>
                     <div class="dropdown-menu">
                         {% for year in educator_reviews_years %}
-                            <a class="dropdown-item" href="#">{{ year.year }}</a>
+                            <a class="dropdown-item" href="#" id="{{forloop.counter}}">{{ year.year }}</a>
                         {% endfor %}
                     </div>
 
@@ -39,7 +39,7 @@
                     </button>
                     <div class="dropdown-menu">
                         {% for dep in educator_reviews_departments %}
-                            <a class="dropdown-item" href="#">{{ dep.student__department__name }}</a>
+                            <a class="dropdown-item" href="#" id="{{forloop.counter}}">{{ dep.student__department__name }}</a>
                         {% endfor %}
                    </div>
                     </div>
