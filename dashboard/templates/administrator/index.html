@@ -7,39 +7,7 @@
         var requireJS = [];
         loadJS(requireJS, "{% static 'dashboard/views/charts4.js'%}");
     </script>
-    <script>
-        function loadPage(event) {
-            var key = document.getElementById("search_input").value;
-            page = document.getElementById(event.target.id).innerHTML;
-            $.ajax({
-                type: "GET",
-                url: "/dashboard/administrator_students/?page=" + page + "&keyword=" + key,
-                success: function (data) {
-                    $('#students_results').html(data);
-                },
-
-                error: function (response, error) {
-                    alert(response.responseText);
-                }
-            });
-        }
-
-        function searchResults(e) {
-            var key = document.getElementById("search_input").value;
-
-            $.ajax({
-                type: "GET",
-                url: "/dashboard/administrator_students/?keyword=" + key,
-                success: function (data) {
-                    $('#students_results').html(data);
-                },
-
-                error: function (response, error) {
-                    alert(response.responseText);
-                }
-            });
-        }
-    </script>
+    
     <input type="hidden" id="myData" name="variable" readonly value="{{ years_counts }}">
     <main class="animated fadeIn row">
 
@@ -117,4 +85,70 @@
         </div>
         </div>
     </main>
+    <script>
+        document.getElementById("lis_1").parentElement.classList.add("active");
+        var search_val = "";     
+        function loadPage(event) {
+                var id = event.target.id;
+                if(document.getElementById(id).parentElement.classList.contains("active") != true){
+                page = document.getElementById(id).innerHTML;
+                if(isNaN(page)){
+                    page = id;
+                }
+                url = "/dashboard/administrator_students/?page=" + page;
+                if(search_val != ""){
+                    url += "&keyword="+search_val;
+                }
+                $.ajax({
+                    type: "GET",
+                    url: url,
+                    success: function (data) {
+                        $('#students_results').html(data);
+                        if(isNaN(id) != true)
+                            id = "lis_"+id;
+                        document.getElementById(id).parentElement.classList.add("active");
+                    },
+    
+                    error: function (response, error) {
+                        alert(response.responseText);
+                    }
+                });
+            }
+        }
+    
+            function searchResults(e) {
+                search_val = $("#search_input").val();
+    
+                $.ajax({
+                    type: "GET",
+                    url: "/dashboard/administrator_students/?keyword=" + search_val,
+                    success: function (data) {
+                        $('#students_results').html(data);
+                        document.getElementById("lis_1").parentElement.classList.add("active");
+                    },
+    
+                    error: function (response, error) {
+                        alert(response.responseText);
+                    }
+                });
+            }
+            $(document).ready(function(){
+                var input_val;
+                $("#search_btn").click(function(e){
+                    input_val = $("#search_input").val();
+                    if(input_val !== search_val){
+                        searchResults();
+                    }
+                });
+                $("#search_input").keypress(function(e){
+                    input_val = $("#search_input").val();
+                    if(input_val !== search_val){
+                        var key_pressed = e.which;
+                        if(key_pressed == 13){
+                            searchResults();
+                        }
+                    }
+                });
+            });
+        </script>
 {% endblock %}
