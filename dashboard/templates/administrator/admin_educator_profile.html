@@ -20,34 +20,40 @@
                 </div>
                 <div class="card-body">
                     <div class="row">
+
                         <div class="dropdown">
-                            <button type="button" class="btn btn-light dropdown-toggle"
-                                    data-toggle="dropdown">year
-                                <span class="caret"></span>
-                            </button>
-                            <div class="dropdown-menu">
+                            <select class="form-control" id="year-selector" onchange="choice1(this)">
+
+                                <option>Year</option>
+
                                 {% for year in educator_reviews_years %}
-                                    <a class="dropdown-item" href="#" id="year_{{forloop.counter}}">{{ year.year }}</a>
+
+                                    <option value="{{ year.year }}" id="year_{{ forloop.counter }}">
+                                        {{ year.year }}
+                                    </option>
+
                                 {% endfor %}
-                            </div>
+
+                            </select>
                         </div>
+
                         <div class="dropdown">
+                            <select class="form-control" id="department-selector" onchange="choice1(this)">
 
+                                <option>Department</option>
 
-                            <button type="button" class="btn btn-light dropdown-toggle"
-                                    data-toggle="dropdown">Department
-                                <span class="caret"></span>
-                            </button>
-                            <div class="dropdown-menu">
-                                <div class="dropdown-menu">
-                                    {% for dep in educator_reviews_departments %}
-                                        <li><a class="dropdown-item" href="#" id="dep_{{forloop.counter}}">{{ dep.student__department__name }}</a>
-                                        </li>
-                                    {% endfor %}
-                                </div>
+                                {% for dep in educator_reviews_departments %}
 
-                            </div>
+                                    <option value="{{ dep.student__department }}"
+                                            id="dep_{{ forloop.counter }}">
+                                        {{ dep.student__department__name }}
+                                    </option>
+
+                                {% endfor %}
+
+                            </select>
                         </div>
+
                         <div class="col-md-6">
                             <div class="btn-toolbar float-right" role="toolbar"
                                  aria-label="Toolbar with button groups">
