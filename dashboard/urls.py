@@ -1,15 +1,15 @@
 from django.urls import path
 
-from dashboard.controllers import forms_testing
+# from dashboard.controllers import forms_testing
 from dashboard.controllers import student_controller, educator_controller, administrator_controller
 
 app_name = 'dashboard'
 
 urlpatterns = [
 
-    path('form/',
-         forms_testing.index,
-         name='form'),
+    # path('form/',
+    #      forms_testing.index,
+    #      name='form'),
 
     path('student/',
          student_controller.index,
