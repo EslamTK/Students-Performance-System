@@ -11,3 +11,6 @@ class EducatorAccount(models.Model):
 
     class Meta:
         unique_together = ("educator", "account")
+
+    def __str__(self):
+        return "{0}'s {1}".format(self.educator.name, self.account.name)
