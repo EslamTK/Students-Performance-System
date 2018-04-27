@@ -1,7 +1,7 @@
 from django.urls import path
 
 #from dashboard.controllers import forms_testing
-from dashboard.controllers import student_controller, educator_controller, administrator_controller
+from dashboard.controllers import student_controller, educator_controller, administrator_controller, login
 
 app_name = 'dashboard'
 
@@ -101,5 +101,6 @@ urlpatterns = [
 
     path('administrator/educator/<int:educator_id>/',
          administrator_controller.educator_profile,
-         name='administrator_educator_profile')
+         name='administrator_educator_profile'),
+    path('login/',login.login ,name='login'),
 ]
