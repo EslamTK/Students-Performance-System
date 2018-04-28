@@ -22,11 +22,22 @@
                     {% for course_form in courses_formset %}
                     <tr>
                     {% for course in course_form %}
+                    {%if course.name == "DELETE"%}
+                    <td>
+                    <div class="mr-3" data-toggle="buttons">
+                        <label class="btn btn-outline-danger">
+                            {% render_field course type="checkbox" name="options"%}
+                            <b>Delete</b>
+                        </label>
+                    </div>
+                    </td>
+                    {%else%}
                     <td>
                         <div class="form-group">
                             {% render_field course class="form-control"%}
                         </div>
                     </td>
+                    {%endif%}
                     
                     {%endfor%}
                 </tr>
