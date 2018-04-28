@@ -1,7 +1,8 @@
 {% extends 'base.html' %}
-{% block title %}Educator{% endblock %}
+{% block title %}Student's Profile{% endblock %}
 {% block body %}
     {% load static %}
+    {% load widget_tweaks %}
     <main class="animated fadeIn row">
         <div class="col-md-12">
             <div class="card" style="margin-top: 10px">
@@ -10,184 +11,25 @@
                 </div>
                 <div class="card-body">
                     <div class="container form-group">
-                        <form class="form-group">
-                            <div class="row ">
-                                <div class="col-md-4">
-                                    <div class="form-group">
-                                        <label for="Name">Student Name:</label>
-                                        <input type="text" class="form-control " value="{{ student.name }}" id="Name">
-                                    </div>
-                                    <div class="form-group">
-                                        <label for="Name">Birthday Date:</label>
-                                        <input type="text" class="form-control " value="{{ student.age }}"
-                                               id="birthday">
-                                    </div>
-                                    <div class="form-group">
-                                        <label for="sel1">Gender:</label>
-                                        <select class="form-control" id="gender">
-                                            {% for gender in genders %}
-                                                <option>{{ gender.choices }}</option>
-                                            {% endfor %}
-                                        </select>
-                                    </div>
-                                    <div class="form-group">
-                                        <label for="sel1">Year:</label>
-                                        <select class="form-control" id="Year">
-                                            {% for year in years %}
-                                                <option>{{ year.name }}</option>
-                                            {% endfor %}
-                                        </select>
-                                    </div>
-                                    <div class="form-group">
-                                        <label for="sel1">Department:</label>
-                                        <select class="form-control" id="department">
-                                            {% for dep in departments %}
-                                                <option>{{ dep.name }}</option>
-                                            {% endfor %}
-                                        </select>
-                                    </div>
-                                    <div class="form-group">
-                                        <label for="sel1">Mother Job:</label>
-                                        <select class="form-control" id="motherJob">
-                                            {% for job in jobs %}
-                                                <option>{{ job.1 }}</option>
-                                            {% endfor %}
-                                        </select>
-                                    </div>
-                                    <div class="form-group">
-                                        <label for="sel1">Father Job:</label>
-                                        <select class="form-control" id="fatherJop">
-                                            {% for job in jobs %}
-                                                <option>{{ job.1 }}</option>
-                                            {% endfor %}
-                                        </select>
-                                    </div>
-                                </div>
-                                <div class="col-md-4">
-                                    <div class="form-group">
-                                        <label for="sel1">Family Size:</label>
-                                        <select class="form-control" id="Family Size">
-                                            {% for f_size in family_sizes %}
-                                                <option>{{ f_size.1 }}</option>
-                                            {% endfor %}
-                                        </select>
-                                    </div>
-                                    <div class="form-group">
-                                        <label for="sel1">Parents Status:</label>
-                                        <select class="form-control" id="parentsStatus">
-                                            {% for p_status in parents_status %}
-                                                <option>{{ p_status.1 }}</option>
-                                            {% endfor %}
-                                        </select>
-                                    </div>
-                                    <div class="form-group">
-                                        <label for="sel1">Guardian:</label>
-                                        <select class="form-control" id="guardian">
-                                            {% for guardian in guardians %}
-                                                <option>{{ guardian.1 }}</option>
-                                            {% endfor %}
-                                        </select>
-                                    </div>
-                                    <div class="form-group">
-                                        <label for="Name">Family Relation Strength:</label>
-                                        <input type="text" class="form-control "
-                                               value="{{ student.family_relation_quality }}"
-                                               id="familyRelationStrength">
-                                    </div>
-                                    <div class="form-group">
-                                        <label for="Name">Father Education Level:</label>
-                                        <input type="text" class="form-control " value="{{ student.father_education }}"
-                                               id="fatherEducationLevel">
-                                    </div>
-                                    <div class="form-group">
-                                        <label for="Name">Mother Education Level:</label>
-                                        <input type="text" class="form-control " value="{{ student.mother_education }}"
-                                               id="motherEducationLevel">
-                                    </div>
-                                    <div class="form-group">
-                                        <label for="Name">Health Level:</label>
-                                        <input type="text" class="form-control " value="{{ student.health_status }}"
-                                               id="healthLevel">
-                                    </div>
-                                </div>
-                                <div class="col-md-4">
-                                    <div class="form-group">
-                                        <label for="Name">Free Time:</label>
-                                        <input type="text" class="form-control " value="{{ student.free_time }}"
-                                               id="freeTime">
-                                    </div>
-                                    <div class="form-group">
-                                        <label for="Name">Travel Time:</label>
-                                        <input type="text" class="form-control " value="{{ student.travel_time }}"
-                                               id="travelTime">
-                                    </div>
-                                    <div class="form-group">
-                                        <label for="Name">Go Out Time:</label>
-                                        <input type="text" class="form-control " value="{{ student.go_out_time }}"
-                                               id="goOutTime">
-                                    </div>
-                                    <div class="form-group">
-                                        <br><br>
-                                        <div class="form-check">
-                                            {% if student.do_extra_activity %}
-                                                <input class="form-check-input" type="checkbox" value=""
-                                                       id="defaultCheck1" checked>
-                                            {% else %}
-                                                <input class="form-check-input" type="checkbox" value=""
-                                                       id="defaultCheck1">
-                                            {% endif %}
-                                            <label class="form-check-label" for="defaultCheck1">
-                                                Extra Activity </label>
-                                        </div>
-                                        <br><br><br>
-                                        <div class="form-check">
-                                            {% if student.wants_higher_education %}
-                                                <input class="form-check-input" type="checkbox" value=""
-                                                       id="defaultCheck2" checked>
-                                            {% else %}
-                                                <input class="form-check-input" type="checkbox" value=""
-                                                       id="defaultCheck2">
-                                            {% endif %}
-                                            <label class="form-check-label" for="defaultCheck2">
-                                                Take Higher Education </label>
-                                        </div>
-                                        <br><br><br>
-                                        <div class="form-check">
-                                            {% if student.has_internet %}
-                                                <input class="form-check-input" type="checkbox" value=""
-                                                       id="defaultCheck3" checked>
-                                            {% else %}
-                                                <input class="form-check-input" type="checkbox" value=""
-                                                       id="defaultCheck3">
-                                            {% endif %}
-                                            <label class="form-check-label" for="defaultCheck3">
-                                                Has Internet </label>
-                                        </div>
-                                        <br><br><br>
-                                        <div class="form-check">
-                                            {% if student.has_relationship %}
-                                                <input class="form-check-input" type="checkbox" value=""
-                                                       id="defaultCheck4" checked>
-                                            {% else %}
-                                                <input class="form-check-input" type="checkbox" value=""
-                                                       id="defaultCheck4">
-                                            {% endif %}
-                                            <label class="form-check-label" for="defaultCheck4">
-                                                Has Relationship </label>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="col-md-4">
-                                </div>
-                                <div class="col-md-4">
-                                    <button type="button" class="btn btn-success" id="saveChange">Save Change</button>
-                                    <button type="button" class="btn btn-success" id="cancel">Cancel</button>
-                                </div>
-                            </div>
-                        </form>
+                        {% if student_id %}
+                            <form id="student_profile" METHOD="POST" >
+                            {% csrf_token %}
+                        {% else %}
+                            <form id="student_add" METHOD="POST" action="{% url 'dashboard:administrator_student_add_form' %} ">
+                            {% csrf_token %}
+
+                        {{ user_form.errors }}
+                        {%for user in user_form%}
+                        <label for="{{ user_for_label }}">{{ user.label }}</label>
+                            {%render_field user class="form-control" %}
+                        {%endfor%}
+                        
+                        {% endif %}
+                        {%include './add_student_form.html'%}
                     </div>
                 </div>
             </div>
+            {% if student_id %}
             <div class="card" style="margin-top: 10px">
                 <div class="card-header">
                     <div class="row">
@@ -208,95 +50,18 @@
                         </div>
                     </div>
                 </div>
-                <div class="card-body">
-                    <table class="table table-striped table-bordered table-hover table-condensed">
-                        <thead>
-                        <tr>
-                            <th>Course</th>
-                            <th>Study Time</th>
-                            <th>Failures</th>
-                            <th>Absences</th>
-                            <th>Family Support</th>
-                            <th>Paid Class</th>
-                            <th>MidTerm Grade</th>
-                            <th>Final Grade</th>
-                        </tr>
-                        </thead>
-                        <tbody>
-                        {% for course in student_courses %}
-                            <tr>
-                            <td>
-                                <div class="form-group">
-                                    <input type="text" class="form-control " value="{{ course.course.name }}"
-                                           id="course1">
-                                </div>
-                            </td>
-                            <td>
-                                <div class="form-group">
-                                    <input type="text" class="form-control " value="{{ course.study_time }}"
-                                           id="studyTime">
-                                </div>
-                            </td>
-                            <td>
-                                <div class="form-group">
-                                    <input type="text" class="form-control " value="{{ course.failures }}"
-                                           id="failures">
-                                </div>
-                            </td>
-                            <td>
-                                <div class="form-group">
-                                    <input type="text" class="form-control " value="{{ course.absences }}"
-                                           id="absences">
-                                </div>
-                            </td>
-                            <td>
-                                <div class="form-check">
-                                    {% if course.has_family_support %}
-                                        <input class="form-check-input" type="checkbox" value="" id="familySupport"
-                                               checked>
-                                    {% else %}
-                                        <input class="form-check-input" type="checkbox" value="" id="familySupport">
-                                    {% endif %}
-
-                                </div>
-                            </td>
-                            <td>
-                                <div class="form-check">
-                                    {% if course.take_paid_class %}
-                                        <input class="form-check-input" type="checkbox" value="" id="Paid" checked>
-                                    {% else %}
-                                        <input class="form-check-input" type="checkbox" value="" id="Paid">
-                                    {% endif %}
-                                </div>
-                            </td>
-                            <td>
-                                <div class="form-group">
-                                    <input type="text" class="form-control " value="{{ course.midterm_grade }}"
-                                           id="midtermGrade">
-                                </div>
-                            </td>
-                            <td>
-                                <div class="form-group">
-                                    <input type="text" class="form-control " value="{{ course.final_grade }}"
-                                           id="FinalGrade">
-                                </div>
-                            </td>
-
-                        {% endfor %}
-                        </tbody>
-                    </table>
-                    <div class="row">
-                        <div class="col-md-4">
-                        </div>
-                        <div class="col-md-4">
-                            <button type="button" class="btn btn-success" id="saveChange2">Save Change</button>
-                            <button type="button" class="btn btn-success" id="cancel2">Cancel</button>
-                        </div>
-                    </div>
-                </div>
+                
+                    {%include './courses_form.html'%}
+                
             </div>
-
+            {%endif%}
         </div>
     </main>
+    <script>
+        {%if student_id%}
+            $("#student_profile").ajaxForm({url: "{% url 'dashboard:administrator_student_update_form' student_id %}", type: 'post'})
+            $("#student_courses").ajaxForm({url: "{% url 'dashboard:administrator_student_courses_update_form' student_id%}", type: 'post'})
+        {%endif%}
+    </script>
 
 {% endblock %}        

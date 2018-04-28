@@ -154,6 +154,9 @@ def student_form_handler(request, student_id=None):
         'student_form': student_form,
         'user_form': user_form
     }
+    template = 'administrator/add_student_form.html'
+    return render_to_response(template, result, content_type=RequestContext(request))
+
 
 
 @require_POST
@@ -168,6 +171,8 @@ def student_courses_formset_handler(request, student_id):
         'student_id': student_id,
         'courses_formset': courses_formset
     }
+    template = 'administrator/courses_form.html'
+    return render_to_response(template, result, content_type=RequestContext(request))
 
 
 @require_GET
