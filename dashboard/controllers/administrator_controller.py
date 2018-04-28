@@ -3,9 +3,9 @@ import json
 from django.contrib.auth import authenticate
 from django.core.serializers.json import DjangoJSONEncoder
 from django.http import JsonResponse, HttpResponse
-from django.shortcuts import render, render_to_response
+from django.shortcuts import render, render_to_response, redirect
 from django.template import RequestContext
-from django.views.decorators.http import require_GET, require_http_methods
+from django.views.decorators.http import require_GET, require_http_methods, require_POST
 
 from dashboard.logic import *
 
@@ -104,51 +104,75 @@ def get_students(request):
 
 
 @require_GET
-def student_profile(request, student_id):
-    # Student Data
-    student_data = student.get_student_data(student_id=student_id)
+def student_profile(request, student_id=None):
+    # User Form
+    user_form = None
 
-    # Departments
-    departments = general.get_departments()
+    # Courses Formset
+    courses_formset = None
 
-    # Years
-    years = general.get_years()
+    if student_id:
+        courses_formset = administrator.get_student_courses_formset(student_id=student_id)
+    else:
+        user_form = administrator.get_user_form()
 
-    # Available Courses For The Student Year
-    courses = administrator.get_available_student_courses(student_id=student_id)
-
-    # Student Courses
-    student_courses = student.get_student_courses(student_id=student_id)
+    # Student Form
+    student_form = administrator.get_student_form(student_id=student_id)
 
     result = {
-        'student': student_data,
-        'genders': student_data.gender_choices,
-        'jobs': student_data.job_choices,
-        'family_sizes': student_data.family_size_choices,
-        'parents_status': student_data.parent_status_choices,
-        'guardians': student_data.guardian_choices,
-        'departments': departments,
-        'years': years,
-        'student_courses': student_courses,
-        'courses': courses
+        'student_id': student_id,
+        'student_form': student_form,
+        'user_form': user_form,
+        'courses_formset': courses_formset
     }
 
     return render(request, 'administrator/admin_student_profile.html', result)
-    # For Testing Only
-    # test_result = {
-    #     'student': model_to_dict(student),
-    #     'genders': student.gender_choices,
-    #     'jobs': student.job_choices,
-    #     'family_sizes': student.family_size_choices,
-    #     'parents_status': student.parent_status_choices,
-    #     'guardians': student.guardian_choices,
-    #     'departments': list(departments.values()),
-    #     'years': list(years.values()),
-    #     'student_courses': list(student_courses.values()),
-    #     'courses': list(courses.values())
-    # }
-    #
-    # return JsonResponse(test_result, safe=False)
+
+
+@require_POST
+def student_form_handler(request, student_id=None):
+    user_form = None
+
+    student_form = administrator.get_student_form(request_data=request.POST,
+                                                  student_id=student_id)
+    if student_id:
+
+        if student_form.is_valid():
+            administrator.update_student(student_form)
+
+    else:
+        user_form = administrator.get_user_form(request_data=request.POST)
+
+        if user_form.is_valid() and student_form.is_valid():
+            student_id = administrator.add_student(user_form, student_form)
+
+            return redirect(to='dashboard:administrator_student_update',
+                            student_id=student_id)
+
+    result = {
+        'student_id': student_id,
+        'student_form': student_form,
+        'user_form': user_form
+    }
+    template = 'administrator/add_student_form.html'
+    return render_to_response(template, result, content_type=RequestContext(request))
+
+
+
+@require_POST
+def student_courses_formset_handler(request, student_id):
+    courses_formset = administrator. \
+        get_student_courses_formset(request_data=request.POST, student_id=student_id)
+
+    if courses_formset.is_valid():
+        administrator.update_student_courses(course_formset=courses_formset,
+                                             student_id=student_id)
+    result = {
+        'student_id': student_id,
+        'courses_formset': courses_formset
+    }
+    template = 'administrator/courses_form.html'
+    return render_to_response(template, result, content_type=RequestContext(request))
 
 
 @require_GET

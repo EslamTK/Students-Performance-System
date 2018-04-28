@@ -9,3 +9,6 @@ class EducatorAdvice(models.Model):
     educator = models.ForeignKey(Educator, on_delete=models.CASCADE)
     content = models.TextField()
     created_at = models.DateTimeField(auto_now_add=True)
+
+    def __str__(self):
+        return "{0} advice for {1}".format(self.educator.name, self.student.name)

@@ -8,6 +8,3 @@ class EducatorAccountRepo(Repo):
 
     def get_educator_accounts(self, educator):
         return self._model.objects.filter(educator=educator).select_related('account')
-
-    def get_none_accounts(self):
-        return self._model.objects.none()

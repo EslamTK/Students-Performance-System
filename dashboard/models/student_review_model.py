@@ -12,3 +12,6 @@ class StudentReview(models.Model):
     content = models.TextField()
     is_anonymous = models.BooleanField(default=False)
     created_at = models.DateTimeField(auto_now_add=True)
+
+    def __str__(self):
+        return "{0} review for {1}".format(self.student.name, self.educator.name)

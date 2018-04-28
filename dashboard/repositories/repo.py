@@ -2,6 +2,9 @@ class Repo:
     def __init__(self, model):
         self._model = model
 
+    def get_none(self):
+        return self._model.objects.none()
+
     def get_one(self, primary_key):
         return self._model.objects.get(pk=primary_key)
 

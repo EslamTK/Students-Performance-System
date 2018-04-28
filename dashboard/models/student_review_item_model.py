@@ -11,3 +11,6 @@ class StudentReviewItem(models.Model):
 
     class Meta:
         unique_together = ("student_review", "review_item")
+
+    def __str__(self):
+        return "{0}'s rate {1} ".format(self.review_item.name, self.rate)
