@@ -168,3 +168,15 @@ class AdministratorLogic(Logic):
 
         for instance in course_formset.deleted_objects:
             instance.delete()
+
+    def get_reports(self, educator_id=None, is_closed=False):
+        reports = self._unit_of_work.reports.get_all(educator=educator_id,
+                                                     is_closed=is_closed)
+
+        return reports
+
+    def close_report(self, report_id):
+        self._unit_of_work.reports.set_closed(report_id=report_id)
+
+    def delete_review(self, review_id):
+        self._unit_of_work.students_reviews.delete(primary_key=review_id)

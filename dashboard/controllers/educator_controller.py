@@ -35,7 +35,7 @@ def index(request):
         'educator_reviews': educator_reviews,
         'educator_reviews_num_pages': educator_reviews_num_pages
     }
-    print(result)
+
     return render(request, 'educator/index.html', result)
     # For Testing Only
     # test_result = {
