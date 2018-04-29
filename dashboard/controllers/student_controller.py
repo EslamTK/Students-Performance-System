@@ -1,4 +1,4 @@
-from django.contrib.auth import authenticate
+from django.contrib.auth.decorators import user_passes_test
 from django.core.exceptions import ObjectDoesNotExist
 from django.db import IntegrityError
 from django.http import JsonResponse, HttpResponseRedirect, HttpResponseBadRequest
@@ -8,11 +8,15 @@ from django.views.decorators.http import require_GET, require_http_methods
 
 from dashboard.logic import *
 
-user = authenticate(username='student', password='1#lklsaK313')
+
+def is_student(user):
+    return user.groups.filter(name='students').exists()
 
 
+@user_passes_test(is_student)
 @require_GET
 def index(request):
+    user = request.user
 
     # Student Advices
     student_advices, student_advices_num_pages = student.get_student_advices(student_id=user.id)
@@ -32,17 +36,12 @@ def index(request):
 
     return render(request, 'student/index.html', result)
 
-    # For Testing Only
-    # test_result = {
-    #    'student_advices': list(student_advices.values()),
-    #    'student_predictions': predictions,
-    #    'student_recommendations': recommendations
-    # }
-    # return JsonResponse(test_result, safe=False)
 
-
+@user_passes_test(is_student)
 @require_GET
 def get_student_advices(request):
+    user = request.user
+
     # Getting the page number
     page = request.GET.get('page')
 
@@ -60,30 +59,12 @@ def get_student_advices(request):
     template = 'student/pagination.html'
 
     return render_to_response(template, result, content_type=RequestContext(request))
-    # For Testing Only
-    # formatted_advices = []
-    #
-    # for i in student_advices:
-    #    advice = {
-    #        'id': i.id,
-    #        'educator_id': i.educator_id,
-    #        'educator_name': i.educator.name,
-    #        'educator_photo_url': i.educator.photo.url,
-    #        'created_at': i.created_at,
-    #        'content': i.content
-    #   }
-    #    formatted_advices.append(advice)
-
-    # test_result = {
-    #    'advices': formatted_advices,
-    #    'num_pages': student_advices_num_pages
-    # }
-
-    #return JsonResponse(test_result)
 
 
+@user_passes_test(is_student)
 @require_GET
 def student_courses(request):
+    user = request.user
     # Student Current Courses Predictions
     predictions = student.get_student_predictions(student_id=user.id)
 
@@ -106,19 +87,11 @@ def student_courses(request):
 
     return render(request, 'student/courses.html', result)
 
-    # For Testing Only
-    # test_result = {
-    #     'student_predictions': predictions,
-    #     'years': list(years.values()),
-    #     'terms': list(terms.values()),
-    #     'student_courses': list(courses.values()),
-    #     'student_courses_num_pages': courses_num_pages
-    # }
-    # return JsonResponse(test_result, safe=False)
 
-
+@user_passes_test(is_student)
 @require_GET
 def get_student_courses_grades(request):
+    user = request.user
     # Getting the year
     year_id = request.GET.get('year_id')
 
@@ -150,8 +123,10 @@ def get_student_courses_grades(request):
     return JsonResponse(result)
 
 
+@user_passes_test(is_student)
 @require_GET
 def get_student_courses(request):
+    user = request.user
     # Getting the page number
     page = request.GET.get('page')
 
@@ -173,30 +148,11 @@ def get_student_courses(request):
 
     return render_to_response(template, result, content_type=RequestContext(request))
 
-    # For Testing Only
-    # formatted_courses = []
-    #
-    # for i in courses:
-    #     course = {
-    #         'id': i.id,
-    #         'course_name': i.course.name,
-    #         'year_name': i.course.year.name,
-    #         'educator_id': i.educator_id,
-    #         'educator_name': i.educator.name,
-    #         'final_grade': i.final_grade,
-    #     }
-    #     formatted_courses.append(course)
-    #
-    # test_result = {
-    #     'courses': formatted_courses,
-    #     'num_pages': courses_num_pages
-    # }
-    #
-    # return JsonResponse(test_result)
 
-
+@user_passes_test(is_student)
 @require_http_methods(['GET', 'POST'])
 def educator_profile(request, educator_id):
+    user = request.user
     # Student Review Form Submission
     if request.method == 'POST':
         review = student.get_review_forms(request.POST)
@@ -228,14 +184,3 @@ def educator_profile(request, educator_id):
     }
     
     return render(request, 'student/educator_profile.html', result)
-
-    # For Testing Only
-    # educator_info = model_to_dict(educator_info)
-    # educator_info['photo'] = educator_info['photo'].url
-    #
-    # test_result = {
-    #     'educator_info': educator_info,
-    #     'educator_accounts': list(educator_accounts.values()),
-    #     'review_items': list(review_items.values())
-    # }
-    # return JsonResponse(test_result, safe=False)

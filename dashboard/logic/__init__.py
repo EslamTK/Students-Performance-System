@@ -4,10 +4,10 @@ from .general_logic import GeneralLogic
 from .student_logic import StudentLogic
 from .user_logic import UserLogic
 
-user = UserLogic()
+user_logic = UserLogic()
 general = GeneralLogic()
 student = StudentLogic()
 educator = EducatorLogic()
 administrator = AdministratorLogic(student=student)
 
-__all__ = ['general', 'student', 'educator', 'administrator', 'user']
+__all__ = ['general', 'student', 'educator', 'administrator', 'user_logic']

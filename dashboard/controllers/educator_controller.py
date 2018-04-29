@@ -1,4 +1,4 @@
-from django.contrib.auth import authenticate
+from django.contrib.auth.decorators import user_passes_test
 from django.core.exceptions import ObjectDoesNotExist
 from django.db import IntegrityError
 from django.http import JsonResponse, HttpResponse, \
@@ -10,12 +10,15 @@ from django.views.decorators.http import require_GET, require_POST, require_http
 from dashboard.forms.educator_advice_form import EducatorAdviceForm
 from dashboard.logic import *
 
-user = authenticate(username='educator', password='3$81jkjjSA')
+
+def is_educator(user):
+    return user.groups.filter(name='educators').exists()
 
 
+@user_passes_test(is_educator)
 @require_GET
 def index(request):
-
+    user = request.user
     # Educator Reviews Rating
     educator_rating = educator.get_educator_rating(educator_id=user.id)
 
@@ -37,18 +40,12 @@ def index(request):
     }
 
     return render(request, 'educator/index.html', result)
-    # For Testing Only
-    # test_result = {
-    #     'educator_reviews': list(educator_reviews),
-    #     'educator_rating': list(educator_rating),
-    #     'educator_reviews_years': list(educator_reviews_years),
-    #     'educator_reviews_departments': list(educator_reviews_departments)
-    # }
-    # return JsonResponse(test_result, safe=False)
 
 
+@user_passes_test(is_educator)
 @require_GET
 def get_educator_rating(request):
+    user = request.user
     # Getting the department
     department_id = request.GET.get('department_id')
 
@@ -69,8 +66,10 @@ def get_educator_rating(request):
     return JsonResponse(result)
 
 
+@user_passes_test(is_educator)
 @require_GET
 def get_educator_reviews(request):
+    user = request.user
     # Getting the page number
     page = request.GET.get('page')
 
@@ -89,17 +88,11 @@ def get_educator_reviews(request):
 
     return render_to_response(template, result, content_type=RequestContext(request))
 
-    # For Testing Only
-    # test_result = {
-    #     'educator_reviews': list(educator_reviews),
-    #     'educator_reviews_num_pages': educator_reviews_num_pages
-    # }
-    #
-    # return JsonResponse(test_result)
 
-
+@user_passes_test(is_educator)
 @require_http_methods(['GET', 'POST'])
 def student_profile(request, student_id):
+    user = request.user
     # Educator Advice Form Submission
     if request.method == 'POST':
 
@@ -142,19 +135,11 @@ def student_profile(request, student_id):
 
     return render(request, 'educator/student_profile.html', result)
 
-    # For Testing Only
-    # test_result = {
-    #     'student_predictions': predictions,
-    #     'years': list(years.values()),
-    #     'terms': list(terms.values()),
-    #     'student_advices': list(student_advices.values())
-    # }
-    #
-    # return JsonResponse(test_result, safe=False)
 
-
+@user_passes_test(is_educator)
 @require_GET
 def educator_students(request):
+    user = request.user
     # Educator Students
     students, students_num_pages = educator.get_educator_students(educator_id=user.id)
 
@@ -181,20 +166,11 @@ def educator_students(request):
 
     return render(request, 'educator/students.html', result)
 
-    # For Testing Only
-    # test_result = {
-    #     'educator_students': list(students),
-    #     'departments': list(departments.values()),
-    #     'years': list(years.values()),
-    #     'terms': list(terms.values()),
-    #     'courses_counts': list(courses_counts)
-    # }
-    #
-    # return JsonResponse(test_result, safe=False)
 
-
+@user_passes_test(is_educator)
 @require_GET
 def get_educator_courses_counts(request):
+    user = request.user
     # Getting the department
     department_id = request.GET.get('department_id')
 
@@ -215,8 +191,10 @@ def get_educator_courses_counts(request):
     return JsonResponse(result)
 
 
+@user_passes_test(is_educator)
 @require_GET
 def get_educator_students(request):
+    user = request.user
     # Getting the page number
     page = request.GET.get('page')
 
@@ -239,17 +217,11 @@ def get_educator_students(request):
     template = 'educator/students_pagination.html'
     return render_to_response(template, result, content_type=RequestContext(request))
 
-    # For Testing Only
-    # test_result = {
-    #     'educator_students': list(students),
-    #     'educator_students_num_pages': students_num_pages
-    # }
-    #
-    # return JsonResponse(test_result)
 
-
+@user_passes_test(is_educator)
 @require_POST
 def add_review_report(request):
+    user = request.user
     # Getting the review id
     review_id = request.POST.get('review_id')
 

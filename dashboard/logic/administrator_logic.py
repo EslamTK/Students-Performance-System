@@ -1,4 +1,5 @@
 from django.contrib.auth.forms import UserCreationForm
+from django.db import transaction
 
 from dashboard.forms.educator_form import EducatorForm
 from dashboard.forms.student_course_form import StudentCourseFormsetInitializer
@@ -87,6 +88,7 @@ class AdministratorLogic(Logic):
 
         return educator_form
 
+    @transaction.atomic
     def update_educator(self, educator_id, educator_form, accounts_formset):
 
         educator_form.save()
@@ -100,9 +102,13 @@ class AdministratorLogic(Logic):
         for instance in accounts_formset.deleted_objects:
             instance.delete()
 
+    @transaction.atomic
     def add_educator(self, user_form, educator_form, accounts_formset):
 
         user = user_form.save()
+
+        educators_group = self._unit_of_work.groups.get_group_by_name(name='educators')
+        user.groups.add(educators_group)
 
         educator = educator_form.save(commit=False)
         educator.user_id = user.id
@@ -113,6 +119,8 @@ class AdministratorLogic(Logic):
         for instance in instances:
             instance.educator_id = user.id
             instance.save()
+
+        return user.id
 
     def get_student_form(self, student_id=None, request_data=None):
 
@@ -128,9 +136,13 @@ class AdministratorLogic(Logic):
     def update_student(self, student_form):
         student_form.save()
 
+    @transaction.atomic
     def add_student(self, user_form, student_form):
 
         user = user_form.save()
+
+        students_group = self._unit_of_work.groups.get_group_by_name(name='students')
+        user.groups.add(students_group)
 
         student = student_form.save(commit=False)
         student.user_id = user.id
@@ -156,6 +168,7 @@ class AdministratorLogic(Logic):
 
         return course_formset_initialize.courses_formset
 
+    @transaction.atomic
     def update_student_courses(self, course_formset, student_id):
 
         instances = course_formset.save(commit=False)
