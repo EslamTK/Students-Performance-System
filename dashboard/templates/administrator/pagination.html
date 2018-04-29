@@ -9,7 +9,7 @@
     <tbody>
     {% for student in students %}
         <tr>
-            <td><a href="{% url 'dashboard:administrator_student_profile' student.user_id %}"
+            <td><a href="{% url 'dashboard:administrator_student_update' student.user_id %}"
                    target="_blank">{{ student.name }}</a>
             </td>
             <td>{{ student.department__name }}</td>

@@ -103,7 +103,7 @@ def student_courses(request):
         'student_courses': courses,
         'student_courses_num_pages': courses_num_pages
     }
-    print(result)
+
     return render(request, 'student/courses.html', result)
 
     # For Testing Only

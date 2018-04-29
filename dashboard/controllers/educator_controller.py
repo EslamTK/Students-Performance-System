@@ -139,7 +139,6 @@ def student_profile(request, student_id):
         'student_advices': student_advices,
         'student_advices_num_pages': student_advices_num_pages
     }
-    print(result)
 
     return render(request, 'educator/student_profile.html', result)
 

@@ -51,14 +51,21 @@
                                 <p class="font-weight-bold text-danger">{{ error }}</p>
                             {% endfor %}
 
+                            <div class="text-center">
+                                <button type="submit" class="center-block btn btn-primary px-4">Login</button>
+                            </div>
+
+                            {% comment %}
                             <div class="row">
                                 <div class="col-6">
                                     <button type="submit" class="btn btn-primary px-4">Login</button>
                                 </div>
+
                                 <div class="col-6 text-right">
                                     <button type="button" class="btn btn-link px-0">Forgot password?</button>
                                 </div>
-                            </div>
+                                </div>
+                            {% endcomment %}
                         </form>
                     </div>
                 </div>

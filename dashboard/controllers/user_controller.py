@@ -1,7 +1,7 @@
 from django.contrib import auth
 from django.http import HttpResponse
 from django.shortcuts import render, redirect
-from django.views.decorators.http import require_GET, require_http_methods
+from django.views.decorators.http import require_POST, require_http_methods
 
 from dashboard.logic import *
 
@@ -29,7 +29,7 @@ def login(request):
     return render(request, 'login.html', result)
 
 
-@require_GET
+@require_POST
 def logout(request):
     auth.logout(request)
 
