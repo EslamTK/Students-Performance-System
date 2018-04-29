@@ -18,16 +18,16 @@
             </div>
             <div class="card-body">
                 <div class="row">
+                        <div class="col-md-4">
+                    
+                        <div class="dropdown">
+                                <select class="form-control" id="year-selector" onchange="choice1(this)">
+                                    <option>Year</option>
+                                    {% for year in years %}
+                                    <option value="{{ year.name }}" id="year_{{ forloop.counter }}">{{ year.name }}</option>
+                                    {% endfor %}
+                                    </select>
 
-                    <div class="input-group-btn col-md-6">
-                        <button type="button" class="btn btn-light dropdown-toggle"
-                                data-toggle="dropdown">Year
-                            <span class="caret"></span>
-                        </button>
-                        <div class="dropdown-menu">
-                            {% for year in years %}
-                                <a class="dropdown-item" href="#" value="{{ year.name }}">{{ year.name }}</a>
-                            {% endfor %}
                             
                         </div>
                     </div>

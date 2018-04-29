@@ -4,10 +4,10 @@
 <div class="form-group">
     <div class ="row">
 {% for stu in student_form %}
-        {{ stu.errors }}
+        
+
         {%if stu.name == "name"%}
-            <div class="col-md-4">
-                
+            <div class="col-md-4">        
         {%elif stu.name == "father_job"%}
             <div class="col-md-4">
         {%endif%}
@@ -19,7 +19,12 @@
             </div>
         {%elif stu.name == "has_relationship"%}
             </div>
-        {%endif%}  
+        {%endif%}
+        {% for error in stu.errors %}
+        <div class="alert alert-danger">
+            <strong>{{ error}}</strong>
+        </div>
+        {% endfor %}
 {% endfor %}
 </div>
 <div class="col-md-12 text-center"> 

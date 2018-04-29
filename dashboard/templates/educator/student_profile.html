@@ -10,6 +10,8 @@
 </script>
     <input type="hidden" id="myVar" name="variable" readonly value="{{ student_predictions.courses }}">
     <input type="hidden" id="" name="variable" readonly value="{{ student_advices_num_pages }}">
+    <input type="hidden" id="student_id" name="variable" readonly value="{{ student_id }}">
+
 <main class="animated fadeIn row">
         <div class="col-md-12">
             <div class="card" style="margin-top: 10px">
@@ -18,16 +20,16 @@
                 </div>
                 <div class="card-body">
                     <div class="row">
-        
-                        <div class="input-group-btn col-md-6">
-                            <button type="button" class="btn btn-light dropdown-toggle"
-                                    data-toggle="dropdown">Year
-                                <span class="caret"></span>
-                            </button>
-                            <div class="dropdown-menu">
-                                {% for year in years %}
-                                    <a class="dropdown-item" href="#" value="{{year.name}}">{{ year.name }}</a>
-                                {% endfor %}
+                        <div class="row col-md-3">
+                            <div class="col-md-4">
+                                <div class="dropdown">
+                                    <select class="form-control" id="year-selector" onchange="choice1(this)">
+                                        <option>Year</option>
+                                        {% for year in years %}
+                                            <option value="{{ year.name }}" id="year_{{ forloop.counter }}">{{ year.name }}</option>
+                                        {% endfor %}
+                                    </select>
+                                </div>
                             </div>
                         </div>
         

@@ -1,5 +1,7 @@
 {% load widget_tweaks %}
-<div class="card-body">
+<div class="card-body" id ="courses_form">
+        <form id="student_courses" METHOD="POST">
+                {% csrf_token %}
         <table class="table table-striped table-bordered table-hover table-condensed">
             <thead>
             <tr>
@@ -16,7 +18,7 @@
             </tr>
             </thead>
             <tbody>
-                <form id="student_courses" METHOD="POST">
+                
                     {% csrf_token %}
                     {{ courses_formset.management_form }}
                     {% for course_form in courses_formset %}
@@ -38,9 +40,15 @@
                         </div>
                     </td>
                     {%endif%}
+                    {% for error in course.errors %}
+                    <div class="alert alert-danger">
+                        <strong>{{ error|escape }}  ({{course.name}})</strong>
+                    </div>
+                {% endfor %}
                     
                     {%endfor%}
                 </tr>
+                
                     {%endfor%}
                 
                 </tbody>

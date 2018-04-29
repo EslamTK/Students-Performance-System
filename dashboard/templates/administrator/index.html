@@ -17,26 +17,33 @@
             </div>
             <div class="card-body">
                 <div class="row">
-
-                        <div>  <button type="button" class="btn btn-light dropdown-toggle"
-                            data-toggle="dropdown" style="color:rgba(41,54,61,1);font-size: 16px;font-weight: bold;font-variant: small-caps;">Year
-                        <div class="dropdown-menu" >
-                            {% for year in years %}
-                                <li><a class="dropdown-item" href="#" value = "{{year.name}}">{{ year.name }}</a></li>
-                            {% endfor %}
+                    <div class="row col-md-9">
+                        <div class="col-md-2">
+                            <div class="dropdown">
+                                <select class="form-control" id="year-selector" onchange="choice1(this)">
+                                    <option>Year</option>
+                                    {% for year in years %}
+                                        <option value="{{ year.name }}" id="year_{{ forloop.counter }}">{{ year.name }}</option>
+                                    {% endfor %}
+                                </select>
+                            </div>
                         </div>
-                    </button></div>
+                    
 
-                    <div><button type="button" class="btn btn-light dropdown-toggle"
-                              data-toggle="dropdown" style="color:rgba(41,54,61,1);font-size: 16px;font-weight: bold;font-variant: small-caps;">Department
-                              <div class="dropdown-menu" >
-                                  {% for dep in departments %}
-                                      <li><a class="dropdown-item" href="#" value ="{{dep.id}}">{{ dep.name }}</a></li>
-                                  {% endfor %}
-                              </div>
-                      </button></div>
+                        <div class="col-md-2">
+                                <div class="dropdown">
+                                    <select class="form-control" id="year-selector" onchange="choice1(this)">
+                                        <option>Department</option>
+                                        {% for dep in departments %}
+                                            <option value="{{ dep.id }}" id="dep_{{ forloop.counter }}">{{ dep.name }}</option>
+                                        {% endfor %}
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+                    
 
-                    <div class="col-md-6">
+                    <div class="col-md-3">
                         <div class="btn-toolbar float-right" role="toolbar"
                              aria-label="Toolbar with button groups">
                             <div class="btn-group mr-3" data-toggle="buttons"
