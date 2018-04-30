@@ -9,7 +9,7 @@
     <tbody>
     {% for student in students %}
         <tr>
-            <td><a href="{% url 'dashboard:administrator_student_profile' student.user_id %}"
+            <td><a href="{% url 'dashboard:administrator_student_update' student.user_id %}"
                    target="_blank">{{ student.name }}</a>
             </td>
             <td>{{ student.department__name }}</td>
@@ -19,13 +19,21 @@
     </tbody>
 </table>
 <ul class="pagination" style="margin-top: 25px">
+    {% if students.has_previous %}
+        <li><a id="{{students.previous_page_number}}" href="#"  onclick="loadResults(event)">Prev</a></li>
+    {% else %}
+        <li class="page-item disabled"><span>Prev</span></li>
+    {% endif %}
     {% with ''|center:students_num_pages as range %}
         {% for i in range %}
-            <li class="page-item ">
             <li class="page-item "><a id="lis_{{ forloop.counter }}" class="page-link" href="#"
                                       onclick="loadPage(event)">{{ forloop.counter }}</a></li>
-            </li>
         {% endfor %}
     {% endwith %}
+    {% if students.has_next %}
+        <li><a id="{{students.next_page_number}}" href="#"  onclick="loadResults(event)">Next</a></li>
+    {% else %}
+        <li class="page-item disabled"><span>Next</span></li>
+    {% endif %}
 
 </ul>

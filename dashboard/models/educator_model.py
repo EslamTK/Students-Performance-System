@@ -11,3 +11,6 @@ class Educator(models.Model):
     email = models.EmailField()
     photo = models.ImageField(upload_to=get_path_with_time_now)
     about_me = models.TextField()
+
+    def __str__(self):
+        return self.name

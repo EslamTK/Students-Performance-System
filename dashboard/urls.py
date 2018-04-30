@@ -1,15 +1,24 @@
 from django.urls import path
 
-from dashboard.controllers import forms_testing
-from dashboard.controllers import student_controller, educator_controller, administrator_controller
+# from dashboard.controllers import forms_testing
+from dashboard.controllers import user_controller, student_controller, \
+    educator_controller, administrator_controller
 
 app_name = 'dashboard'
 
 urlpatterns = [
 
-    path('form/',
-         forms_testing.index,
-         name='form'),
+    # path('form/',
+    #      forms_testing.index,
+    #      name='form'),
+
+    path('login/',
+         user_controller.login,
+         name='user_login'),
+
+    path('logout/',
+         user_controller.logout,
+         name='user_logout'),
 
     path('student/',
          student_controller.index,
@@ -81,9 +90,25 @@ urlpatterns = [
 
     path('administrator/student/<int:student_id>/',
          administrator_controller.student_profile,
-         name='administrator_student_profile'),
+         name='administrator_student_update'),
 
-    path('administrator/educators',
+    path('administrator/student/<int:student_id>/form/',
+         administrator_controller.student_form_handler,
+         name='administrator_student_update_form'),
+
+    path('administrator/student/add/',
+         administrator_controller.student_profile,
+         name='administrator_student_add'),
+
+    path('administrator/student/add/form/',
+         administrator_controller.student_form_handler,
+         name='administrator_student_add_form'),
+
+    path('administrator/student/<int:student_id>/courses/form/',
+         administrator_controller.student_courses_formset_handler,
+         name='administrator_student_courses_update_form'),
+
+    path('administrator/educators/',
          administrator_controller.educators,
          name='administrator_educators'),
 

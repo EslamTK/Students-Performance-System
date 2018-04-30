@@ -1,30 +1,12 @@
-{% extends 'base.html' %}
+{% extends 'educator/base.html' %}
 {% block title %}Student{% endblock %}
 {% block body %}
 {% load static %}
+{% load widget_tweaks %}
 
 <script>
     var requireJS = [];
     loadJS(requireJS, "{% static 'dashboard/views/charts.js'%}");
-</script>
-    <script>
-
-
-        function loadResults(event) {
-            page = document.getElementById(event.target.id).innerHTML;
-
-            $.ajax({
-                type: "GET",
-                url: "/dashboard/student_advices/?page=" + page,
-                success: function (data) {
-                    $('#advices').html(data);
-                },
-
-                error: function (response, error) {
-                    alert(response.responseText);
-                }
-            });
-        }
 </script>
     <input type="hidden" id="myVar" name="variable" readonly value="{{ student_predictions.courses }}">
     <input type="hidden" id="" name="variable" readonly value="{{ student_advices_num_pages }}">
@@ -44,7 +26,7 @@
                             </button>
                             <div class="dropdown-menu">
                                 {% for year in years %}
-                                    <a class="dropdown-item" href="#">{{ year.name }}</a>
+                                    <a class="dropdown-item" href="#" value="{{year.name}}">{{ year.name }}</a>
                                 {% endfor %}
                             </div>
                         </div>
@@ -60,7 +42,7 @@
                                         {% else %}
                                             <label class="btn btn-outline-secondary">
                                         {% endif %}
-                                    <input type="radio" name="options" id="option" +"{{ forloop.counter }}"
+                                    <input type="radio" name="options" value="{{term_id}}"
                                     > {{ term.name }}
                                     </label>
                                     {% endfor %}
@@ -80,23 +62,34 @@
                         <h3 class="card-title mb-0">Add Review</h3>
                       </div>
                       <div class="card-body">
+                          <form method="POST" >
+                              {%csrf_token%}
                         <div class="form-group">
                             <label for="comment">Review :</label>
-                            <textarea class="form-control" rows="5" id="comment"></textarea>
+                            {% for field in advice_form.visible_fields %}
+                            <div class="form-group">
+                               
+                                {{ field|add_class:'form-control' |attr:"rows:5"  }}
+                                {% for error in field.errors %}
+                                    <span class="help-block">{{ error }}</span>
+                                {% endfor %}
+                            </div>
+                            {% endfor %}
                         </div>
                         <div  class= "col-md-8 col-sm-12 " >
-                             <button type="button" class="btn btn-primary " >Submit</button>
+                             <button type="submit" class="btn btn-primary" >Submit</button>
                         </div>
+                        </form>
                       </div>
                     </div>
                   </div>
-                  <div class="col-md-12">
-                      <div class="card" style="margin-top: 10px">
+                  <div class="col-md-12" id="educator_advices">
+                      <div class="card" style="margin-top: 10px" >
                           <div class="card-header">
-                            <h3 class="card-title mb-0">Educators Reviews</h3>
-                        </div>
+                            <h3 class="card-title mb-0">Educators Advices</h3>
+                            </div>
 
-                          <div class="card-body" id="educator_advices">
+                          <div class="card-body" >
                               {% include './student_profile_pagination.html' %}
                           </div>
                       </div>
@@ -105,4 +98,31 @@
         
         
         </main>
+        <script>
+                document.getElementById("lis_1").parentElement.classList.add("active");
+                function loadResults(event){
+                    var id = event.target.id;
+                    page = document.getElementById(id).innerHTML;
+                    if(document.getElementById(id).parentElement.classList.contains("active") != true){
+                        if(isNaN(page)){
+                            page = id;
+                        }
+                        $.ajax({        
+                        type: "GET",
+                        url: "/dashboard/student_advices/?page="+page,
+                        success: function(data) {
+                            $('#educator_advices').html(data);
+                            if(isNaN(id) != true)
+                                id = "lis_"+id;
+                            document.getElementById(id).parentElement.classList.add("active");
+            
+                        },
+                
+                        error: function(response, error) {
+                            alert(response.responseText);  
+                        }
+                    });
+                }
+                }
+            </script>
 {% endblock %}        

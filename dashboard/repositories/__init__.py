@@ -4,6 +4,7 @@ from .department_repo import DepartmentRepo
 from .educator_account_repo import EducatorAccountRepo
 from .educator_advice_repo import EducatorAdviceRepo
 from .educator_repo import EducatorRepo
+from .group_repo import GroupRepo
 from .report_repo import ReportRepo
 from .review_item_repo import ReviewItemRepo
 from .student_course_repo import StudentCourseRepo

@@ -1,6 +1,9 @@
 from django.contrib.auth.forms import UserCreationForm
+from django.db import transaction
 
 from dashboard.forms.educator_form import EducatorForm
+from dashboard.forms.student_course_form import StudentCourseFormsetInitializer
+from dashboard.forms.student_form import StudentForm
 from .logic import Logic
 from .utilities import get_paginated_result_and_num_pages
 
@@ -50,7 +53,7 @@ class AdministratorLogic(Logic):
 
     def get_educator_form(self, educator_id=None, request_data=None, request_files=None):
 
-        educator, educator_accounts = None, self._unit_of_work.educators_accounts.get_none_accounts()
+        educator, educator_accounts = None, self._unit_of_work.educators_accounts.get_none()
 
         if educator_id:
             educator = self._unit_of_work.educators.get_one(educator_id)
@@ -85,6 +88,7 @@ class AdministratorLogic(Logic):
 
         return educator_form
 
+    @transaction.atomic
     def update_educator(self, educator_id, educator_form, accounts_formset):
 
         educator_form.save()
@@ -98,9 +102,13 @@ class AdministratorLogic(Logic):
         for instance in accounts_formset.deleted_objects:
             instance.delete()
 
+    @transaction.atomic
     def add_educator(self, user_form, educator_form, accounts_formset):
 
         user = user_form.save()
+
+        educators_group = self._unit_of_work.groups.get_group_by_name(name='educators')
+        user.groups.add(educators_group)
 
         educator = educator_form.save(commit=False)
         educator.user_id = user.id
@@ -111,3 +119,77 @@ class AdministratorLogic(Logic):
         for instance in instances:
             instance.educator_id = user.id
             instance.save()
+
+        return user.id
+
+    def get_student_form(self, student_id=None, request_data=None):
+
+        student = None
+
+        if student_id:
+            student = self._unit_of_work.students.get_one(student_id)
+
+        student_form = StudentForm(request_data, instance=student)
+
+        return student_form
+
+    def update_student(self, student_form):
+        student_form.save()
+
+    @transaction.atomic
+    def add_student(self, user_form, student_form):
+
+        user = user_form.save()
+
+        students_group = self._unit_of_work.groups.get_group_by_name(name='students')
+        user.groups.add(students_group)
+
+        student = student_form.save(commit=False)
+        student.user_id = user.id
+        student.save()
+
+        return user.id
+
+    def get_student_courses_formset(self, student_id=None, request_data=None):
+
+        student_courses, available_courses = self._unit_of_work.students_courses.get_none(), None
+
+        if student_id:
+
+            student_courses = self._unit_of_work.students_courses. \
+                get_student_courses(student=student_id)
+
+            available_courses = self._unit_of_work.courses. \
+                get_available_student_courses(student=student_id)
+
+        course_formset_initialize = StudentCourseFormsetInitializer(request_data=request_data,
+                                                                    student_courses=student_courses,
+                                                                    available_courses=available_courses)
+
+        return course_formset_initialize.courses_formset
+
+    @transaction.atomic
+    def update_student_courses(self, course_formset, student_id):
+
+        instances = course_formset.save(commit=False)
+
+        for instance in instances:
+            if instance.student_id is None:
+                instance.student_id = student_id
+                instance.educator_id = instance.course.educator_id
+            instance.save()
+
+        for instance in course_formset.deleted_objects:
+            instance.delete()
+
+    def get_reports(self, educator_id=None, is_closed=False):
+        reports = self._unit_of_work.reports.get_all(educator=educator_id,
+                                                     is_closed=is_closed)
+
+        return reports
+
+    def close_report(self, report_id):
+        self._unit_of_work.reports.set_closed(report_id=report_id)
+
+    def delete_review(self, review_id):
+        self._unit_of_work.students_reviews.delete(primary_key=review_id)

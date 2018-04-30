@@ -1,17 +1,20 @@
 import json
 
-from django.contrib.auth import authenticate
+from django.contrib.auth.decorators import user_passes_test
 from django.core.serializers.json import DjangoJSONEncoder
-from django.http import JsonResponse, HttpResponse
-from django.shortcuts import render, render_to_response
+from django.http import JsonResponse
+from django.shortcuts import render, render_to_response, redirect
 from django.template import RequestContext
-from django.views.decorators.http import require_GET, require_http_methods
+from django.views.decorators.http import require_GET, require_http_methods, require_POST
 
 from dashboard.logic import *
 
-user = authenticate(username='admin', password='a1$$m2IN12')
+
+def is_administrator(user):
+    return user.groups.filter(name='administrators').exists()
 
 
+@user_passes_test(is_administrator)
 @require_GET
 def index(request):
     # Departments
@@ -38,17 +41,10 @@ def index(request):
         'students_num_pages': students_num_pages
     }
 
-    # For Testing Only
-    # test_result = {
-    #     'departments': list(departments.values()),
-    #     'terms': list(terms.values()),
-    #     'years_counts': list(years_counts),
-    #     'students': list(students)
-    # }
-    # return JsonResponse(test_result, safe=False)
     return render(request, 'administrator/index.html', result)
 
 
+@user_passes_test(is_administrator)
 @require_GET
 def get_years_counts(request):
     # Getting the department
@@ -71,6 +67,7 @@ def get_years_counts(request):
     return JsonResponse(result)
 
 
+@user_passes_test(is_administrator)
 @require_GET
 def get_students(request):
     # Getting the page number
@@ -94,63 +91,78 @@ def get_students(request):
 
     return render_to_response(template, result, content_type=RequestContext(request))
 
-    # For Testing Only
-    # test_result = {
-    #     'students': list(students),
-    #     'students_num_pages': students_num_pages
-    # }
-    #
-    # return JsonResponse(test_result)
 
-
+@user_passes_test(is_administrator)
 @require_GET
-def student_profile(request, student_id):
-    # Student Data
-    student_data = student.get_student_data(student_id=student_id)
+def student_profile(request, student_id=None):
+    # User Form
+    user_form = None
 
-    # Departments
-    departments = general.get_departments()
+    # Courses Formset
+    courses_formset = None
 
-    # Years
-    years = general.get_years()
+    if student_id:
+        courses_formset = administrator.get_student_courses_formset(student_id=student_id)
+    else:
+        user_form = administrator.get_user_form()
 
-    # Available Courses For The Student Year
-    courses = administrator.get_available_student_courses(student_id=student_id)
-
-    # Student Courses
-    student_courses = student.get_student_courses(student_id=student_id)
+    # Student Form
+    student_form = administrator.get_student_form(student_id=student_id)
 
     result = {
-        'student': student_data,
-        'genders': student_data.gender_choices,
-        'jobs': student_data.job_choices,
-        'family_sizes': student_data.family_size_choices,
-        'parents_status': student_data.parent_status_choices,
-        'guardians': student_data.guardian_choices,
-        'departments': departments,
-        'years': years,
-        'student_courses': student_courses,
-        'courses': courses
+        'student_id': student_id,
+        'student_form': student_form,
+        'user_form': user_form,
+        'courses_formset': courses_formset
     }
 
     return render(request, 'administrator/admin_student_profile.html', result)
-    # For Testing Only
-    # test_result = {
-    #     'student': model_to_dict(student),
-    #     'genders': student.gender_choices,
-    #     'jobs': student.job_choices,
-    #     'family_sizes': student.family_size_choices,
-    #     'parents_status': student.parent_status_choices,
-    #     'guardians': student.guardian_choices,
-    #     'departments': list(departments.values()),
-    #     'years': list(years.values()),
-    #     'student_courses': list(student_courses.values()),
-    #     'courses': list(courses.values())
-    # }
-    #
-    # return JsonResponse(test_result, safe=False)
 
 
+@user_passes_test(is_administrator)
+@require_POST
+def student_form_handler(request, student_id=None):
+    user_form = None
+
+    student_form = administrator.get_student_form(request_data=request.POST,
+                                                  student_id=student_id)
+    if student_id:
+
+        if student_form.is_valid():
+            administrator.update_student(student_form)
+
+    else:
+        user_form = administrator.get_user_form(request_data=request.POST)
+
+        if user_form.is_valid() and student_form.is_valid():
+            student_id = administrator.add_student(user_form, student_form)
+
+            return redirect(to='dashboard:administrator_student_update',
+                            student_id=student_id)
+
+    result = {
+        'student_id': student_id,
+        'student_form': student_form,
+        'user_form': user_form
+    }
+
+
+@user_passes_test(is_administrator)
+@require_POST
+def student_courses_formset_handler(request, student_id):
+    courses_formset = administrator. \
+        get_student_courses_formset(request_data=request.POST, student_id=student_id)
+
+    if courses_formset.is_valid():
+        administrator.update_student_courses(course_formset=courses_formset,
+                                             student_id=student_id)
+    result = {
+        'student_id': student_id,
+        'courses_formset': courses_formset
+    }
+
+
+@user_passes_test(is_administrator)
 @require_GET
 def educators(request):
     # Departments
@@ -175,16 +187,9 @@ def educators(request):
     }
 
     return render(request, 'administrator/admin_educators.html', result)
-    # For Testing Only
-    # test_result = {
-    #     'departments': list(departments.values()),
-    #     'educators': list(educators_list),
-    #     'educators_rating': list(educators_rating)
-    # }
-    #
-    # return JsonResponse(test_result, safe=False)
 
 
+@user_passes_test(is_administrator)
 @require_GET
 def get_educators_rating(request):
     # Getting the department
@@ -203,6 +208,7 @@ def get_educators_rating(request):
     return JsonResponse(result)
 
 
+@user_passes_test(is_administrator)
 @require_GET
 def get_educators(request):
     # Getting the page number
@@ -226,15 +232,8 @@ def get_educators(request):
 
     return render_to_response(template, result, content_type=RequestContext(request))
 
-    # For Testing Only
-    # test_result = {
-    #     'educators': list(educators_list),
-    #     'educators_num_pages': educators_num_pages
-    # }
-    #
-    # return JsonResponse(test_result)
 
-
+@user_passes_test(is_administrator)
 @require_http_methods(['GET', 'POST'])
 def educator_profile(request, educator_id):
     # Educator profile and accounts forms
@@ -247,7 +246,8 @@ def educator_profile(request, educator_id):
         if educator_form.is_valid() and accounts_formset.is_valid():
             administrator.update_educator(educator_id=educator_id, educator_form=educator_form,
                                           accounts_formset=educator_form.accounts_formset)
-            return HttpResponse('Updated Successfully')
+            return redirect(to='dashboard:administrator_educator_profile',
+                            educator_id=educator_id)
     else:
         educator_form = administrator.get_educator_form(educator_id=educator_id)
         accounts_formset = educator_form.accounts_formset
@@ -265,6 +265,7 @@ def educator_profile(request, educator_id):
     educator_reviews, educator_reviews_num_pages = educator.get_educator_reviews(educator_id=educator_id)
 
     result = {
+        'educator_id': educator_id,
         'educator_form': educator_form,
         'educator_accounts_form': accounts_formset,
         'educator_reviews': educator_reviews,
@@ -275,33 +276,9 @@ def educator_profile(request, educator_id):
     }
 
     return render(request, 'administrator/admin_educator_profile.html', result)
-    # For Testing Only
-    # educator_info = model_to_dict(educator_info)
-    # educator_info['photo'] = educator_info['photo'].url
-    #
-    # educator_accounts = []
-    #
-    # for i in accounts:
-    #     account = {
-    #         'id': i.id,
-    #         'name': i.name,
-    #         'logo': i.logo.url,
-    #         'url': i.url
-    #     }
-    #     educator_accounts.append(account)
-    #
-    # test_result = {
-    #     'educator_info': educator_info,
-    #     'educator_accounts': educator_accounts,
-    #     'educator_reviews': list(educator_reviews),
-    #     'educator_rating': list(educator_rating),
-    #     'educator_reviews_years': list(educator_reviews_years),
-    #     'educator_reviews_departments': list(educator_reviews_departments)
-    # }
-    #
-    # return JsonResponse(test_result, safe=False)
 
 
+@user_passes_test(is_administrator)
 @require_http_methods(['GET', 'POST'])
 def add_educator(request):
     # Educator profile and accounts forms
@@ -314,10 +291,11 @@ def add_educator(request):
         accounts_formset = educator_form.accounts_formset
 
         if user_form.is_valid() and educator_form.is_valid() and accounts_formset.is_valid():
-            administrator.add_educator(user_form=user_form, educator_form=educator_form,
-                                       accounts_formset=accounts_formset)
+            educator_id = administrator.add_educator(user_form=user_form, educator_form=educator_form,
+                                                     accounts_formset=accounts_formset)
 
-            return HttpResponse('Added Successfully')
+            return redirect(to='dashboard:administrator_educator_profile',
+                            educator_id=educator_id)
     else:
         user_form = administrator.get_user_form()
         educator_form = administrator.get_educator_form()
@@ -329,4 +307,4 @@ def add_educator(request):
         'educator_accounts_form': accounts_formset
     }
 
-    return render(request, 'administrator/admin_educator_profile.html', result)
+    return render(request, 'administrator/admin_create_user.html', result)

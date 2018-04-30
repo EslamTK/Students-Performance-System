@@ -1,4 +1,4 @@
-{% extends 'base.html' %}
+{% extends 'administrator/base.html' %}
 {% block title %}Educator{% endblock %}
 {% block body %}
     {% load static %}
@@ -7,94 +7,12 @@
         var requireJS = [];
         loadJS(requireJS, "{% static 'dashboard/views/charts6.js'%}");
     </script>
-        <script>
-            function loadResults(event) {
-
-                page = document.getElementById(event.target.id).innerHTML;
-                $.ajax({
-                    type: "GET",
-                    url: "/dashboard/student_advices/?page=" + page,
-                    success: function (data) {
-                        $('#advices').html(data);
-                    },
-
-                    error: function (response, error) {
-                        alert(response.responseText);
-                    }
-                });
-            }
-        </script>
-    {% endblock %}
+    
+    {%endblock%}
     <input type="hidden" id="myData" name="variable" readonly value="{{ educator_rating }}">
     <main class="animated fadeIn">
-        <div class="col-md-12 ">
-            <div class="card " style="margin-top: 10px">
-                <div class="card-header ">
-                    <h3 class="card-title mb-0">My profile</h3>
-                </div>
-                <div class="card-body">
-                    <div class="row">
-                        <div class="col-md-4 card" style="margin-top: 10px">
-                            <div class=" text-center ">
-                                <img class="img-circle img-responsive"
-                                     src="{{ educator_info.photo }}"
-                                     alt="Generic placeholder image" width="150" height="150">
-                            </div>
-                            <div class="card-body" style="height: 50vh">
-                                <form class="col-sm-12">
-                                    <div class="input-group">
-                                        <input type="text" class="form-control" id="usr"
-                                               value="{{ educator_info.name }}">
-                                    </div>
-                                    <div class="input-group">
-                                        <input id="msg" type="text" class="form-control" name="msg"
-                                               value="{{ educator_info.title }}">
-                                    </div>
-                                    <div class="input-group">
-                                        <i class="glyphicon glyphicon-user"></i></span>
-                                        <input id="Email" type="text" class="form-control" name="email"
-                                               value="{{ educator_info.email }}">
-                                    </div>
-                                    <div class="col-md-12 social-icons margin: 0 2px 0 5px;" style="margin-top: 30px">
-                                        <div class="row">
-                                            {% for acc in educator_accounts %}
-                                                <a href="{{ acc.url }}"
-                                                   style="margin: 0 5px 0 5px; margin-top: 5px"><span
-                                                        class="col-md-2 btn"><img src='{{ acc.logo }}'></span></a>
-                                                <span class="col-md-10"><input id="Email" type="text"
-                                                                               class="form-control" name="email"
-                                                                               value="{{ acc.url }}"></span>
-                                                <br><br>
-                                            {% endfor %}
-                                        </div>
-                                    </div>
-                                </form>
-
-                            </div>
-
-                        </div>
-                        <div class="col-md-8 card" style="margin-top: 10px">
-                            <br><br><br><br><br><br>
-                            <lable class="col-md-12 h4" style="color:rgb(26,99,115);">About Him
-                                <textarea class="form-control " rows="10"
-                                          id="comment">{{ educator_info.about_me }}</textarea>
-                            </lable>
-
-
-                        </div>
-
-                    </div>
-                    <div class="container">
-                        <div class="row col-md-12">
-                            <div class="col-md-5"></div>
-                            <div class=col-md-6>
-                                <button type="button" class="btn btn-success">Save Change</button>
-                                <button type="button" class="btn btn-success">Cancel</button>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
+            {%include './admin_educator_profile_form.html'%}
+                   
 
             <div class="card" style="margin-top: 10px">
                 <div class="card-header">
@@ -102,34 +20,40 @@
                 </div>
                 <div class="card-body">
                     <div class="row">
+
                         <div class="dropdown">
-                            <button type="button" class="btn btn-light dropdown-toggle"
-                                    data-toggle="dropdown">year
-                                <span class="caret"></span>
-                            </button>
-                            <div class="dropdown-menu">
+                            <select class="form-control" id="year-selector" onchange="choice1(this)">
+
+                                <option>Year</option>
+
                                 {% for year in educator_reviews_years %}
-                                    <a class="dropdown-item" href="#">{{ year.year }}</a>
+
+                                    <option value="{{ year.year }}" id="year_{{ forloop.counter }}">
+                                        {{ year.year }}
+                                    </option>
+
                                 {% endfor %}
-                            </div>
+
+                            </select>
                         </div>
+
                         <div class="dropdown">
+                            <select class="form-control" id="department-selector" onchange="choice1(this)">
 
+                                <option>Department</option>
 
-                            <button type="button" class="btn btn-light dropdown-toggle"
-                                    data-toggle="dropdown">Department
-                                <span class="caret"></span>
-                            </button>
-                            <div class="dropdown-menu">
-                                <div class="dropdown-menu">
-                                    {% for dep in educator_reviews_departments %}
-                                        <li><a class="dropdown-item" href="#">{{ dep.student__department__name }}</a>
-                                        </li>
-                                    {% endfor %}
-                                </div>
+                                {% for dep in educator_reviews_departments %}
 
-                            </div>
+                                    <option value="{{ dep.student__department }}"
+                                            id="dep_{{ forloop.counter }}">
+                                        {{ dep.student__department__name }}
+                                    </option>
+
+                                {% endfor %}
+
+                            </select>
                         </div>
+
                         <div class="col-md-6">
                             <div class="btn-toolbar float-right" role="toolbar"
                                  aria-label="Toolbar with button groups">
@@ -160,6 +84,34 @@
 
 
     </main>
+    <script>
+        document.getElementById("lis_1").parentElement.classList.add("active");
+        function loadResults(event){
+            var id = event.target.id;
+            if(document.getElementById(id).parentElement.classList.contains("active") != true){
+                
+            page = document.getElementById(id).innerHTML;   
+            if(isNaN(page)){
+                page = id;
+            }         
+            $.ajax({                    
+                type: "GET",            
+                url: "/dashboard/educator_reviews/?page="+page,            
+                success: function(data) {            
+                    $('#educator_reviews').html(data);
+                    if(isNaN(id) != true)
+                        id = "lis_"+id;
+                    document.getElementById(id).parentElement.classList.add("active");
+                },            
+                
+                error: function(response, error) {
+                    alert("something");            
+                    alert(response.responseText);              
+                }            
+                });        
+            }       
+        }             
+        </script>
 {% endblock %}
 
     

@@ -1,4 +1,4 @@
-{% extends 'base.html' %}
+{% extends 'administrator/base.html' %}
 {% block title %}Educator{% endblock %}
 {% block body %}
     {% load static %}
@@ -9,40 +9,7 @@
         var educatorsRatingData = {{ educators_rating|safe }};
         loadJS(requireJS, "{% static 'dashboard/views/charts5.js'%}");
     </script>
-    <script>
-
-        function loadResults(event) {
-            var key = document.getElementById("search_input").value;
-            page = document.getElementById(event.target.id).innerHTML;
-            $.ajax({
-                type: "GET",
-                url: "/dashboard/administrator_educators/?page=" + page + "&keyword=" + key,
-                success: function (data) {
-                    $('#search_results').html(data);
-                },
-
-                error: function (response, error) {
-                    alert(response.responseText);
-                }
-            });
-        }
-
-        function searchResults(e) {
-            var key = document.getElementById("search_input").value;
-            console.log(key);
-            $.ajax({
-                type: "GET",
-                url: "/dashboard/administrator_educators/?keyword=" + key,
-                success: function (data) {
-                    $('#search_results').html(data);
-                },
-
-                error: function (response, error) {
-                    alert(response.responseText);
-                }
-            });
-        }
-    </script>
+    
 
     <main class="animated fadeIn row">
 
@@ -53,19 +20,23 @@
             <div class="card-body">
                 <div class="row">
 
-                    <div class="input-group-btn col-md-6">
-                        <button type="button" class="btn btn-light dropdown-toggle"
-                                data-toggle="dropdown">Department
-                            <span class="caret"></span>
-                        </button>
-                        <div class="dropdown-menu">
-
-                            {% for dep in departments %}
-                                    <li><a class="dropdown-item" href="#">{{ dep.name }}</a></li>
-                                {% endfor %}
-
+                        <div>  <button type="button" class="btn btn-light dropdown-toggle"
+                            data-toggle="dropdown" style="color:rgba(41,54,61,1);font-size: 16px;font-weight: bold;font-variant: small-caps;">Year
+                        <div class="dropdown-menu" >
+                            {% for year in years %}
+                                <li><a class="dropdown-item" href="#" value = "{{year.name}}">{{ year.name }}</a></li>
+                            {% endfor %}
                         </div>
-                    </div>
+                    </button></div>
+
+                    <div><button type="button" class="btn btn-light dropdown-toggle"
+                              data-toggle="dropdown" style="color:rgba(41,54,61,1);font-size: 16px;font-weight: bold;font-variant: small-caps;">Department
+                              <div class="dropdown-menu" >
+                                  {% for dep in departments %}
+                                      <li><a class="dropdown-item" href="#" value ="{{dep.id}}">{{ dep.name }}</a></li>
+                                  {% endfor %}
+                              </div>
+                      </button></div>
 
                     <div class="col-md-6">
                         <div class="btn-toolbar float-right" role="toolbar"
@@ -91,7 +62,7 @@
                     <div class="row">
                         <div class="col-md-8 col-sm-12">
                             <h3 class="card-title mb-0">Educators
-                                <button type="button" class="btn btn-info">Add</button>
+                                <a href="{%url 'dashboard:administrator_add_educator'%}" type="button" class="btn btn-info">Add</a>
                             </h3>
                         </div>
 
@@ -100,7 +71,7 @@
                                    name="input1-group2"
                                    class="form-control" placeholder="Educator Name">
                             <span class=" input-group-btn ">
-                        <button type="button" class="btn btn-primary " onclick="searchResults()"><i
+                        <button type="button" class="btn btn-primary " id = "search_btn"><i
                                 class="fa fa-search"></i></button>
                       </span>
 
@@ -114,4 +85,68 @@
         </div>
         </div>
     </main>
+    <script>
+        var search_val = "";
+        document.getElementById("lis_1").parentElement.classList.add("active");
+        function loadResults(event){
+            var id = event.target.id;
+            if(document.getElementById(id).parentElement.classList.contains("active") != true){
+            
+            page = document.getElementById(id).innerHTML;
+            if(isNaN(page)){
+                page = id;
+            }
+            url = "/dashboard/administrator_educators/?page="+page;
+                if(search_val != ""){
+                    url += "&keyword="+search_val;
+                }
+            $.ajax({        
+                type: "GET",
+                url: url,
+                success: function(data) {
+                    $('#search_results').html(data);
+                    if(isNaN(id) != true)
+                        id = "lis_"+id;
+                    document.getElementById(id).parentElement.classList.add("active");
+                },            
+                error: function(response, error) {
+                    alert(response.responseText);  
+                }
+               });
+        }
+    }
+    function searchResults(e){
+        search_val = $("#search_input").val();
+        $.ajax({        
+            type: "GET",
+            url: "/dashboard/administrator_educators/?keyword="+search_val,
+            success: function(data) {
+                $('#search_results').html(data);
+                document.getElementById("lis_1").parentElement.classList.add("active");
+            },
+            error: function (response, error) {
+                alert(response.responseText);
+            }
+        });
+                    
+    }
+            $(document).ready(function(){
+                var input_val;
+                $("#search_btn").click(function(e){
+                    input_val = $("#search_input").val();
+                    if(input_val !== search_val){
+                        searchResults();
+                    }
+                });
+                $("#search_input").keypress(function(e){
+                    input_val = $("#search_input").val();
+                    if(input_val !== search_val){
+                        var key_pressed = e.which;
+                        if(key_pressed == 13){
+                            searchResults();
+                        }
+                    }
+                });
+            });
+    </script>
 {% endblock %}

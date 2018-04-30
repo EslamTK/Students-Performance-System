@@ -11,3 +11,6 @@ class Course(models.Model):
     term = models.ForeignKey(Term, on_delete=models.CASCADE)
     year = models.ForeignKey(Year, on_delete=models.CASCADE)
     is_active = models.BooleanField(default=True)
+
+    def __str__(self):
+        return self.name
