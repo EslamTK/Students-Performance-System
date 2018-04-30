@@ -10,15 +10,15 @@
     
     <input type="hidden" id="myData" name="variable" readonly value="{{ years_counts }}">
     <main class="animated fadeIn row">
-
+        <div class="col-md-12">
         <div class="card" style="margin-top: 10px">
             <div class="card-header">
                 <h3 class="card-title mb-0">Students Performance</h3>
             </div>
             <div class="card-body">
                 <div class="row">
-                    <div class="row col-md-9">
-                        <div class="col-md-2">
+                    <div class="row col-sm-9">
+                        <div class="col-xl-2 col-md-3">
                             <div class="dropdown">
                                 <select class="form-control" id="year-selector" onchange="choice1(this)">
                                     <option>Year</option>
@@ -30,7 +30,7 @@
                         </div>
                     
 
-                        <div class="col-md-2">
+                        <div class="col-xl-2 col-md-4">
                                 <div class="dropdown">
                                     <select class="form-control" id="year-selector" onchange="choice1(this)">
                                         <option>Department</option>
@@ -64,11 +64,12 @@
                     </div>
                 </div>
 
-                <div class="chart-wrapper" style="height: 70vh;width: 80vw;">
+                <div class="wrapper mx-auto" style="height: 80vh;width: 75vw;">
                     <canvas id="canvas-1" class="chart"
                             style="height: inherit;"></canvas>
                 </div>
             </div>
+        </div>
         </div>
 
         <div class="col-md-12">

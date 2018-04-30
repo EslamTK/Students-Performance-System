@@ -39,7 +39,7 @@
                     <img src="{{ acc_form.logo_url.value }}" width="25" height="25">          
                     {{ acc_form.id }}          
                     {{ acc_form.account }}          
-                    {{ acc_form.url}}          
+                    {% render_field acc_form.url class="form-control" placeholder=acc_form.url.label %}          
                     
                     <div class="mr-3" data-toggle="buttons">
                         <label class="btn btn-outline-danger">
@@ -79,6 +79,7 @@
                     </div>
                 </div>
             </div>
-        </div>
+        
     </form>
+</div>
         

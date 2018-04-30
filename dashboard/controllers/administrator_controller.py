@@ -92,7 +92,7 @@ def get_students(request):
     }
     template = 'administrator/pagination.html'
 
-    return render_to_response(template, result, content_type=RequestContext(request))
+    return render(request, template, result)
 
     # For Testing Only
     # test_result = {
@@ -155,7 +155,7 @@ def student_form_handler(request, student_id=None):
         'user_form': user_form
     }
     template = 'administrator/add_student_form.html'
-    return render_to_response(template, result, content_type=RequestContext(request))
+    return render(request, template, result)
 
 
 
@@ -172,8 +172,7 @@ def student_courses_formset_handler(request, student_id):
         'courses_formset': courses_formset
     }
     template = 'administrator/courses_form.html'
-    return render_to_response(template, result, content_type=RequestContext(request))
-
+    return render(request, template, result)
 
 @require_GET
 def educators(request):

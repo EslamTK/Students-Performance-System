@@ -12,69 +12,94 @@
                 <div class="card-body">
                     <div class="container form-group">
                         {% if student_id %}
-                            <form id="student_profile" METHOD="POST" >
+                            <form id="student_profile" METHOD="POST">
                             {% csrf_token %}
                         {% else %}
-                            <form id="student_add" METHOD="POST" action="{% url 'dashboard:administrator_student_add_form' %} ">
+                            <form id="student_add" METHOD="POST"
+                                  action="{% url 'dashboard:administrator_student_add_form' %} ">
                             {% csrf_token %}
 
-                        {{ user_form.errors }}
-                        {%for user in user_form%}
-                        <label for="{{ user_for_label }}">{{ user.label }}</label>
-                            {%render_field user class="form-control" %}
-                        {%endfor%}
-                        
+                            {{ user_form.errors }}
+                            {% for user in user_form %}
+                                <label for="{{ user_for_label }}">{{ user.label }}</label>
+                                {% render_field user class="form-control" %}
+                            {% endfor %}
+
                         {% endif %}
-                        {%include './add_student_form.html'%}
+                        {% include 'administrator/add_student_form.html' %}
                     </div>
                 </div>
             </div>
-            {% if student_id %}
+        </div>
+        {% if student_id %}
             <div class="card" style="margin-top: 10px">
-                <div class="card-header">
-                    <div class="row">
-                        <div class="col-md-8">
-                        </div>
-                        <div class="col-md-1">
-                        </div>
-                        <div class="col-md-1">
-                        </div>
-                        <div class="col-md-1">
-                        </div>
-                        <div class="input-group col-md-1">
+            <div class="card-header">
+                <div class="row">
+                    <div class="col-md-8">
+                    </div>
+                    <div class="col-md-1">
+                    </div>
+                    <div class="col-md-1">
+                    </div>
+                    <div class="col-md-1">
+                    </div>
+                    <div class="input-group col-md-1">
                          <span class=" input-group-btn ">
        
                          <button type="button" class="btn btn-success "><i
                                  class="fa fa-plus"></i></button>
                          </span>
-                        </div>
                     </div>
                 </div>
-                
-                    {%include './courses_form.html'%}
-                
             </div>
-            {%endif%}
+
+            <form id="student_courses" METHOD="POST">
+                <div class="card-body">
+                    <table class="table table-striped table-bordered table-hover table-condensed">
+                        <thead>
+                        <tr>
+                            <th>Course</th>
+                            <th>Study Time</th>
+                            <th>Failures</th>
+                            <th>Absences</th>
+                            <th>Family Support</th>
+                            <th>Paid Class</th>
+                            <th>MidTerm Grade</th>
+                            <th>Final Grade</th>
+                            <th>Delete</th>
+                        </tr>
+                        </thead>
+                        <tbody id="courses_form_body">
+                        {% include 'administrator/courses_form.html' %}
+                        </tbody>
+                    </table>
+                    <div class="col-md-12 text-center">
+                        <button type="submit" class="btn btn-success" id="saveChange2">Save Change</button>
+                        <button type="button" class="btn btn-success" id="cancel2">Cancel</button>
+                    </div>
+                </div>
+            </form>
+        {% endif %}
         </div>
     </main>
     <script>
-        
-        {%if student_id%} 
+
+        {%if student_id%}
             $("#student_profile").ajaxForm({
-                    url: "{% url 'dashboard:administrator_student_update_form' student_id %}", 
-                    type: 'post', 
-                    success : function (response) {
-                        $("#student_form").html(response);
-                    }
-                });
-            $("#student_courses").ajaxForm({
-                url: "{% url 'dashboard:administrator_student_courses_update_form' student_id%}", 
+                url: "{% url 'dashboard:administrator_student_update_form' student_id %}",
                 type: 'post',
-                success : function (response) {
-                    $("#courses_form").html(response);
+                success: function (response) {
+                    $("#student_form").html(response);
+                }
+            });
+            $("#student_courses").ajaxForm({
+                url: "{% url 'dashboard:administrator_student_courses_update_form' student_id%}",
+                type: 'post',
+                success: function (response) {
+                    $("#courses_form_body").html(response);
                 }
             });
         {%endif%}
     </script>
 
-{% endblock %}        
+{% endblock %}
