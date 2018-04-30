@@ -1,0 +1,34 @@
+{% load widget_tweaks %}
+
+{% csrf_token %}
+{{ courses_formset.management_form }}
+{% for course_form in courses_formset %}
+    {{ course_form.id }}
+    <tr>
+        {% for course in course_form %}
+            {% if course.name != "id" %}
+                <td>
+                {% if course.name == "DELETE" %}
+
+                    <div class="mr-3" data-toggle="buttons">
+                        <label class="btn btn-outline-danger">
+                            {% render_field course type="checkbox" name="options" %}
+                            <b>Delete</b>
+                        </label>
+                    </div>
+                {% else %}
+                    <div class="form-group">
+                        {% render_field course class="form-control" %}
+                    </div>
+                {% endif %}
+            {% endif %}
+        {% for error in course.errors %}
+            <div class="alert alert-danger">
+                <strong>{{ error|escape }}</strong>
+            </div>
+        {% endfor %}
+        </td>
+        {% endfor %}
+    </tr>
+
+{% endfor %}

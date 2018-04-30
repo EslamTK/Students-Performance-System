@@ -11,28 +11,30 @@
 
     <input type="hidden" id="total" name="variable" readonly value="{{ student_courses_num_pages }}">
     <main class="animated fadeIn row">
-
+        <div class="col-md-12">
         <div class="card" style="margin-top: 10px">
             <div class="card-header">
                 <h3 class="card-title mb-0">Courses Performance</h3>
             </div>
             <div class="card-body">
                 <div class="row">
+                    <div class="row col-sm-9">
+                        <div class="col-xl-2 col-md-3">
+                    
+                        <div class="dropdown">
+                                <select class="form-control" id="year-selector" onchange="choice1(this)">
+                                    <option>Year</option>
+                                    {% for year in years %}
+                                    <option value="{{ year.name }}" id="year_{{ forloop.counter }}">{{ year.name }}</option>
+                                    {% endfor %}
+                                    </select>
 
-                    <div class="input-group-btn col-md-6">
-                        <button type="button" class="btn btn-light dropdown-toggle"
-                                data-toggle="dropdown">Year
-                            <span class="caret"></span>
-                        </button>
-                        <div class="dropdown-menu">
-                            {% for year in years %}
-                                <a class="dropdown-item" href="#" value="{{ year.name }}">{{ year.name }}</a>
-                            {% endfor %}
                             
                         </div>
                     </div>
+                    </div>
 
-                    <div class="col-md-6">
+                    <div class="col-md-3">
                         <div class="btn-toolbar float-right" role="toolbar"
                              aria-label="Toolbar with button groups">
                             <div class="btn-group mr-3" data-toggle="buttons"
@@ -52,11 +54,12 @@
                     </div>
                 </div>
 
-                <div class="chart-wrapper" style="height: 70vh;width: 80vw;">
+                <div class="wrapper mx-auto" style="height: 80vh;width: 75vw;">
                     <canvas id="canvas-1" class="chart"
                             style="height: inherit;"></canvas>
                 </div>
             </div>
+        </div>
         </div>
 
         <div class="col-md-12">
