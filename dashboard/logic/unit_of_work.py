@@ -17,3 +17,4 @@ class UnitOfWork:
         self.students_review_items = StudentReviewItemRepo()
         self.term = TermRepo()
         self.year = YearRepo()
+        self.groups = GroupRepo()
