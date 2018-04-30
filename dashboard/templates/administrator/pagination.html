@@ -22,7 +22,7 @@
     {% if students.has_previous %}
         <li><a id="{{students.previous_page_number}}" href="#"  onclick="loadResults(event)">Prev</a></li>
     {% else %}
-        <li class="page-item disabled"><span>Prev</span></li>
+        <li class="page-item disabled"><a>Prev</a></li>
     {% endif %}
     {% with ''|center:students_num_pages as range %}
         {% for i in range %}
@@ -33,7 +33,7 @@
     {% if students.has_next %}
         <li><a id="{{students.next_page_number}}" href="#"  onclick="loadResults(event)">Next</a></li>
     {% else %}
-        <li class="page-item disabled"><span>Next</span></li>
+        <li class="page-item disabled"><a>Next</a></li>
     {% endif %}
 
 </ul>

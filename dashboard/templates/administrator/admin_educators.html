@@ -12,31 +12,38 @@
     
 
     <main class="animated fadeIn row">
-
+        <div class="col-md-12">
         <div class="card" style="margin-top: 10px">
             <div class="card-header">
                 <h3 class="card-title mb-0">Educators Performance</h3>
             </div>
             <div class="card-body">
-                <div class="row">
-
-                        <div>  <button type="button" class="btn btn-light dropdown-toggle"
-                            data-toggle="dropdown" style="color:rgba(41,54,61,1);font-size: 16px;font-weight: bold;font-variant: small-caps;">Year
-                        <div class="dropdown-menu" >
-                            {% for year in years %}
-                                <li><a class="dropdown-item" href="#" value = "{{year.name}}">{{ year.name }}</a></li>
-                            {% endfor %}
-                        </div>
-                    </button></div>
-
-                    <div><button type="button" class="btn btn-light dropdown-toggle"
-                              data-toggle="dropdown" style="color:rgba(41,54,61,1);font-size: 16px;font-weight: bold;font-variant: small-caps;">Department
-                              <div class="dropdown-menu" >
-                                  {% for dep in departments %}
-                                      <li><a class="dropdown-item" href="#" value ="{{dep.id}}">{{ dep.name }}</a></li>
-                                  {% endfor %}
-                              </div>
-                      </button></div>
+                    <div class="row">
+                            <div class="row col-sm-9">
+                                <div class="col-xl-2 col-md-3">
+                                    <div class="dropdown">
+                                        <select class="form-control" id="year-selector" onchange="choice1(this)">
+                                            <option>Year</option>
+                                            {% for year in years %}
+                                                <option value="{{ year.name }}" id="year_{{ forloop.counter }}">{{ year.name }}</option>
+                                            {% endfor %}
+                                        </select>
+                                    </div>
+                                </div>
+                            
+    
+                                <div class="col-xl-2 col-md-4">
+                                        <div class="dropdown">
+                                            <select class="form-control" id="year-selector" onchange="choice1(this)">
+                                                <option>Department</option>
+                                                {% for dep in departments %}
+                                                    <option value="{{ dep.id }}" id="dep_{{ forloop.counter }}">{{ dep.name }}</option>
+                                                {% endfor %}
+                                            </select>
+                                        </div>
+                                    </div>
+    
+    </div></div>
 
                     <div class="col-md-6">
                         <div class="btn-toolbar float-right" role="toolbar"
@@ -49,12 +56,13 @@
                     </div>
                 </div>
 
-                <div class="chart-wrapper" style="height: 70vh;width: 80vw;">
+                <div class="wrapper mx-auto" style="height: 80vh;width: 75vw;">
                     <canvas id="canvas-1" class="chart"
                             style="height: inherit;"></canvas>
                 </div>
             </div>
         </div>
+    
 
         <div class="col-md-12">
             <div class="card" style="margin-top: 10px">
