@@ -1,4 +1,4 @@
-from .administrator_logic import AdministratorLogic
+from .administrator.administrator_logic import AdministratorLogic
 from .educator_logic import EducatorLogic
 from .general_logic import GeneralLogic
 from .student_logic import StudentLogic

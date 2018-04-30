@@ -16,12 +16,11 @@
             <div class="card" style="margin-top: 10px">
                 <div class="card-header">
                     <h3 class="card-title mb-0">Courses Performance</h3>
-                    <div class="small text-muted">First Term - 4th Year</div>
+                    <div class="small text-muted">{{ student_info.term__name }} - {{ student_info.year__name }}</div>
                 </div>
-                <div class="card-body" style="height: 60vh">
-                    <div class="chart-wrapper" style="height: inherit">
-                        <canvas id="canvas-1" class="chart"
-                                style="height: inherit;"></canvas>
+                <div class="card-body">
+                    <div class="chart-wrapper">
+                        <canvas id="canvas-1" class="chart"></canvas>
                     </div>
                 </div>
             </div>
@@ -31,8 +30,7 @@
                 <div class="card-header">
                     <h4 class="card-title mb-0">To Increase Your Performance</h4>
                 </div>
-                <div class="card-body" style="height: calc(70vh + 20px)">
-                    <h5>General recommendation:</h5>
+                <div class="card-body pre-scrollable" style="height: calc(70vh + 20px)">
                     <table class="table table-responsive-sm">
                         <tbody>
                         {% for rec_gen in student_recommendations.general_recommendations.0 %}
@@ -42,25 +40,23 @@
                         {% endfor %}
                         </tbody>
                     </table>
-                    <h5>course specific:</h5>
+                    {% for rec_co in student_recommendations.courses %}
+                        <h5 class="font-weight-bold">{{ rec_co.name }}:</h5>
                     <table class="table table-responsive-sm">
                         <tbody>
-                        {% for rec_co in student_recommendations.courses %}
+                        {% for rec in rec_co.recommendations %}
                             <tr>
-                                <th>{{ rec_co.name }}:</th>
-                                {% for rec in rec_co.recommendations %}
-                                    <td>{{ rec }}</td>
-                                {% endfor %}
+                                <td>{{ rec }}</td>
                             </tr>
                         {% endfor %}
                         </tbody>
                     </table>
+                    {% endfor %}
                 </div>
             </div>
         </div>
         <div class="col-md-12" id="advices">
-            {% include "./pagination.html" %}
-
+            {% include "student/pagination.html" %}
         </div>
     </main>
     <script>

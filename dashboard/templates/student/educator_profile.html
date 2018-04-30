@@ -14,8 +14,9 @@
                     <p><b>{{ educator_info.email }}</b></p>
                     <div class="social-icons">
                         {% for acc in educator_accounts %}
-                            <a href="{{ acc.url }}" style="margin: 0 2px 0 5px;"><span
-                                    class="btn-facebook"></span></a>
+                            <a href="{{ acc.url }}" style="margin: 0 2px 0 5px;">
+                                <img src="{{ acc.account.logo.url }}" width="25" height="25">
+                            </a>
                         {% endfor %}
                     </div>
                 </div>
@@ -33,16 +34,16 @@
 
             <div class="col-md-12 col-xs-12 card" style=" padding: 0;">
                 <div class=" card-header">
-                    <h4 class="card-title mb-0">Tell The Doctor Something</h4>
+                    <h4 class="card-title mb-0">Your Review</h4>
                 </div>
                 <div class="card-body">
                     <div class="container">
-                        <div class="row">
-                            <div class="col-sm-3"></div>
+                        <div class="row text-center">
+                            <div class="col-sm-2"></div>
 
-                            <label class="col-sm-2 h3">Bad</label>
-                            <label class="col-sm-2 h3">Good</label>
-                            <label class="h3">Excellent</label>
+                            <label class="col-sm-2 h3 center-block">Bad</label>
+                            <label class="col-sm-2 h3 center-block">Good</label>
+                            <label class="col-sm-2 h3 center-block">Excellent</label>
                         </div>
                     </div>
 
@@ -60,14 +61,16 @@
                                     {{ item.review_item }}
                             
                                     {{ item.name }}
-                                    <div class="col-sm-3 h4">
-                                            <label >{{ item.name.value }}</label>
+
+                                    <div class="row text-center">
+                                        <label class="h4 col-sm-2 text-left">{{ item.name.value }}</label>
+
+                                        {% for choice in item.rate %}
+                                            <div class="col-sm-2 center-block">
+                                                {{ choice }}
+                                            </div>
+                                        {% endfor %}
                                     </div>
-                                    
-                            
-                                    {% for choice in item.rate %}
-                                        {{choice}}
-                                    {% endfor %}
                             
                                     <br>
                                 {% endfor %}

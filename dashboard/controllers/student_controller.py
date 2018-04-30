@@ -18,6 +18,9 @@ def is_student(user):
 def index(request):
     user = request.user
 
+    # Student Year and Term
+    student_info = student.get_student_year_and_term(student_id=user.id)
+
     # Student Advices
     student_advices, student_advices_num_pages = student.get_student_advices(student_id=user.id)
 
@@ -28,6 +31,7 @@ def index(request):
     recommendations = student.get_student_recommendations(student_id=user.id)
 
     result = {
+        'student_info': student_info,
         'student_advices': student_advices,
         'student_advices_num_pages': student_advices_num_pages,
         'student_predictions': predictions,

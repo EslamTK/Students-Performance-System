@@ -8,6 +8,9 @@ from .utilities import convert_boolean_to_yes_no, get_paginated_result_and_num_p
 
 class StudentLogic(Logic):
 
+    def get_student_year_and_term(self, student_id):
+        return self._unit_of_work.students.get_year_and_term(student=student_id)
+
     def get_student_advices(self, student_id, page=1, page_size=4):
         advices = self._unit_of_work.educators_advices.get_student_advices(student=student_id)
 

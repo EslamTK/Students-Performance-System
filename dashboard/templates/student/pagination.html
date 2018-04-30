@@ -4,12 +4,12 @@
     </div>
     <div class="card-body">
         {% for advice in student_advices %}
-            <div class="media mb-4">
+            <div class="media">
                 <img class="d-flex mr-3 rounded-circle" id="img_{{ forloop.counter }}"
                      src="{{ advice.educator.photo.url }}" width="50" height="50"
                      alt="">
                 <div class="media-body">
-                    <h5 class="mt-0" style="margin-bottom: 2px;"><a
+                    <h5 class="mt-0"><a
                             target="_blank"
                             id="a_{{ forloop.counter }}"
                             href="{% url 'dashboard:student_educator_profile' advice.educator_id %}">{{ advice.educator.name }}</a>
@@ -17,6 +17,7 @@
                     <p id="cont_{{ forloop.counter }}">{{ advice.content }}</p>
                 </div>
             </div>
+            <hr style="margin-top: 0; border-width: 1.5px;"/>
         {% endfor %}
 
         <ul class="pagination" style="margin-top: 25px">

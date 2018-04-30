@@ -6,6 +6,9 @@ class StudentRepo(Repo):
     def __init__(self):
         super().__init__(Student)
 
+    def get_year_and_term(self, student):
+        return self._model.objects.values('year', 'year__name', 'term', 'term__name').get(pk=student)
+
     def get_all(self, keyword=None):
         filters = {}
 
