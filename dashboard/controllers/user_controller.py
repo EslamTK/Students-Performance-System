@@ -1,5 +1,5 @@
 from django.contrib import auth
-from django.http import HttpResponseRedirect
+from django.http import HttpResponseRedirect, HttpResponseForbidden
 from django.shortcuts import render, redirect
 from django.views.decorators.http import require_POST, require_http_methods
 
@@ -50,5 +50,7 @@ def redirect_user(user, next_url=None):
         return redirect(to='dashboard:student_index')
     elif user_group == 'educators':
         return redirect(to='dashboard:educator_index')
-    else:
+    elif user_group == 'administrators':
         return redirect(to='dashboard:administrator_index')
+    else:
+        return HttpResponseForbidden()

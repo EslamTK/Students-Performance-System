@@ -126,7 +126,10 @@ urlpatterns = [
          
     path('administrator/educator/<int:educator_id>/',
          administrator_controller.educator_profile,
-         name='administrator_educator_profile')
+         name='administrator_educator_profile'),
 
+    path('administrator/educator/<int:educator_id>/reviews/',
+         administrator_controller.get_educator_reviews,
+         name='administrator_educator_reviews_paginator'),
     
 ]

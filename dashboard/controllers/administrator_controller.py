@@ -149,7 +149,6 @@ def student_form_handler(request, student_id=None):
     return render(request, template, result)
 
 
-
 @user_passes_test(is_administrator)
 @require_POST
 def student_courses_formset_handler(request, student_id):
@@ -165,6 +164,7 @@ def student_courses_formset_handler(request, student_id):
     }
     template = 'administrator/courses_form.html'
     return render(request, template, result)
+
 
 @user_passes_test(is_administrator)
 @require_GET
@@ -312,3 +312,26 @@ def add_educator(request):
     }
 
     return render(request, 'administrator/admin_create_user.html', result)
+
+
+@user_passes_test(is_administrator)
+@require_GET
+def get_educator_reviews(request, educator_id):
+    # Getting the page number
+    page = request.GET.get('page')
+
+    # Getting the page size
+    page_size = request.GET.get('page_size', 4)
+
+    # Educator Reviews
+    educator_reviews, educator_reviews_num_pages = educator.get_educator_reviews(educator_id=educator_id,
+                                                                                 page=page, page_size=page_size)
+
+    result = {
+        'educator_reviews': educator_reviews,
+        'educator_reviews_num_pages': educator_reviews_num_pages
+    }
+
+    template = 'educator/pagination.html'
+
+    return render_to_response(template, result, content_type=RequestContext(request))
