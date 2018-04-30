@@ -34,8 +34,11 @@
                     <div class="card-body">
                         <h1>Login</h1>
                         <p class="text-muted">Sign In to your account</p>
-
+                        {% if next_url %}
+                            <form METHOD="POST" action="{% url 'dashboard:user_login' %}?next={{ next_url }}">
+                        {% else %}
                         <form METHOD="POST" action="{% url 'dashboard:user_login' %}">
+                        {% endif %}
                             {% csrf_token %}
 
                             <div class="input-group mb-3">
