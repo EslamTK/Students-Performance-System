@@ -1,4 +1,4 @@
-{% extends 'educator/base.html' %}
+{% extends 'base.html' %}
 {% block title %}Educator{% endblock %}
 {% block body %}
 {% load static %}
@@ -18,41 +18,52 @@
             <h3 class="card-title mb-0">Strengths & Weakness</h3>
         </div>
         <div class="card-body">
-            <div class="row col-md-2">
+                    <div class="row">
 
-                <div class="input-group-btn col-md-6">
-                    <button type="button" class="btn btn-light dropdown-toggle"
-                            data-toggle="dropdown">Year
-                        <span class="caret"></span>
-                    </button>
-                    <div class="dropdown-menu">
-                        {% for year in educator_reviews_years %}
-                            <a class="dropdown-item" href="#" val="{{year.year}}">{{ year.year }}</a>
-                        {% endfor %}
+                        <div class="dropdown">
+                            <select class="form-control" id="year-selector">
+
+                                <option value="" id="yTitle" selected>Year</option>
+                                {% for year in educator_reviews_years %}
+                                    <option value="{{ year.year }}" id="year_{{ forloop.counter }}">
+                                        {{ year.year }}
+                                    </option>
+                                {% endfor %}
+
+                            </select>
+                        </div>
+
+                        <div class="dropdown">
+                            <select class="form-control" id="department-selector" disabled="disabled">
+                                
+                                <option value="" id="dTitle" selected>Department</option>
+                                {% for dep in educator_reviews_departments %}
+                                    <option value="{{ dep.student__department }}"
+                                            id="dep_{{ forloop.counter }}">
+                                        {{ dep.student__department__name }}
+                                    </option>
+                                {% endfor %}
+
+                            </select>
+                        </div>
+
+                        <div class="col-md-6">
+                            <div class="btn-toolbar float-right" role="toolbar"
+                                 aria-label="Toolbar with button groups">
+                                <div class="btn-group mr-3" data-toggle="buttons"
+                                     aria-label="First group">
+
+                                </div>
+                            </div>
+                        </div>
                     </div>
-
+                    <div class="chart-wrapper" style="height: 70vh;width: 80vw;">
+                        <canvas id="canvas-1" class="chart"
+                                style="height: inherit;"></canvas>
+                    </div>
                 </div>
-                <div class="input-group-btn col-md-6">
-                  <button type="button" class="btn btn-light dropdown-toggle"
-                            data-toggle="dropdown">Department
-                            <span class="caret"></span>
-                    </button>
-                    <div class="dropdown-menu">
-                        {% for dep in educator_reviews_departments %}
-                            <a class="dropdown-item" href="#" value="{{dep.student__department}}">{{ dep.student__department__name }}</a>
-                        {% endfor %}
-                   </div>
-                    </div>
 
-            </div>
-
-            <div class="chart-wrapper" style="height: 70vh;width: 80vw;">
-                <canvas id="canvas-1" class="chart"
-                        style="height: inherit;"></canvas>
-            </div>
-        </div>
     </div>
-
     <div class="col-md-12">
         <div class="card" style="margin-top: 10px">
             <div class="card-header">
