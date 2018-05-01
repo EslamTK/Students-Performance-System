@@ -1,0 +1,46 @@
+<div class="card" style="margin-top: 10px">
+    <div class="card-header">
+        <h3 class="card-title mb-0">Educators Advices</h3>
+    </div>
+    <div class="card-body">
+        {% for advice in student_advices %}
+        <div class="media">
+            <img class="d-flex mr-3 rounded-circle" id="img_{{ forloop.counter }}" src="{{ advice.educator.photo.url }}" width="50" height="50"
+                alt="">
+            <div class="media-body">
+                <h5 class="mt-0">
+                    <a target="_blank" id="a_{{ forloop.counter }}" href="{% url 'dashboard:student_educator_profile' advice.educator_id %}">{{ advice.educator.name }}</a>
+                </h5>
+                <p id="cont_{{ forloop.counter }}">{{ advice.content }}</p>
+            </div>
+        </div>
+        <hr style="margin-top: 0; border-width: 1.5px;" /> {% endfor %}
+
+        <ul class="pagination" style="margin-top: 25px">
+            {% if student_advices.has_previous %}
+            <li>
+                <a id="{{student_advices.previous_page_number}}" href="#advices" onclick="loadResults(event)">Prev</a>
+            </li>
+            {% else %}
+            <li class="page-item disabled">
+                <a>Prev</a>
+            </li>
+            {% endif %} {% with ''|center:student_advices_num_pages as range %} {% for i in range %}
+            <li class="page-item ">
+                <a id="lis_{{ forloop.counter }}" class="page-link" href="#advices" onclick="loadResults(event)">{{ forloop.counter }}</a>
+            </li>
+            {% endfor %} {% endwith %} {% if student_advices.has_next %}
+            <li>
+                <a id="{{student_advices.next_page_number}}" href="#advices" onclick="loadResults(event)">Next</a>
+            </li>
+            {% else %}
+            <li class="page-item disabled">
+                <a>Next</a>
+            </li>
+            {% endif %}
+
+        </ul>
+
+
+    </div>
+</div>

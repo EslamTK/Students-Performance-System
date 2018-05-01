@@ -1,0 +1,45 @@
+{% load static %} {% for rev in educator_reviews %}
+<div class="media mb-4">
+    {% if rev.is_anonymous %}
+        <img class="d-flex mr-3 rounded-circle" src="{% static 'imgs/anonymous.png' %}" width="50" height="50" alt="">
+        <div class="media-body">
+            <h5 class="mt-0" style="margin-bottom: 2px;">Anonymous</h5>
+            {% else %}
+                <img class="d-flex mr-3 rounded-circle" src="{% static 'dashboard\img\profile-pictures.png' %}" width="50" height="50" alt="">
+                <div class="media-body">
+                    <h5 class="mt-0" style="margin-bottom: 2px;">
+                        <a href="{% url 'dashboard:educator_student_profile' rev.student_id %}">{{ rev.student__name }}</a>
+                    </h5>
+
+            {% endif %}
+                <p>{{ rev.content }}</p>
+                <div class="btn-group btn-group-justified">
+                    <button type="button" class="btn btn-link">Delete</button>
+                </div>
+
+            </div>
+        </div>
+    {% endfor %}
+    <ul class="pagination" style="margin-top: 25px">
+        {% if educator_reviews.has_previous %}
+        <li>
+            <a id="{{educator_reviews.previous_page_number}}" href="#reviews" onclick="loadResults(event)">Prev</a>
+        </li>
+        {% else %}
+        <li class="page-item disabled">
+            <a>Prev</a>
+        </li>
+        {% endif %} {% with ''|center:educator_reviews_num_pages as range %} {% for i in range %}
+        <li class="page-item ">
+            <a id="lis_{{ forloop.counter }}" class="page-link" href="#reviews" onclick="loadResults(event)">{{ forloop.counter }}</a>
+        </li>
+        {% endfor %} {% endwith %} {% if educator_reviews.has_next %}
+        <li>
+            <a id="{{educator_reviews.next_page_number}}" href="#reviews" onclick="loadResults(event)">Next</a>
+        </li>
+        {% else %}
+        <li class="page-item disabled">
+            <a>Next</a>
+        </li>
+        {% endif %}
+    </ul>

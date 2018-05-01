@@ -1,0 +1,61 @@
+<table class="table table-responsive-sm">
+    <thead>
+        <tr>
+            <th>Course Name</th>
+            <th>Year</th>
+            <th>Doctor</th>
+            <th>Grade</th>
+            <th>Status</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for course in student_courses %}
+        <tr>
+            <td>{{ course.course.name }}</td>
+            <td>{{ course.course.year.name }}</td>
+            <td>
+                <a href="{% url 'dashboard:student_educator_profile' course.educator_id %}" target="_blank">{{ course.educator.name }}</a>
+            </td>
+            {% if course.final_grade is None %}
+            <td>--</td>
+            <td>--</td>
+            {% else %}
+            <td>{{ course.final_grade }}</td>
+
+            {% if course.final_grade >= 50 %}
+            <td>
+                <span class="badge badge-success">Pass</span>
+            </td>
+            {% else %}
+            <td>
+                <span class="badge badge-danger">Fail</span>
+            </td>
+            {% endif %} {% endif %}
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
+<ul class="pagination" style="margin-top: 25px">
+    {% if student_courses.has_previous %}
+    <li>
+        <a id="{{student_courses.previous_page_number}}" href="#courses_results" onclick="loadResults(event)">Prev</a>
+    </li>
+    {% else %}
+    <li class="page-item disabled">
+        <a>Prev</a>
+    </li>
+    {% endif %} {% with ''|center:student_courses_num_pages as range %} {% for i in range %}
+    <li class="page-item ">
+        <a id="lis_{{ forloop.counter }}" class="page-link" href="#courses_results" onclick="loadResults(event)">{{ forloop.counter }}</a>
+    </li>
+    {% endfor %} {% endwith %} {% if student_courses.has_next %}
+    <li>
+        <a id="{{student_courses.next_page_number}}" href="#courses_results" onclick="loadResults(event)">Next</a>
+    </li>
+    {% else %}
+    <li class="page-item disabled">
+        <a>Next</a>
+    </li>
+    {% endif %}
+
+</ul>

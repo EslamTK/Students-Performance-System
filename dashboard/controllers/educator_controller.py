@@ -84,7 +84,7 @@ def get_educator_reviews(request):
         'educator_reviews': educator_reviews,
         'educator_reviews_num_pages': educator_reviews_num_pages
     }
-    template = 'educator/pagination.html'
+    template = 'educator/pagination/index.html'
 
     return render_to_response(template, result, content_type=RequestContext(request))
 
@@ -214,7 +214,7 @@ def get_educator_students(request):
         'educator_students_num_pages': students_num_pages,
     }
 
-    template = 'educator/students_pagination.html'
+    template = 'educator/pagination/students.html'
     return render_to_response(template, result, content_type=RequestContext(request))
 
 

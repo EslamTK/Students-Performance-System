@@ -1,130 +1,124 @@
-{% extends 'educator/base.html' %}
-{% block title %}Student{% endblock %}
-{% block body %}
-{% load static %}
-{% load widget_tweaks %}
+{% extends 'educator/base.html' %} {% block title %}Student{% endblock %} {% block body %} {% load static %} 
+{% load widget_tweaks%}
 
 <script>
     var requireJS = [];
     loadJS(requireJS, "{% static 'dashboard/views/charts.js'%}");
 </script>
-    <input type="hidden" id="myVar" name="variable" readonly value="{{ student_predictions.courses }}">
-    <input type="hidden" id="" name="variable" readonly value="{{ student_advices_num_pages }}">
-    <input type="hidden" id="student_id" name="variable" readonly value="{{ student_id }}">
+<input type="hidden" id="myVar" name="variable" readonly value="{{ student_predictions.courses }}">
+<input type="hidden" id="" name="variable" readonly value="{{ student_advices_num_pages }}">
+<input type="hidden" id="student_id" name="variable" readonly value="{{ student_id }}">
 
 <main class="animated fadeIn row">
-        <div class="col-md-12">
-            <div class="card" style="margin-top: 10px">
-                <div class="card-header">
-                    <h3 class="card-title mb-0">Student Performance</h3>
-                </div>
-                <div class="card-body">
-                    <div class="row">
-                        <div class="row col-sm-9">
-                            <div class="col-xl-2 col-md-3">
-                                <div class="dropdown">
-                                    <select class="form-control" id="year-selector" onchange="choice1(this)">
-                                        <option>Year</option>
-                                        {% for year in years %}
-                                            <option value="{{ year.name }}" id="year_{{ forloop.counter }}">{{ year.name }}</option>
-                                        {% endfor %}
-                                    </select>
-                                </div>
+    <div class="col-md-12">
+        <div class="card" style="margin-top: 10px">
+            <div class="card-header">
+                <h3 class="card-title mb-0">Student Performance</h3>
+            </div>
+            <div class="card-body">
+                <div class="row">
+                    <div class="row col-sm-9">
+                        <div class="col-xl-2 col-md-3">
+                            <div class="dropdown">
+                                <select class="form-control" id="year-selector" onchange="choice1(this)">
+                                    <option>Year</option>
+                                    {% for year in years %}
+                                    <option value="{{ year.name }}" id="year_{{ forloop.counter }}">{{ year.name }}</option>
+                                    {% endfor %}
+                                </select>
                             </div>
                         </div>
-        
-                        <div class="col-md-3">
-                            <div class="btn-toolbar float-right" role="toolbar"
-                                 aria-label="Toolbar with button groups">
-                                <div class="btn-group mr-3" data-toggle="buttons"
-                                     aria-label="First group">
-                                    {% for term in terms %}
-                                        {% if forloop.counter == 1 %}
-                                            <label class="btn btn-outline-secondary active">
-                                        {% else %}
-                                            <label class="btn btn-outline-secondary">
+                    </div>
+
+                    <div class="col-md-3">
+                        <div class="btn-toolbar float-right" role="toolbar" aria-label="Toolbar with button groups">
+                            <div class="btn-group mr-3" data-toggle="buttons" aria-label="First group">
+                                {% for term in terms %} {% if forloop.counter == 1 %}
+                                <label class="btn btn-outline-secondary active">
+                                    {% else %}
+                                    <label class="btn btn-outline-secondary">
                                         {% endif %}
-                                    <input type="radio" name="options" value="{{term_id}}"
-                                    > {{ term.name }}
+                                        <input type="radio" name="options" value="{{term_id}}"> {{ term.name }}
                                     </label>
                                     {% endfor %}
-                                </div>
                             </div>
                         </div>
                     </div>
-                  </div>
-                  <div class="wrapper mx-auto" style="height: 80vh;width: 75vw;">
-                        <canvas id="canvas-1" class="chart"
-                                style="height: inherit;"></canvas>
-                    </div>
-                  </div>
-                  <div class="col-md-12">
-                    <div class="card  style="margin-top: 10px"">
-                      <div class="card-header">
-                        <h3 class="card-title mb-0">Add Review</h3>
-                      </div>
-                      <div class="card-body">
-                          <form method="POST" >
-                              {%csrf_token%}
+                </div>
+            </div>
+            <div class="wrapper mx-auto" style="height: 80vh;width: 75vw;">
+                <canvas id="canvas-1" class="chart" style="height: inherit;"></canvas>
+            </div>
+        </div>
+        <div class="col-md-12">
+            <div class="card  style=" margin-top: 10px "">
+                <div class="card-header">
+                    <h3 class="card-title mb-0">Add Review</h3>
+                </div>
+                <div class="card-body">
+                    <form method="POST">
+                        {%csrf_token%}
                         <div class="form-group">
                             <label for="comment">Review :</label>
                             {% for field in advice_form.visible_fields %}
                             <div class="form-group">
-                               
-                                {{ field|add_class:'form-control' |attr:"rows:5"  }}
+
+                                {{ field|add_class:'form-control' |attr:"rows:5" }} 
                                 {% for error in field.errors %}
-                                    <span class="help-block">{{ error }}</span>
+                                <span class="help-block">{{ error }}</span>
                                 {% endfor %}
                             </div>
                             {% endfor %}
                         </div>
-                        <div  class= "col-md-8 col-sm-12 " >
-                             <button type="submit" class="btn btn-primary" >Submit</button>
+                        <div class="col-md-8 col-sm-12 ">
+                            <button type="submit" class="btn btn-primary">Submit</button>
                         </div>
-                        </form>
-                      </div>
-                    </div>
-                  </div>
-                  <div class="col-md-12" id="educator_advices">
-                      <div class="card" style="margin-top: 10px" >
-                          <div class="card-header">
-                            <h3 class="card-title mb-0">Educators Advices</h3>
-                            </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-12" id="educator_advices">
+            <div class="card" style="margin-top: 10px">
+                <div class="card-header">
+                    <h3 class="card-title mb-0">Educators Advices</h3>
+                </div>
 
-                          <div class="card-body" >
-                              {% include './student_profile_pagination.html' %}
-                          </div>
-                      </div>
-        
-                  </div>
-        
-        
-        </main>
-        <script>
-                document.getElementById("lis_1").parentElement.classList.add("active");
-                function loadResults(event){
-                    var id = event.target.id;
-                    page = document.getElementById(id).innerHTML;
-                    if(document.getElementById(id).parentElement.classList.contains("active") != true){
-                        if(isNaN(page)){
-                            page = id;
-                        }
-                        $.ajax({        
-                        type: "GET",
-                        url: "/dashboard/student_advices/?page="+page,
-                        success: function(data) {
-                            $('#educator_advices').html(data);
-                            if(isNaN(id) != true)
-                                id = "lis_"+id;
-                            document.getElementById(id).parentElement.classList.add("active");
-            
-                        },
-                
-                        error: function(response, error) {
-                            alert(response.responseText);  
-                        }
-                    });
+                <div class="card-body">
+                    {% include './pagination/student_profile.html' %}
+                </div>
+            </div>
+
+        </div>
+    </div>
+
+
+</main>
+<script>
+    document.getElementById("lis_1").parentElement.classList.add("active");
+
+    function loadResults(event) {
+        var id = event.target.id;
+        page = document.getElementById(id).innerHTML;
+        if (document.getElementById(id).parentElement.classList.contains("active") != true) {
+            if (isNaN(page)) {
+                page = id;
+            }
+            $.ajax({
+                type: "GET",
+                url: "/dashboard/student_advices/?page=" + page,
+                success: function (data) {
+                    $('#educator_advices').html(data);
+                    if (isNaN(id) != true)
+                        id = "lis_" + id;
+                    document.getElementById(id).parentElement.classList.add("active");
+
+                },
+
+                error: function (response, error) {
+                    alert(response.responseText);
                 }
-                }
-            </script>
-{% endblock %}        
+            });
+        }
+    }
+</script>
+{% endblock %}
