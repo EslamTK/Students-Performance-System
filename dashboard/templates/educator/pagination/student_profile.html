@@ -2,9 +2,7 @@
     <div class="media mb-4">
         <img class="d-flex mr-3 rounded-circle" src="{{ advice.educator.photo.url }}" width="50" height="50" alt="">
         <div class="media-body">
-            <h5 class="mt-0" style="margin-bottom: 2px;"><a target="_blank"
-                                                            href="{% url 'dashboard:student_educator_profile' advice.educator_id %}">{{ advice.educator.name }}</a>
-            </h5>
+            <h5 class="mt-0 font-weight-bold" style="margin-bottom: 2px;">{{ advice.educator.name }}</h5>
             <p id="cont_{{ forloop.counter }}">{{ advice.content }}</p>
         </div>
     </div>

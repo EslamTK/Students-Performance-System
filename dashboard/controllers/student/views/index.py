@@ -35,7 +35,6 @@ class StudentAdvicesPaginatorView(StudentPaginatorBaseView):
     template_name = 'student/pagination/index.html'
 
     def get(self, request, user_id, page, page_size):
-        # Student Advices
         student_advices, student_advices_num_pages = student.get_student_advices(student_id=user_id,
                                                                                  page=page,
                                                                                  page_size=page_size)

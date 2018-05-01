@@ -1,126 +1,132 @@
 {% extends 'educator/base.html' %} {% block title %}Dashboard{% endblock %} {% block body %} {% load static %}
-<script>
-    var requireJS = [];
-    loadJS(requireJS, "{% static 'dashboard/views/charts2.js'%}");
-</script>
+    <script>
+        var requireJS = [];
+        loadJS(requireJS, "{% static 'dashboard/views/charts2.js'%}");
+    </script>
 
-<input type="hidden" id="myVar" name="variable" readonly value="{{ educator_rating }}">
-<input type="hidden" id="total" name="variable" readonly value="{{ educator_reviews_num_pages }}">
-<main class="animated fadeIn row">
-    <div class="col-md-12">
-        <div class="card" style="margin-top: 10px">
-            <div class="card-header">
-                <h3 class="card-title mb-0">Strengths & Weakness</h3>
+    <input type="hidden" id="myVar" name="variable" readonly value="{{ educator_rating }}">
+    <input type="hidden" id="total" name="variable" readonly value="{{ educator_reviews_num_pages }}">
+    <main class="animated fadeIn row">
+        <div class="col-md-12">
+
+            <div class="card" style="margin-top: 10px">
+                <div class="card-header">
+                    <h3 class="card-title mb-0">Strengths & Weakness</h3>
+                </div>
+                <div class="card-body">
+
+                    <div class="row col-sm-9">
+                        <div class="col-xl-2 col-md-3">
+                            <div class="dropdown">
+                                <select class="form-control" id="year-selector" onchange="choice1(this)">
+                                    <option>Year</option>
+                                    {% for year in educator_reviews_years %}
+                                        <option value="{{ year.year }}"
+                                                id="year_{{ forloop.counter }}">{{ year.year }}</option>
+                                    {% endfor %}
+                                </select>
+                            </div>
+                        </div>
+
+                        <div class="col-xl-2 col-md-4">
+                            <div class="dropdown">
+                                <select class="form-control" id="dep-selector" onchange="choice1(this)">
+                                    <option>Department</option>
+                                    {% for dep in educator_reviews_departments %}
+                                        <option value="{{ dep.student__department }}"
+                                                id="dep_{{ forloop.counter }}">{{ dep.student__department__name }}</option>
+                                    {% endfor %}
+                                </select>
+                            </div>
+                        </div>
+
+                    </div>
+                    <div class="wrapper mx-auto">
+                        <canvas id="canvas-1" class="chart"></canvas>
+                    </div>
+                </div>
+
             </div>
-            <div class="card-body">
-                <div class="row col-sm-9">
-                    <div class="col-xl-2 col-md-3">
-                        <div class="dropdown">
-                            <select class="form-control" id="year-selector" onchange="choice1(this)">
-                                <option>Year</option>
-                                {% for year in educator_reviews_years %}
-                                <option value="{{ year.year }}" id="year_{{ forloop.counter }}">{{ year.year }}</option>
-                                {% endfor %}
-                            </select>
-                        </div>
-                    </div>
+        </div>
+        </div>
 
-                    <div class="col-xl-2 col-md-4">
-                        <div class="dropdown">
-                            <select class="form-control" id="dep-selector" onchange="choice1(this)">
-                                <option>Department</option>
-                                {% for dep in educator_reviews_departments %}
-                                <option value="{{dep.student__department}}" id="dep_{{ forloop.counter }}">{{ dep.student__department__name }}</option>
-                                {% endfor %}
-                            </select>
-                        </div>
-                    </div>
+        <div class="col-md-12">
+            <div class="card" style="margin-top: 10px">
+                <div class="card-header">
+                    <h3 class="card-title mb-0">Student Reviews</h3>
+                </div>
+                <div class="card-body" id="reviews">
+                    {% include "./pagination/index.html" %}
                 </div>
             </div>
 
-            <div class="wrapper mx-auto" style="height: 80vh;width: 75vw;">
-                <canvas id="canvas-1" class="chart" style="height: inherit;"></canvas>
-            </div>
-        </div>
-    </div>
-    </div>
-
-    <div class="col-md-12">
-        <div class="card" style="margin-top: 10px">
-            <div class="card-header">
-                <h3 class="card-title mb-0">Student Reviews</h3>
-            </div>
-            <div class="card-body" id="reviews">
-                {% include "./pagination/index.html" %}
-            </div>
         </div>
 
-    </div>
-
-</main>
-<script>
-    function getCookie(name) {
-        var cookieValue = null;
-        if (document.cookie && document.cookie !== '') {
-            var cookies = document.cookie.split(';');
-            for (var i = 0; i < cookies.length; i++) {
-                var cookie = jQuery.trim(cookies[i]);
-                // Does this cookie string begin with the name we want?
-                if (cookie.substring(0, name.length + 1) === (name + '=')) {
-                    cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
-                    break;
+    </main>
+    <script>
+        function getCookie(name) {
+            var cookieValue = null;
+            if (document.cookie && document.cookie !== '') {
+                var cookies = document.cookie.split(';');
+                for (var i = 0; i < cookies.length; i++) {
+                    var cookie = jQuery.trim(cookies[i]);
+                    // Does this cookie string begin with the name we want?
+                    if (cookie.substring(0, name.length + 1) === (name + '=')) {
+                        cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+                        break;
+                    }
                 }
             }
+            return cookieValue;
         }
-        return cookieValue;
-    }
-    var csrftoken = getCookie('csrftoken');
+
+        var csrftoken = getCookie('csrftoken');
 
 
-    document.getElementById("lis_1").parentElement.classList.add("active");
+        document.getElementById("lis_1").parentElement.classList.add("active");
 
-    function report(id) {
-        console.log(id)
-        $.ajax({
-            type: "POST",
-            url: "/dashboard/educator/review_report/",
-            data: {
-                'review_id': id,
-                'csrfmiddlewaretoken': csrftoken
-            },
-
-            success: function (data) {
-                $("#rep" + id).html('<p class="p-1 mb-1 bg-success text-white">Reported</p>');
-            },
-
-            error: function (response, error) {
-                alert(error);
-            }
-        });
-    }
-
-    function loadReviews(event) {
-        var id = event.target.id;
-        if (document.getElementById(id).parentElement.classList.contains("active") != true) {
-            page = document.getElementById(id).innerHTML;
-            if (isNaN(page)) {
-                page = id;
-            }
+        function report(id) {
+            console.log(id)
             $.ajax({
-                type: "GET",
-                url: "/dashboard/educator_reviews/?page=" + page,
+                type: "POST",
+                url: "{% url 'dashboard:educator_add_report_api' %}",
+                data: {
+                    'review_id': id,
+                    'csrfmiddlewaretoken': csrftoken
+                },
+
                 success: function (data) {
-                    $('#reviews').html(data);
-                    if (isNaN(id) != true)
-                        id = "lis_" + id;
-                    document.getElementById(id).parentElement.classList.add("active");
+                    $("#rep" + id).html('<p class="p-1 mb-1 bg-success text-white">Reported</p>');
                 },
 
                 error: function (response, error) {
-                    alert(response.responseText);
+                    alert(error);
                 }
             });
         }
-    }
-</script>
+
+        function loadReviews(event) {
+            var id = event.target.id;
+            if (document.getElementById(id).parentElement.classList.contains("active") != true) {
+                page = document.getElementById(id).innerHTML;
+                if (isNaN(page)) {
+                    page = id;
+                }
+                $.ajax({
+                    type: "GET",
+                    url: "{% url 'dashboard:educator_reviews_paginator' %}?page=" + page,
+                    success: function (data) {
+                        $('#reviews').html(data);
+                        if (isNaN(id) != true)
+                            id = "lis_" + id;
+                        document.getElementById(id).parentElement.classList.add("active");
+                    },
+
+                    error: function (response, error) {
+                        alert(response.responseText);
+                    }
+                });
+            }
+        }
+    </script>
 {% endblock %}

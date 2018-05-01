@@ -1,7 +1,15 @@
 from django.urls import path
 
 # from dashboard.controllers import forms_testing
-from dashboard.controllers import educator_controller, administrator_controller
+from dashboard.controllers import administrator_controller
+from dashboard.controllers.educator.apis.counts import EducatorStudentsCountsApi
+from dashboard.controllers.educator.apis.rating import EducatorRatingApi
+from dashboard.controllers.educator.apis.report import EducatorReportApi
+from dashboard.controllers.educator.apis.student_courses import EducatorStudentsCoursesGradesApi
+from dashboard.controllers.educator.views.index import EducatorIndexView, EducatorReviewsPaginatorView
+from dashboard.controllers.educator.views.student_profile import EducatorStudentProfileView, \
+    EducatorStudentAdvicesPaginatorView
+from dashboard.controllers.educator.views.students import EducatorStudentsView, EducatorStudentsPaginatorView
 from dashboard.controllers.student.apis.courses_grades import StudentCoursesGradesApi
 from dashboard.controllers.student.views.courses import StudentCoursesView, StudentCoursesPaginatorView
 from dashboard.controllers.student.views.educator_profile import StudentEducatorProfileView
@@ -29,7 +37,7 @@ urlpatterns = [
          StudentIndexView.as_view(),
          name='student_index'),
 
-    path('student/advices/',
+    path('student/advices/paginator/',
          StudentAdvicesPaginatorView.as_view(),
          name='student_advices_paginator'),
 
@@ -37,7 +45,7 @@ urlpatterns = [
          StudentCoursesView.as_view(),
          name='student_courses'),
 
-    path('student/courses/paginator',
+    path('student/courses/paginator/',
          StudentCoursesPaginatorView.as_view(),
          name='student_courses_paginator'),
 
@@ -49,37 +57,47 @@ urlpatterns = [
          StudentEducatorProfileView.as_view(),
          name='student_educator_profile'),
 
+
     path('educator/',
-         educator_controller.index,
+         EducatorIndexView.as_view(),
          name='educator_index'),
 
-    path('educator_rating/',
-         educator_controller.get_educator_rating,
-         name='educator_rating'),
-
-    path('educator_reviews/',
-         educator_controller.get_educator_reviews,
+    path('educator/reviews/paginator/',
+         EducatorReviewsPaginatorView.as_view(),
          name='educator_reviews_paginator'),
 
-    path('educator/student/<int:student_id>/',
-         educator_controller.student_profile,
-         name='educator_student_profile'),
+    path('api/educator/rating/',
+         EducatorRatingApi.as_view(),
+         name='educator_rating_api'),
+
+    path('api/educator/reviews/report/',
+         EducatorReportApi.as_view(),
+         name='educator_add_report_api'),
 
     path('educator/students/',
-         educator_controller.educator_students,
+         EducatorStudentsView.as_view(),
          name='educator_students'),
 
-    path('educator_courses_counts/',
-         educator_controller.get_educator_courses_counts,
-         name='educator_courses_counts'),
-
-    path('educator_students/',
-         educator_controller.get_educator_students,
+    path('educator/students/paginator/',
+         EducatorStudentsPaginatorView.as_view(),
          name='educator_students_paginator'),
 
-    path('educator/review_report/',
-         educator_controller.add_review_report,
-         name='educator_add_review_report'),
+    path('api/educator/students/counts/',
+         EducatorStudentsCountsApi.as_view(),
+         name='educator_students_counts_api'),
+
+    path('educator/students/<int:student_id>/',
+         EducatorStudentProfileView.as_view(),
+         name='educator_student_profile'),
+
+    path('educator/students/<int:student_id>/advices/paginator/',
+         EducatorStudentAdvicesPaginatorView.as_view(),
+         name='educator_student_profile_advices_paginator'),
+
+    path('api/educator/students/<int:student_id>/courses/grades/',
+         EducatorStudentsCoursesGradesApi.as_view(),
+         name='educator_student_profile_courses_grades_api'),
+
 
     path('administrator/',
          administrator_controller.index,

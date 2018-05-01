@@ -15,8 +15,10 @@ class StudentCourseRepo(Repo):
             'student': student
         }
 
-        if year and term:
+        if year:
             filters['course__year'] = year
+
+        if term:
             filters['course__term'] = term
 
         if keyword:
