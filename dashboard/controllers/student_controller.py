@@ -60,7 +60,7 @@ def get_student_advices(request):
         'student_advices': student_advices,
         'student_advices_num_pages': student_advices_num_pages
     }
-    template = 'student/pagination.html'
+    template = 'student/pagination/index.html'
 
     return render_to_response(template, result, content_type=RequestContext(request))
 
@@ -148,7 +148,7 @@ def get_student_courses(request):
         'student_courses': courses,
         'student_courses_num_pages': courses_num_pages
     }
-    template = 'student/courses_pagination.html'
+    template = 'student/pagination/courses.html'
 
     return render_to_response(template, result, content_type=RequestContext(request))
 

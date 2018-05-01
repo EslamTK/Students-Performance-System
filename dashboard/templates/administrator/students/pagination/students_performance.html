@@ -20,18 +20,18 @@
 </table>
 <ul class="pagination" style="margin-top: 25px">
     {% if students.has_previous %}
-        <li><a id="{{students.previous_page_number}}" href="#"  onclick="loadResults(event)">Prev</a></li>
+        <li><a id="{{students.previous_page_number}}" href="#students_results"  onclick="loadResults(event)">Prev</a></li>
     {% else %}
         <li class="page-item disabled"><a>Prev</a></li>
     {% endif %}
     {% with ''|center:students_num_pages as range %}
         {% for i in range %}
-            <li class="page-item "><a id="lis_{{ forloop.counter }}" class="page-link" href="#"
+            <li class="page-item "><a id="lis_{{ forloop.counter }}" class="page-link" href="#students_results"
                                       onclick="loadPage(event)">{{ forloop.counter }}</a></li>
         {% endfor %}
     {% endwith %}
     {% if students.has_next %}
-        <li><a id="{{students.next_page_number}}" href="#"  onclick="loadResults(event)">Next</a></li>
+        <li><a id="{{students.next_page_number}}" href="#students_results"  onclick="loadResults(event)">Next</a></li>
     {% else %}
         <li class="page-item disabled"><a>Next</a></li>
     {% endif %}

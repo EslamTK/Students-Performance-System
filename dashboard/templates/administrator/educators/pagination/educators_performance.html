@@ -24,18 +24,18 @@
 </table>
 <ul class="pagination" style="margin-top: 25px">
     {% if educators.has_previous %}
-        <li><a id="{{educators.previous_page_number}}" href="#"  onclick="loadResults(event)">Prev</a></li>
+        <li><a id="{{educators.previous_page_number}}" href="#search_results"  onclick="loadResults(event)">Prev</a></li>
     {% else %}
         <li class="page-item disabled"><a>Prev</a></li>
     {% endif %}
     {% with ''|center:educators_num_pages as range %}
         {% for i in range %}
-            <li class="page-item "><a id="lis_{{ forloop.counter }}" class="page-link" href="#"
+            <li class="page-item "><a id="lis_{{ forloop.counter }}" class="page-link" href="#search_results"
                                       onclick="loadResults(event)">{{ forloop.counter }}</a></li>
         {% endfor %}
     {% endwith %}
     {% if educators.has_next %}
-        <li><a id="{{educators.next_page_number}}" href="#"  onclick="loadResults(event)">Next</a></li>
+        <li><a id="{{educators.next_page_number}}" href="#search_results"  onclick="loadResults(event)">Next</a></li>
     {% else %}
         <li class="page-item disabled"><a>Next</a></li>
     {% endif %}
