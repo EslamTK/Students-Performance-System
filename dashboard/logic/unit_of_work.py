@@ -18,3 +18,4 @@ class UnitOfWork:
         self.term = TermRepo()
         self.year = YearRepo()
         self.groups = GroupRepo()
+        self.home_pages = HomePageRepo()

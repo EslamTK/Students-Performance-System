@@ -8,6 +8,7 @@ admin.site.register(Course)
 admin.site.register(Term)
 admin.site.register(Year)
 admin.site.register(Department)
+admin.site.register(HomePage)
 
 admin.site.register(Student)
 admin.site.register(StudentCourse)

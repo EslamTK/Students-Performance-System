@@ -5,12 +5,6 @@
 // Active ajax page loader
 $.ajaxLoad = false;
 
-//required when $.ajaxLoad = true
-$.defaultPage = '';
-$.subPagesDirectory = '';
-$.page404 = 'views/pages/404.html';
-$.mainContent = $('#ui-view');
-
 //Main navigation
 $.navigation = $('nav > ul.nav');
 
