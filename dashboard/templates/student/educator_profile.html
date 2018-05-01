@@ -1,92 +1,93 @@
 {% extends 'student/base.html' %} {% block body %} {% load widget_tweaks %}
-<main class="animated fadeIn">
-    <div class="row" style="margin-top: 10px;">
+    <main class="animated fadeIn">
+        <div class="row" style="margin-top: 10px;">
 
-        <div class="col-md-4 col-xs-12 card">
-            <div class="mydetails slideanim text-center card-body">
-                <img class="img-circle img-responsive" src="{{ educator_info.photo.url }}" alt="Generic placeholder image" width="150" height="150">
-                <h3>{{ educator_info.name }}</h3>
-                <p>{{ educator_info.title }}</p>
-                <p>
-                    <b>{{ educator_info.email }}</b>
-                </p>
-                <div class="social-icons">
-                    {% for acc in educator_accounts %}
-                    <a href="{{ acc.url }}" style="margin: 0 2px 0 5px;">
-                        <img src="{{ acc.account.logo.url }}" width="25" height="25">
-                    </a>
-                    {% endfor %}
-                </div>
-            </div>
-        </div>
-
-        <div class="col-md-7 col-xs-12 card" style="margin: auto; padding: 0;">
-            <div class="card-header">
-                <h3 class="card-title mb-0">About Me</h3>
-            </div>
-            <div class="card-body">
-                <p>{{ educator_info.about_me }}</p>
-            </div>
-        </div>
-
-
-        <div class="col-md-12 col-xs-12 card" style=" padding: 0;">
-            <div class=" card-header">
-                <h4 class="card-title mb-0">Your Review</h4>
-            </div>
-            <div class="card-body">
-                <div class="container">
-                    <div class="row text-center">
-                        <div class="col-sm-2"></div>
-
-                        <label class="col-sm-2 h3 center-block">Bad</label>
-                        <label class="col-sm-2 h3 center-block">Good</label>
-                        <label class="col-sm-2 h3 center-block">Excellent</label>
+            <div class="col-md-4 col-xs-12 card">
+                <div class="mydetails slideanim text-center card-body">
+                    <img class="img-circle img-responsive" src="{{ educator_info.photo.url }}"
+                         alt="Generic placeholder image" width="150" height="150">
+                    <h3>{{ educator_info.name }}</h3>
+                    <p>{{ educator_info.title }}</p>
+                    <p>
+                        <b>{{ educator_info.email }}</b>
+                    </p>
+                    <div class="social-icons">
+                        {% for acc in educator_accounts %}
+                            <a href="{{ acc.url }}" style="margin: 0 2px 0 5px;">
+                                <img src="{{ acc.account.logo.url }}" width="25" height="25">
+                            </a>
+                        {% endfor %}
                     </div>
                 </div>
-
-                <div class="container">
-
-                    <form METHOD="POST" action="{%url 'dashboard:student_educator_profile' educator_id%}">
-                        {% csrf_token %} {{ review_items_form.management_form }} {% for item in review_items_form %} 
-                        {{ item.rate.errors }} {{ item.review_item}} {{ item.name }}
-
-                        <div class="row text-center">
-                            <label class="h4 col-sm-2 text-left">{{ item.name.value }}</label>
-
-                            {% for choice in item.rate %}
-                            <div class="col-sm-2 center-block">
-                                {{ choice }}
-                            </div>
-                            {% endfor %}
-                        </div>
-
-                        <br> {% endfor %}
-                </div>
-                {% for field in review_form %} {% if field.name == "content"%}
-                <div class="form-group">
-                    {% render_field field class="form-control" placeholder="Content" rows="6" id="textarea-input" name="textarea-input"%}
-                </div>
-                {%else%}
-                <div class="mr-3" data-toggle="buttons">
-                    <label class="btn btn-outline-danger">
-                        {% render_field field type="checkbox" name="options" id="option1"%}
-                        <b>Anonymous</b>
-                    </label>
-                </div>
-                {%endif%} {% endfor %}
-
-                <div style="text-align: center;">
-                    <button type="submit" class="btn btn-sm btn-outline-primary">
-                        <b>Submit</b>
-                    </button>
-                </div>
-
-                </form>
-
             </div>
-        </div>
-    </div>
-</main>
+
+            <div class="col-md-7 col-xs-12 card" style="margin: auto; padding: 0;">
+                <div class="card-header">
+                    <h3 class="card-title mb-0">About Me</h3>
+                </div>
+                <div class="card-body">
+                    <p>{{ educator_info.about_me }}</p>
+                </div>
+            </div>
+
+
+            <div class="col-md-12 col-xs-12 card" style=" padding: 0;">
+                <div class=" card-header">
+                    <h4 class="card-title mb-0">Your Review</h4>
+                </div>
+                <div class="card-body">
+                    <div class="container">
+                        <div class="row text-center">
+                            <div class="col-sm-2"></div>
+
+                            <label class="col-sm-2 h3 center-block">Bad</label>
+                            <label class="col-sm-2 h3 center-block">Good</label>
+                            <label class="col-sm-2 h3 center-block">Excellent</label>
+                        </div>
+                    </div>
+
+                    <div class="container">
+
+                        <form METHOD="POST" action="{% url 'dashboard:student_educator_profile' educator_id %}">
+                            {% csrf_token %} {{ review_items_form.management_form }} {% for item in review_items_form %}
+                            {{ item.rate.errors }} {{ item.review_item }} {{ item.name }}
+
+                            <div class="row text-center">
+                                <label class="h4 col-sm-2 text-left">{{ item.name.value }}</label>
+
+                                {% for choice in item.rate %}
+                                    <div class="col-sm-2 center-block">
+                                        {{ choice }}
+                                    </div>
+                                {% endfor %}
+                            </div>
+                            <br>
+                        {% endfor %}
+
+                            {% for field in review_form %} {% if field.name == "content" %}
+                                <div class="form-group">
+                                    {% render_field field class="form-control" placeholder="Content" rows="6" id="textarea-input" name="textarea-input" %}
+                                </div>
+                            {% else %}
+                                <div class="mr-3" data-toggle="buttons">
+                                    <label class="btn btn-outline-danger">
+                                        {% render_field field type="checkbox" name="options" id="option1" %}
+                                        <b>Anonymous</b>
+                                    </label>
+                                </div>
+                            {% endif %} {% endfor %}
+
+                            <div style="text-align: center;">
+                                <button type="submit" class="btn btn-sm btn-outline-primary">
+                                    <b>Submit</b>
+                                </button>
+                            </div>
+
+                        </form>
+
+                    </div>
+                </div>
+            </div>
+    </main>
 
 {% endblock %}

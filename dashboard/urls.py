@@ -1,9 +1,13 @@
 from django.urls import path
 
 # from dashboard.controllers import forms_testing
-from dashboard.controllers import student_controller, \
-    educator_controller, administrator_controller
-from dashboard.controllers.user import login, logout
+from dashboard.controllers import educator_controller, administrator_controller
+from dashboard.controllers.student.apis.courses_grades import StudentCoursesGradesApi
+from dashboard.controllers.student.views.courses import StudentCoursesView, StudentCoursesPaginatorView
+from dashboard.controllers.student.views.educator_profile import StudentEducatorProfileView
+from dashboard.controllers.student.views.index import StudentIndexView, StudentAdvicesPaginatorView
+from dashboard.controllers.user.login import LoginView
+from dashboard.controllers.user.logout import LogoutView
 
 app_name = 'dashboard'
 
@@ -14,35 +18,35 @@ urlpatterns = [
     #      name='form'),
 
     path('login/',
-         login.LoginView.as_view(),
+         LoginView.as_view(),
          name='user_login'),
 
     path('logout/',
-         logout.LogoutView.as_view(),
+         LogoutView.as_view(),
          name='user_logout'),
 
     path('student/',
-         student_controller.index,
+         StudentIndexView.as_view(),
          name='student_index'),
 
-    path('student_advices/',
-         student_controller.get_student_advices,
+    path('student/advices/',
+         StudentAdvicesPaginatorView.as_view(),
          name='student_advices_paginator'),
 
     path('student/courses/',
-         student_controller.student_courses,
+         StudentCoursesView.as_view(),
          name='student_courses'),
 
-    path('student_courses_grades/',
-         student_controller.get_student_courses_grades,
-         name='student_courses_grades'),
-
-    path('student_courses/',
-         student_controller.get_student_courses,
+    path('student/courses/paginator',
+         StudentCoursesPaginatorView.as_view(),
          name='student_courses_paginator'),
 
+    path('api/student/courses/grades/',
+         StudentCoursesGradesApi.as_view(),
+         name='student_courses_grades_api'),
+
     path('student/educator/<int:educator_id>/',
-         student_controller.educator_profile,
+         StudentEducatorProfileView.as_view(),
          name='student_educator_profile'),
 
     path('educator/',

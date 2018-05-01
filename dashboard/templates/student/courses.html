@@ -91,7 +91,9 @@
             if (isNaN(page)) {
                 page = id;
             }
-            url = "/dashboard/student_courses/?page=" + page;
+
+            url = "{% url 'dashboard:student_courses_paginator' %}?page=" + page;
+
             if (search_val != "") {
                 url += "&keyword=" + search_val;
             }
@@ -118,7 +120,7 @@
 
         $.ajax({
             type: "GET",
-            url: "/dashboard/student_courses/?keyword=" + search_val,
+            url: "{% url 'dashboard:student_courses_paginator' %}?keyword=" + search_val,
             success: function (data) {
                 $('#courses_results').html(data);
                 document.getElementById("lis_1").parentElement.classList.add("active");

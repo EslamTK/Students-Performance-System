@@ -68,7 +68,7 @@
             }
             $.ajax({
                 type: "GET",
-                url: "/dashboard/student_advices/?page=" + page,
+                url: "{% url 'dashboard:student_advices_paginator' %}?page=" + page,
                 success: function (data) {
                     $('#advices').html(data);
                     if (isNaN(id) != true)
