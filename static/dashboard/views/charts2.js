@@ -1,4 +1,3 @@
-alert(255);
 window.onload = default_;
 $('#year-selector').change(function () {    
         var selectedYear=$( '#year-selector option:selected' ).val();
@@ -41,9 +40,9 @@ function send_request(selectedYear,selectedDep) {
                 //collecting data 
                 var label_data = [];
                 var rates = [];
-                for (var i = 0; i < data.length; i++) {
-                    label_data.push(data[i].review_item__name);
-                    rates.push(data[i].rate__avg);
+                for (var i = 0; i < data.result.length; i++) {
+                    label_data.push(data.result[i].review_item__name);
+                    rates.push(data.result[i].rate__avg);
                 }
                 //console.log(label_data);
                var barChartData = {
@@ -65,7 +64,7 @@ function send_request(selectedYear,selectedDep) {
                     type: 'bar',
                     data: barChartData,
                     options: {
-                        /*scales: {
+                        scales: {
                         yAxes: [{
                             display: true,
                             ticks: {
@@ -74,7 +73,7 @@ function send_request(selectedYear,selectedDep) {
                                             max: 5
                                    }
                              }]
-                            },*/
+                            },
                         responsive: true
                     }
                 });
