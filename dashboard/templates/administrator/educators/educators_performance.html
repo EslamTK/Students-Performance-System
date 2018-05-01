@@ -1,21 +1,20 @@
-{% extends 'educator/base.html' %} {% block title %}My Students{% endblock %} {% block body %} {% load static %}
+{% extends 'administrator/base.html' %} {% block title %}Educators Perfromance{% endblock %} {% block body %} {% load static %}
 
-<script>
+
+<script type='text/javascript'>
     var requireJS = [];
-    loadJS(requireJS, "{% static 'dashboard/views/charts3.js'%}");
+    var educatorsRatingData = {{educators_rating|safe}};
+    loadJS(requireJS, "{% static 'dashboard/views/charts5.js'%}");
 </script>
 
-<input type="hidden" id="myVar" name="variable" readonly value="{{ courses_counts }}">
-<input type="hidden" id="total" name="variable" readonly value="{{ student_courses_num_pages }}">
+
 <main class="animated fadeIn row">
     <div class="col-md-12">
-
         <div class="card" style="margin-top: 10px">
             <div class="card-header">
-                <h3 class="card-title mb-0">Courses Performance</h3>
+                <h3 class="card-title mb-0">Educators Performance</h3>
             </div>
             <div class="card-body">
-
                 <div class="row">
                     <div class="row col-sm-9">
                         <div class="col-xl-2 col-md-3">
@@ -42,83 +41,65 @@
                         </div>
 
                     </div>
+                </div>
 
+                <div class="col-md-6">
+                    <div class="btn-toolbar float-right" role="toolbar" aria-label="Toolbar with button groups">
+                        <div class="btn-group mr-3" data-toggle="buttons" aria-label="First group">
 
-                    <div class="col-md-3">
-                        <div class="btn-toolbar float-right" role="toolbar" aria-label="Toolbar with button groups">
-                            <div class="btn-group mr-3" data-toggle="buttons" aria-label="First group">
-                                {% for term in terms %} {% if forloop.counter == 1 %}
-                                <label class="btn btn-outline-secondary active">
-                                    {% else %}
-                                    <label class="btn btn-outline-secondary">
-                                        {% endif %}
-                                        <input type="radio" name="options" id="term_{{ forloop.counter }}"> {{ term.name }}
-                                    </label>
-                                    {% endfor %}
-                            </div>
                         </div>
-
                     </div>
                 </div>
-                <br>
-                <br>
-                <div class="container">
-                    <div class="row">
-                        <div class="col-md-4"></div>
-                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-                        <label class="col-md-1 " style="color: rgba(41,54,61,.7);font-size: 15px;font-weight: bold;">MidTerm</label>
-                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-                        <label style="color:rgba(41,54,61,.7);font-size: 15px;font-weight: bold;">Final/Expected</label>
-                    </div>
-                </div>
+            </div>
 
-
-                <div class="wrapper mx-auto" style="height: 80vh;width: 75vw;">
-                    <canvas id="canvas-1" class="chart" style="height: inherit;"></canvas>
-                </div>
-
+            <div class="wrapper mx-auto" style="height: 80vh;width: 75vw;">
+                <canvas id="canvas-1" class="chart" style="height: inherit;"></canvas>
             </div>
         </div>
     </div>
+
 
     <div class="col-md-12">
         <div class="card" style="margin-top: 10px">
             <div class="card-header">
                 <div class="row">
                     <div class="col-md-8 col-sm-12">
-                        <h3 class="card-title mb-0">Students</h3>
+                        <h3 class="card-title mb-0">Educators
+                            <a href="{%url 'dashboard:administrator_add_educator'%}" type="button" class="btn btn-info">Add</a>
+                        </h3>
                     </div>
+
                     <div class="input-group col-md-4 col-sm-12">
-                        <input type="text" id="search_input" name="input1-group2" class="form-control" placeholder="Student Name">
+                        <input type="text" id="search_input" name="input1-group2" class="form-control" placeholder="Educator Name">
                         <span class=" input-group-btn ">
                             <button type="button" class="btn btn-primary " id="search_btn">
                                 <i class="fa fa-search"></i>
                             </button>
-
                         </span>
 
                     </div>
                 </div>
             </div>
-            <div class="card-body" id="students_results">
-                {% include './pagination/students.html' %}
+            <div class="card-body" id="search_results">
+                {% include './pagination/educators_performance.html' %}
             </div>
         </div>
     </div>
-
+    </div>
 </main>
 <script>
-    document.getElementById("lis_1").parentElement.classList.add("active");
     var search_val = "";
+    document.getElementById("lis_1").parentElement.classList.add("active");
 
-    function loadPage(event) {
+    function loadResults(event) {
         var id = event.target.id;
-        page = document.getElementById(id).innerHTML;
-        if (isNaN(page)) {
-            page = id;
-        }
         if (document.getElementById(id).parentElement.classList.contains("active") != true) {
-            url = "/dashboard/educator_students/?page=" + page;
+
+            page = document.getElementById(id).innerHTML;
+            if (isNaN(page)) {
+                page = id;
+            }
+            url = "/dashboard/administrator_educators/?page=" + page;
             if (search_val != "") {
                 url += "&keyword=" + search_val;
             }
@@ -126,12 +107,11 @@
                 type: "GET",
                 url: url,
                 success: function (data) {
-                    $('#students_results').html(data);
+                    $('#search_results').html(data);
                     if (isNaN(id) != true)
                         id = "lis_" + id;
-                    document.getElementById(id).parentElement.classList.add("active")
+                    document.getElementById(id).parentElement.classList.add("active");
                 },
-
                 error: function (response, error) {
                     alert(response.responseText);
                 }
@@ -141,22 +121,19 @@
 
     function searchResults(e) {
         search_val = $("#search_input").val();
-
         $.ajax({
             type: "GET",
-            url: "/dashboard/educator_students/?keyword=" + search_val,
+            url: "/dashboard/administrator_educators/?keyword=" + search_val,
             success: function (data) {
-                $('#students_results').html(data);
-
+                $('#search_results').html(data);
+                document.getElementById("lis_1").parentElement.classList.add("active");
             },
-
             error: function (response, error) {
                 alert(response.responseText);
             }
         });
 
     }
-
     $(document).ready(function () {
         var input_val;
         $("#search_btn").click(function (e) {

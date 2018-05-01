@@ -41,7 +41,7 @@ def index(request):
         'students_num_pages': students_num_pages
     }
 
-    return render(request, 'administrator/index.html', result)
+    return render(request, 'administrator/students/students_performance.html', result)
 
 
 @user_passes_test(is_administrator)
@@ -87,7 +87,7 @@ def get_students(request):
         'students': students,
         'students_num_pages': students_num_pages
     }
-    template = 'administrator/pagination.html'
+    template = 'administrator/students/pagination/students_performance.html'
 
     return render(request, template, result)
 
@@ -116,7 +116,7 @@ def student_profile(request, student_id=None):
         'courses_formset': courses_formset
     }
 
-    return render(request, 'administrator/admin_student_profile.html', result)
+    return render(request, 'administrator/students/student_profile.html', result)
 
 
 @user_passes_test(is_administrator)
@@ -145,7 +145,7 @@ def student_form_handler(request, student_id=None):
         'student_form': student_form,
         'user_form': user_form
     }
-    template = 'administrator/add_student_form.html'
+    template = 'administrator/students/forms/add_student.html'
     return render(request, template, result)
 
 
@@ -162,7 +162,7 @@ def student_courses_formset_handler(request, student_id):
         'student_id': student_id,
         'courses_formset': courses_formset
     }
-    template = 'administrator/courses_form.html'
+    template = 'administrator/students/forms/courses_form.html'
     return render(request, template, result)
 
 
@@ -190,7 +190,7 @@ def educators(request):
         'educators_rating': educators_rating
     }
 
-    return render(request, 'administrator/admin_educators.html', result)
+    return render(request, 'administrator/educators/educators_performance.html', result)
 
 
 @user_passes_test(is_administrator)
@@ -232,9 +232,9 @@ def get_educators(request):
         'educators': educators_list,
         'educators_num_pages': educators_num_pages,
     }
-    template = 'administrator/educators_pagination.html'
+    template = 'administrator/educators/pagination/educators_performance.html'
 
-    return render_to_response(template, result, content_type=RequestContext(request))
+    return render(request, template, result)
 
 
 @user_passes_test(is_administrator)
@@ -279,7 +279,7 @@ def educator_profile(request, educator_id):
         'educator_reviews_departments': educator_reviews_departments
     }
 
-    return render(request, 'administrator/admin_educator_profile.html', result)
+    return render(request, 'administrator/educators/educator_profile.html', result)
 
 
 @user_passes_test(is_administrator)
@@ -311,7 +311,7 @@ def add_educator(request):
         'educator_accounts_form': accounts_formset
     }
 
-    return render(request, 'administrator/admin_create_user.html', result)
+    return render(request, 'administrator/forms/create_user.html', result)
 
 
 @user_passes_test(is_administrator)
@@ -332,6 +332,6 @@ def get_educator_reviews(request, educator_id):
         'educator_reviews_num_pages': educator_reviews_num_pages
     }
 
-    template = 'educator/pagination.html'
+    template = 'administrator/educators/pagination/educator_profile.html'
 
-    return render_to_response(template, result, content_type=RequestContext(request))
+    return render(request, template, result)
