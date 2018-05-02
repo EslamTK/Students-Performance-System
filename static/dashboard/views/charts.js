@@ -1,88 +1,176 @@
-$(function () {
+alert(44);
+
+window.onload = default_;
+var selectedYear;
+var flag=0;//flag to save the state of the term button =>(first or second) in window.term_id before select the year and dep
+window.selected_year = null;
+$('#year-selector').change(function () {	
+        selectedYear=$( '#year-selector option:selected' ).val();
+		//condition to disabe department_list till select year
+	    if(selectedYear === ''){
+			$("#department-selector").val($("#department-selector option:first").val());
+            $('#department-selector').attr('disabled', 'disabled');
+			default_();
+		}	
+		console.log("Id: "+selectedYear);
+	   //------------set year value in global variables 
+			if(selectedYear!==null )
+				{
+					window.selected_year = selectedYear;
+				}			
+			//-------------if flag=0 that mean button not checked > then return null in its value
+			if(flag===0){
+				send_request(selectedYear,null);
+			}else{ //---------else flag=1 that mean button checked > then return its value
+				send_request(selectedYear,window.term_id);
+				flag=0;//-------- return flag = 0 after execute the function 
+			}
+    });
+
+    //function applied on change term 
+	$("input:radio[name=options]").change(function(){
+		var ter_id= $('input[name=options]:checked').val();		
+		console.log("termId : "+ter_id );
+		window.term_id=ter_id; //make ter_id global variable
+			flag=1;
+		//------------------check if year & department are selected
+		if(window.selected_year===null ) {
+			// if year & department not selected send request with selected term only.
+			send_request(null,ter_id);
+			}else{ //if year & department are selected send request with selected year, department & term.
+					console.log("you select year: "+window.selected_year);
+				//send request with values of selected year, department & term.
+					send_request(window.selected_year,ter_id);
+				   
+			}
+		//---------------------------------------------
+	});
+
+var std_id= $('#student_id').val();
+console.log("sssss: "+std_id);
+
+//default value of radio button
+var term_id=$("#rb").prop("checked", true).val();
+console.log("test_term: "+term_id);
+
+function send_request(selectedYear,t_id) {
     'use strict';
+    console.log("selectedYear: "+selectedYear);
+    var yId = 'year='+selectedYear+'';
+	var stdId = '&student_id='+std_id+'';
+	var tId;
+	if(t_id===null)
+		{
+			 tId = '&term_id='+term_id+'';
+		}else{
+			 tId = '&term_id='+t_id+'';
+		}
+    var bUrl = 'http://127.0.0.1:8000/dashboard/administrator_educators_rating?';
+    var aUrl;
+	// if year is not selected 
+	//make url doesn't contain year value as url parameters
+	if(selectedYear===null)
+		{
+		    aUrl = bUrl + tId;
+		}else{
+			aUrl = bUrl +  yId + tId;
+		}
+	console.log(aUrl);
+	if(typeof std_id === 'undefined'){
+			aUrl ;
+		}else{
+			aUrl += stdId;
+		}
+	    console.log("URL: "+ aUrl);
+	
     $.ajax({
-        url: 'http://127.0.0.1:8000/dashboard/student_courses_grades',
+        url: aUrl,
         dataType: "json",
         type: 'GET',
         contentType: 'application/json',
-        data: data,
+        data: JSON.stringify( { } ),
         success: function (data) {
-            console.log(data.result);
-            /*name = data.result.map(result => result.name);
-            console.log('results: '+ name);*/
+            var label_data = [];   //year
+            var review_item_label = []; // item_name
+            var review_item = {};
 
-            // transform json array to normal array 
-            var name = data.result.map(function(result) {
-            return result.name;
-           });
-            var mt = data.result.map(function(result) {
-            return result.midterm;
-           });
-            var final = data.result.map(function(result) {
-            return result.final;
-           });
-            console.log('names: '+ name);
-            console.log('mts: '+ mt);
-            console.log('finals: '+ final);
+            for (var i = 0; i < data.result.length; i++) {
+                if (!label_data.includes(data.result[i].year)) {
+                    label_data.push(data.result[i].year);
+                }
+                if (review_item_label.includes(data.result[i].review_item__name)) {
+                    review_item[data.result[i].review_item__name].push(data.result[i].rate__avg);
+                    }
+                else {
+                    review_item_label.push(data.result[i].review_item__name);
+                    review_item[data.result[i].review_item__name] = new Array();
+                    review_item[data.result[i].review_item__name].push(data.result[i].rate__avg);
 
-/////////////// student_courses_performance barchart
-    var barChartData = {
-        labels: name,
-        datasets: [
-            {
-                label: 'MidTerm',
-                backgroundColor: 'rgba(220,220,220,0.2)',
-                borderColor: 'rgba(220,220,220,1)',
-                pointBackgroundColor: 'rgba(220,220,220,1)',
-                pointBorderColor: '#fff',
-                data: mt
-            },
-            {
-                label: 'Expected Final Grades',
-                backgroundColor: 'rgba(151,187,205,0.2)',
-                borderColor: 'rgba(151,187,205,1)',
-                pointBackgroundColor: 'rgba(151,187,205,1)',
-                pointBorderColor: '#fff',
-                data: final
+                }
+
             }
-        ]
-    }
+             
 
+            var colors = [];
+            for (var i = 0; i < review_item_label.length; i++) {
+                colors.push('' + randomScalingFactor() + ',' + randomScalingFactor() + ',' + randomScalingFactor() + ',');
+            }
+            
+            var datasetss = [];
+            for (var i = 0; i < review_item_label.length; i++) {
+                datasetss.push({
+                    label: review_item_label[i],
+                    backgroundColor: 'rgba(' + colors[i] + '0.2)',
+                    borderColor: 'rgba(' + colors[i] + '1)',
+                    pointBackgroundColor: 'rgba(' + colors[i] + '1)',
+                    pointBorderColor: '#fff',
+                    data: review_item[review_item_label[i]]
+                });
 
-    var ctx = document.getElementById('canvas-1');
-    var chart = new Chart(ctx, {
-        type: 'bar',
-        data: barChartData,
-        options: {
-            scales: {
-                yAxes: [{
-                    display: true,
-                    ticks: {
-                        beginAtZero: true,
-                        stepSize: 5,
-                        max: 50
-                           }
-                     }]
-                    },
-            responsive: true
+            }
+
+            var barChartData = {
+                labels: label_data,
+                datasets: datasetss
+            }
+
+            var ctx = document.getElementById('canvas-1');
+            var chart = new Chart(ctx, {
+                type: 'bar',
+                data: barChartData,
+                options: {
+                    responsive: true,
+                    scales: {
+                        yAxes: [{
+                            ticks: {
+                                beginAtZero: true
+                            }
+                        }]
+                    }
+                }
+            });
+
         }
     });
-/////////
-        }
-    });
 
-        /*var randomScalingFactor = function () {
-            return Math.round(Math.random() * 100)
-        };*/
+    var randomScalingFactor = function () {
+        return Math.round(Math.random() * 255)
+    };
+}
 
-////////
+function default_() {
+    'use strict';
+
+    var randomScalingFactor = function () {
+        return Math.round(Math.random() * 100)
+    };
+
     //getting data from hidden input field
     var my_data = document.getElementById("myVar").value;
 
     //transform string into valid json string
     var data = my_data.replace(/'/g, '"');
-   
-   /* 
+
     //trasnform data into json
     data = JSON.parse(data);
     console.log(data);
@@ -96,10 +184,41 @@ $(function () {
         midterm.push(data[i].midterm);
         prediction.push(data[i].prediction);
 
-    }*/
-    /////////////
-    
-    /*var randomScalingFactor = function () {
+    }
+    var lineChartData = {
+        labels: label_data,
+        datasets: [
+            {
+                label: 'MidTerm',
+                backgroundColor: 'rgba(220,220,220,0.2)',
+                borderColor: 'rgba(220,220,220,1)',
+                pointBackgroundColor: 'rgba(220,220,220,1)',
+                pointBorderColor: '#fff',
+                data: midterm
+            },
+            {
+                label: 'Expected Final Grades',
+                backgroundColor: 'rgba(151,187,205,0.2)',
+                borderColor: 'rgba(151,187,205,1)',
+                pointBackgroundColor: 'rgba(151,187,205,1)',
+                pointBorderColor: '#fff',
+                data: prediction
+            }
+        ]
+    }
+
+
+    var ctx = document.getElementById('canvas-1');
+    var chart = new Chart(ctx, {
+        type: 'bar',
+        data: lineChartData,
+        options: {
+            responsive: true
+        }
+    });
+
+
+    var randomScalingFactor = function () {
         return Math.round(Math.random() * 100)
     };
     var barChartData = {
@@ -128,10 +247,10 @@ $(function () {
         options: {
             responsive: true
         }
-    });*/
+    });
 
 
-    /*var doughnutData = {
+    var doughnutData = {
         labels: [
             'Red',
             'Green',
@@ -251,7 +370,7 @@ $(function () {
             'Grey',
             'Blue'
         ]
-    };*/
+    };
 
 
-});
+}
