@@ -5,7 +5,7 @@
         <th>Course</th>
         <th>Department</th>
         <th>Year</th>
-        <th>Result/Expected</th>
+        <th>Result</th>
     </tr>
     </thead>
     <tbody>
@@ -17,6 +17,9 @@
             <td>{{ student.course__name }}</td>
             <td>{{ student.student__department__name }}</td>
             <td>{{ student.course__year__name }}</td>
+            <td>{{ student.midterm_grade }}</td>
+
+        {% comment %}
             {% if student.prediction_grade is None %}
                 <td>--</td>
             {% else %}
@@ -30,6 +33,7 @@
                     </td>
                 {% endif %}
             {% endif %}
+        {% endcomment %}
 
         </tr>
     {% endfor %}

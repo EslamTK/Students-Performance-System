@@ -37,8 +37,9 @@ class StudentReviewItemRepo(Repo):
             filters['student_review__student_year'] = year
 
         rating = self._model.objects.filter(**filters) \
-            .extra(select={'year': "EXTRACT(year FROM created_at)"}) \
-            .values('review_item', 'review_item__name', 'year', 'student_review__created_at') \
+            .extra(select={'year': "EXTRACT(year FROM created_at)"},
+                   tables=["dashboard_studentreview"],) \
+            .values('review_item', 'review_item__name', 'year') \
             .annotate(Avg('rate'))
 
         return rating
