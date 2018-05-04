@@ -311,7 +311,7 @@ def add_educator(request):
         'educator_accounts_form': accounts_formset
     }
 
-    return render(request, 'administrator/forms/create_user.html', result)
+    return render(request, 'administrator/educators/forms/create_user.html', result)
 
 
 @user_passes_test(is_administrator)
