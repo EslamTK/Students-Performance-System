@@ -132,7 +132,11 @@ function send_request(selectedYear,selectedDep,t_id) {
 
 
             var ctx = document.getElementById('canvas-1');
-            var chart = new Chart(ctx, {
+			// erase old data from chart when update data 
+			if(window.chart !== undefined || window.chart !== null){
+				window.chart.destroy();
+			}
+            window.chart = new Chart(ctx, {
                 type: 'bar',
                 data: lineChartData,
                 options: {
@@ -207,7 +211,7 @@ function default_() {
 
 
     var ctx = document.getElementById('canvas-1');
-    var chart = new Chart(ctx, {
+    window.chart = new Chart(ctx, {
         type: 'line',
         data: lineChartData,
         options: {
