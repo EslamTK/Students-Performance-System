@@ -4,6 +4,10 @@ var flag=0;//flag to save the state of the term button =>(first or second) in wi
 window.selected_year = null;
 window.selected_dep = null;
 $('#year-selector').change(function () {	
+	// erase old data from chart when update data 
+		if(window.chart !== undefined || window.chart !== null){
+			window.chart.destroy();
+			}
         selectedYear=$( '#year-selector option:selected' ).val();
 		//condition to disabe department_list till select year
 	    if(selectedYear === ''){
@@ -39,6 +43,10 @@ $('#year-selector').change(function () {
 
     //function applied on change term 
 	$("input:radio[name=options]").change(function(){
+		// erase old data from chart when update data 
+		if(window.chart !== undefined || window.chart !== null){
+			window.chart.destroy();
+			}
 		var ter_id= $('input:radio[name=options]:checked').val();
 		//console.log("here is : "+ter_id );
 		window.term_id=ter_id; //make ter_id global variable
@@ -132,10 +140,6 @@ function send_request(selectedYear,selectedDep,t_id) {
 
 
             var ctx = document.getElementById('canvas-1');
-			// erase old data from chart when update data 
-			if(window.chart !== undefined || window.chart !== null){
-				window.chart.destroy();
-			}
             window.chart = new Chart(ctx, {
                 type: 'bar',
                 data: lineChartData,

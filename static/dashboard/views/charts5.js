@@ -1,5 +1,9 @@
 window.onload = default_;
 $('#year-selector').change(function () {	
+	// erase old data from chart when update data 
+		if(window.chart !== undefined || window.chart !== null){
+			window.chart.destroy();
+			}
         selectedYear=$( '#year-selector option:selected' ).val();
 		//condition to disabe department_list till select year
 	    if(selectedYear === ''){
@@ -79,10 +83,6 @@ function send_request(selectedYear,selectedDep) {
             }
 
             var ctx = document.getElementById('canvas-1');
-			// erase old data from chart when update data 
-			if(window.chart !== undefined || window.chart !== null){
-				window.chart.destroy();
-			}
             window.chart = new Chart(ctx, {
                 type: 'bar',
                 data: barChartData,
