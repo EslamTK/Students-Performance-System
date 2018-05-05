@@ -82,6 +82,6 @@ def get_user_data_format(user):
         user_data['absences'].append(i['absences'])
         user_data['famsup'].append(i['famsup'])
         user_data['paid'].append(i['paid'])
-        user_data['midterm'].append(i['midterm'])
+        user_data['midterm'].append((i['midterm']/100)*20)
 
     return user_data

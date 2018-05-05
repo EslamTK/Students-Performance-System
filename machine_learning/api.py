@@ -19,9 +19,10 @@ def prediction(student_data):
     }
 
     for i in range(len(student_data['courses'])):
+
         course = {
             'id': student_data['courses'][i]['id'],
-            'prediction': float(format(result[i], '.2f')),
+            'prediction': int((result[i]/20)*100),
             'name': student_data['courses'][i]['name'],
             'midterm': student_data['courses'][i]['midterm']
         }

@@ -86,3 +86,11 @@ class AdministratorEducatorLogic(Logic):
         for instance in instances:
             instance.educator_id = user.id
             instance.save()
+
+        return user.id
+
+    def close_report(self, review_id):
+        self._unit_of_work.reports.set_closed(review_id)
+
+    def delete_review(self, review_id):
+        self._unit_of_work.students_reviews.delete(review_id)

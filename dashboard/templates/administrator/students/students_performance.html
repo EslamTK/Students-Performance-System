@@ -59,8 +59,8 @@
                     </div>
                 </div>
 
-                <div class="wrapper mx-auto" style="height: 80vh;width: 75vw;">
-                    <canvas id="canvas-1" class="chart" style="height: inherit;"></canvas>
+                <div class="wrapper mx-auto">
+                    <canvas id="canvas-1" class="chart"></canvas>
                 </div>
             </div>
         </div>
@@ -84,28 +84,59 @@
 
                     </div>
                 </div>
-            </div>
-            <div class="card-body" id="students_results">
-                {% include './pagination/students_performance.html' %}
+                <div class="card-body" id="students_results">
+                    {% include 'administrator/students/pagination/students_performance.html' %}
+                </div>
             </div>
         </div>
-    </div>
-    </div>
-</main>
-<script>
-    document.getElementById("lis_1").parentElement.classList.add("active");
-    var search_val = "";
-
-    function loadPage(event) {
-        var id = event.target.id;
-        if (document.getElementById(id).parentElement.classList.contains("active") != true) {
-            page = document.getElementById(id).innerHTML;
-            if (isNaN(page)) {
-                page = id;
+        </div>
+    </main>
+    <script>
+        document.getElementById("lis_1").parentElement.classList.add("active");
+        var search_val = "";     
+        function loadPage(event) {
+                var id = event.target.id;
+                if(document.getElementById(id).parentElement.classList.contains("active") != true){
+                page = document.getElementById(id).innerHTML;
+                if(isNaN(page)){
+                    page = id;
+                }
+                    url = "{% url 'dashboard:administrator_students_paginator' %}?page=" + page;
+                if(search_val != ""){
+                    url += "&keyword="+search_val;
+                }
+                $.ajax({
+                    type: "GET",
+                    url: url,
+                    success: function (data) {
+                        $('#students_results').html(data);
+                        if(isNaN(id) != true)
+                            id = "lis_"+id;
+                        document.getElementById(id).parentElement.classList.add("active");
+                    },
+    
+                    error: function (response, error) {
+                        alert(response.responseText);
+                    }
+                });
             }
-            url = "/dashboard/administrator_students/?page=" + page;
-            if (search_val != "") {
-                url += "&keyword=" + search_val;
+        }
+    
+            function searchResults(e) {
+                search_val = $("#search_input").val();
+    
+                $.ajax({
+                    type: "GET",
+                    url: "{% url 'dashboard:administrator_students_paginator' %}?keyword=" + search_val,
+                    success: function (data) {
+                        $('#students_results').html(data);
+                        document.getElementById("lis_1").parentElement.classList.add("active");
+                    },
+    
+                    error: function (response, error) {
+                        alert(response.responseText);
+                    }
+                });
             }
             $.ajax({
                 type: "GET",
@@ -121,42 +152,5 @@
                     alert(response.responseText);
                 }
             });
-        }
-    }
-
-    function searchResults(e) {
-        search_val = $("#search_input").val();
-
-        $.ajax({
-            type: "GET",
-            url: "/dashboard/administrator_students/?keyword=" + search_val,
-            success: function (data) {
-                $('#students_results').html(data);
-                document.getElementById("lis_1").parentElement.classList.add("active");
-            },
-
-            error: function (response, error) {
-                alert(response.responseText);
-            }
-        });
-    }
-    $(document).ready(function () {
-        var input_val;
-        $("#search_btn").click(function (e) {
-            input_val = $("#search_input").val();
-            if (input_val !== search_val) {
-                searchResults();
-            }
-        });
-        $("#search_input").keypress(function (e) {
-            input_val = $("#search_input").val();
-            if (input_val !== search_val) {
-                var key_pressed = e.which;
-                if (key_pressed == 13) {
-                    searchResults();
-                }
-            }
-        });
-    });
-</script>
+        </script>
 {% endblock %}

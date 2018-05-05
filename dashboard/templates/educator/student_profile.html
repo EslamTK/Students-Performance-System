@@ -45,18 +45,19 @@
                         </div>
                     </div>
                 </div>
+                <div class="wrapper mx-auto">
+                    <canvas id="canvas-1" class="chart"></canvas>
+                </div>
             </div>
-            <div class="wrapper mx-auto" style="height: 80vh;width: 75vw;">
-                <canvas id="canvas-1" class="chart" style="height: inherit;"></canvas>
-            </div>
+
         </div>
         <div class="col-md-12">
-            <div class="card  style=" margin-top: 10px "">
+            <div class="card" style="margin-top:10px;">
                 <div class="card-header">
                     <h3 class="card-title mb-0">Add Review</h3>
                 </div>
                 <div class="card-body">
-                    <form method="POST">
+                    <form method="POST" action="{% url 'dashboard:educator_student_profile' student_id %}">
                         {%csrf_token%}
                         <div class="form-group">
                             <label for="comment">Review :</label>
@@ -77,14 +78,14 @@
                 </div>
             </div>
         </div>
-        <div class="col-md-12" id="educator_advices">
+        <div class="col-md-12">
             <div class="card" style="margin-top: 10px">
                 <div class="card-header">
                     <h3 class="card-title mb-0">Educators Advices</h3>
                 </div>
 
-                <div class="card-body">
-                    {% include './pagination/student_profile.html' %}
+                <div class="card-body" id="educator_advices">
+                    {% include 'educator/pagination/student_profile.html' %}
                 </div>
             </div>
 
@@ -105,7 +106,7 @@
             }
             $.ajax({
                 type: "GET",
-                url: "/dashboard/student_advices/?page=" + page,
+                url: "{% url 'dashboard:educator_student_profile_advices_paginator' student_id%}?page=" + page,
                 success: function (data) {
                     $('#educator_advices').html(data);
                     if (isNaN(id) != true)

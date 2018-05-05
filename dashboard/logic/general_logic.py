@@ -14,3 +14,6 @@ class GeneralLogic(Logic):
 
     def get_terms(self):
         return self._unit_of_work.term.get_all()
+
+    def get_home_page(self, group_id):
+        return self._unit_of_work.home_pages.get_one(primary_key=group_id)

@@ -15,8 +15,10 @@ class StudentCourseRepo(Repo):
             'student': student
         }
 
-        if year and term:
+        if year:
             filters['course__year'] = year
+
+        if term:
             filters['course__term'] = term
 
         if keyword:
@@ -44,7 +46,7 @@ class StudentCourseRepo(Repo):
         students = self._model.objects.filter(**filters) \
             .values('student', 'student__name', 'student__department', 'student__department__name',
                     'course', 'course__name', 'course__year', 'course__year__name', 'final_grade',
-                    'prediction_grade').order_by('-created_at').exclude(final_grade__isnull=False)
+                    'midterm_grade', 'prediction_grade').order_by('-created_at').exclude(final_grade__isnull=False)
 
         return students
 
@@ -66,7 +68,7 @@ class StudentCourseRepo(Repo):
         midterm_pass = Count('midterm_grade', filter=Q(midterm_grade__gte=50))
         final_pass = Count('final_grade', filter=Q(final_grade__gte=50))
 
-        counts = self._model.objects.filter(**filters). \
+        counts = self._model.objects.exclude(final_grade__isnull=True).filter(**filters). \
             values('course', 'course__name') \
             .annotate(midterm_pass=midterm_pass, final_pass=final_pass, total=Count('course'))
 

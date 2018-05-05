@@ -1,16 +1,15 @@
 {% extends 'administrator/base.html' %} {% block body %} {%load static%} {% load widget_tweaks %}
 
-<form method="POST" action="{%url 'dashboard:administrator_add_educator'%}" enctype="multipart/form-data">
 
     <div class="card-body">
 
-        {%csrf_token%}
+
         <div class="row">
             <div class="col-lg-4 card" style="margin-top: 10px">
                 <div class="card-body">
                     <h2>Add educator</h2>
                     <div class="col-sm-12">
-                        {%for usr in user_form%} {% render_field usr class="form-control" placeholder=usr.label %} {%endfor%}
+
                         <br> {%for field in educator_form%} {%if field.name == "about_me"%} {%elif field.name == "photo"%} {{field}}
                         {%else%}
                         <div class="input-group">

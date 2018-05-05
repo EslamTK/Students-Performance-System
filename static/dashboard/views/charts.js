@@ -214,7 +214,15 @@ function default_() {
         type: 'bar',
         data: lineChartData,
         options: {
-            responsive: true
+            responsive: true,
+                        scales: {
+                yAxes: [{
+                    ticks: {
+                        beginAtZero: true,
+                        max: 100
+                    }
+                }]
+            }
         }
     });
 

@@ -1,32 +1,40 @@
-<div id="student_form">
-    {% load widget_tweaks %} {{ student_form.non_field_errors }}
-    <div class="form-group">
-        <div class="row">
-            {% for stu in student_form %} {%if stu.name == "name"%}
-            <div class="col-md-4">
-                {%elif stu.name == "father_job"%}
-                <div class="col-md-4">
-                    {%endif%}
-                    <div class="form-group">
-                        <label for="{{ stu.id_for_label }}">{{ stu.label }}</label>
-                        {%render_field stu class="form-control" %}
-                    </div>
-                    {%if stu.name == "mother_job"%}
-                </div>
-                {%elif stu.name == "has_relationship"%}
-            </div>
-            {%endif%} {% for error in stu.errors %}
-            <div class="alert alert-danger">
-                <strong>{{ error}}</strong>
-            </div>
-            {% endfor %} {% endfor %}
-        </div>
-        <div class="col-md-12 text-center">
-            <button type="submit" class="btn btn-success" id="saveChange">Save Change</button>
-            <a href="{%url 'dashboard:administrator_index'%}">
-                <button type="button" class="btn btn-success">Cancel</button>
-            </a>
-        </div>
+{% load widget_tweaks %}
+{{ student_form.non_field_errors }}
+<div class="form-group">
+    <div class="row">
+        {% csrf_token %}
+        {% if user_form %}
+            {{ user_form.errors }}
+            {% for user in user_form %}
+                <label for="{{ user_for_label }}">{{ user.label }}</label>
+                {% render_field user class="form-control" %}
+            {% endfor %}
+        {% endif %}
 
-        </form>
+        {% for stu in student_form %}
+            {% if stu.name == "name" %}
+            <div class="col-md-4">
+            {% elif stu.name == "father_job" %}
+                <div class="col-md-4">
+            {% endif %}
+        <div class="form-group">
+            <label for="{{ stu.id_for_label }}">{{ stu.label }}</label>
+            {% render_field stu class="form-control" %}
+        </div>
+        {% if stu.name == "mother_job" %}
+            </div>
+        {% elif stu.name == "has_relationship" %}
+            </div>
+        {% endif %} {% for error in stu.errors %}
+            <div class="alert alert-danger">
+                <strong>{{ error }}</strong>
+            </div>
+        {% endfor %} {% endfor %}
     </div>
+    <div class="col-md-12 text-center">
+        <button type="submit" class="btn btn-success" id="saveChange">Save Change</button>
+        <a href="{% url 'dashboard:administrator_index' %}">
+            <button type="button" class="btn btn-success">Cancel</button>
+        </a>
+    </div>
+</div>

@@ -8,7 +8,7 @@
                 <img class="d-flex mr-3 rounded-circle" src="{% static 'dashboard\img\profile-pictures.png' %}" width="50" height="50" alt="">
                 <div class="media-body">
                     <h5 class="mt-0" style="margin-bottom: 2px;">
-                        <a href="{% url 'dashboard:educator_student_profile' rev.student_id %}">{{ rev.student__name }}</a>
+                        <a href="{% url 'dashboard:administrator_student_update' rev.student_id %}">{{ rev.student__name }}</a>
                     </h5>
 
             {% endif %}

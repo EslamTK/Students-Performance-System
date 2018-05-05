@@ -4,6 +4,7 @@ from .department_model import Department
 from .educator_account_model import EducatorAccount
 from .educator_advice_model import EducatorAdvice
 from .educator_model import Educator
+from .home_page_model import HomePage
 from .report_model import Report
 from .review_item_model import ReviewItem
 from .student_course_model import StudentCourse

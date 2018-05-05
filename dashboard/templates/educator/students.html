@@ -62,19 +62,9 @@
                 </div>
                 <br>
                 <br>
-                <div class="container">
-                    <div class="row">
-                        <div class="col-md-4"></div>
-                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-                        <label class="col-md-1 " style="color: rgba(41,54,61,.7);font-size: 15px;font-weight: bold;">MidTerm</label>
-                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-                        <label style="color:rgba(41,54,61,.7);font-size: 15px;font-weight: bold;">Final/Expected</label>
-                    </div>
-                </div>
 
-
-                <div class="wrapper mx-auto" style="height: 80vh;width: 75vw;">
-                    <canvas id="canvas-1" class="chart" style="height: inherit;"></canvas>
+                <div class="wrapper mx-auto">
+                    <canvas id="canvas-1" class="chart"></canvas>
                 </div>
 
             </div>
@@ -101,7 +91,7 @@
                 </div>
             </div>
             <div class="card-body" id="students_results">
-                {% include './pagination/students.html' %}
+                {% include 'educator/pagination/students.html' %}
             </div>
         </div>
     </div>
@@ -118,7 +108,7 @@
             page = id;
         }
         if (document.getElementById(id).parentElement.classList.contains("active") != true) {
-            url = "/dashboard/educator_students/?page=" + page;
+            url = "{% url 'dashboard:educator_students_paginator' %}?page=" + page;
             if (search_val != "") {
                 url += "&keyword=" + search_val;
             }
@@ -144,7 +134,7 @@
 
         $.ajax({
             type: "GET",
-            url: "/dashboard/educator_students/?keyword=" + search_val,
+            url: "{% url 'dashboard:educator_students_paginator' %}?keyword=" + search_val,
             success: function (data) {
                 $('#students_results').html(data);
 
@@ -169,7 +159,7 @@
             input_val = $("#search_input").val();
             if (input_val !== search_val) {
                 var key_pressed = e.which;
-                if (key_pressed == 13) {
+                if (key_pressed === 13) {
                     searchResults();
                 }
             }

@@ -1,4 +1,4 @@
-{% extends 'base.html' %}
+{% extends 'administrator/base.html' %}
 {% block title %}Student's Profile{% endblock %}
 {% block body %}
     {% load static %}
@@ -11,22 +11,18 @@
                 </div>
                 <div class="card-body">
                     <div class="container form-group">
+
                         {% if student_id %}
-                            <form id="student_profile" METHOD="POST">
-                            {% csrf_token %}
+                            <form id="student_profile" METHOD="POST"
+                                  action="{% url 'dashboard:administrator_student_update' student_id %}">
                         {% else %}
-                            <form id="student_add" METHOD="POST"
-                                  action="{% url 'dashboard:administrator_student_add_form' %} ">
-                            {% csrf_token %}
-
-                            {{ user_form.errors }}
-                            {% for user in user_form %}
-                                <label for="{{ user_for_label }}">{{ user.label }}</label>
-                                {% render_field user class="form-control" %}
-                            {% endfor %}
-
+                            <form id="student_profile" METHOD="POST"
+                                  action="{% url 'dashboard:administrator_student_add' %}">
                         {% endif %}
-                        {% include 'administrator/students/forms/add_student.html' %}
+                        <div id="student_form">
+                            {% include 'administrator/students/forms/add_student.html' %}
+                        </div>
+                        </form>
                     </div>
                 </div>
             </div>
@@ -83,23 +79,22 @@
         </div>
     </main>
     <script>
-
-        {%if student_id%}
+        {%if student_id %}
             $("#student_profile").ajaxForm({
-                url: "{% url 'dashboard:administrator_student_update_form' student_id %}",
                 type: 'post',
                 success: function (response) {
                     $("#student_form").html(response);
                 }
             });
+
             $("#student_courses").ajaxForm({
-                url: "{% url 'dashboard:administrator_student_courses_update_form' student_id%}",
+                url: "{% url 'dashboard:administrator_student_courses_update' student_id%}",
                 type: 'post',
                 success: function (response) {
                     $("#courses_form_body").html(response);
                 }
             });
-        {%endif%}
+        {% endif %}
     </script>
 
 {% endblock %}
