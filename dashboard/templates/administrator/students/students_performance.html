@@ -1,16 +1,15 @@
-{% extends 'administrator/base.html' %}
-{% block title %}Students Performance{% endblock %}
-{% block body %}
-    {% load static %}
+{% extends 'administrator/base.html' %} {% block title %}Students Performance{% endblock %} 
+{% block body %} 
+{% load static %}
 
-    <script>
-        var requireJS = [];
-        loadJS(requireJS, "{% static 'dashboard/views/charts4.js'%}");
-    </script>
-    
-    <input type="hidden" id="myData" name="variable" readonly value="{{ years_counts }}">
-    <main class="animated fadeIn row">
-        <div class="col-md-12">
+<script>
+    var requireJS = [];
+    loadJS(requireJS, "{% static 'dashboard/views/charts4.js'%}");
+</script>
+
+<input type="hidden" id="myData" name="variable" readonly value="{{ years_counts }}">
+<main class="animated fadeIn row">
+    <div class="col-md-12">
         <div class="card" style="margin-top: 10px">
             <div class="card-header">
                 <h3 class="card-title mb-0">Students Performance</h3>
@@ -20,44 +19,40 @@
                     <div class="row col-sm-9">
                         <div class="col-xl-2 col-md-3">
                             <div class="dropdown">
-                                <select class="form-control" id="year-selector" onchange="choice1(this)">
-                                    <option>Year</option>
+                                <select class="form-control" id="year-selector">
+                                    <option id="yTitle" value="" selected>Year</option>
                                     {% for year in years %}
-                                        <option value="{{ year.name }}" id="year_{{ forloop.counter }}">{{ year.name }}</option>
+                                    <option value="{{ year.name }}" id="year_{{ forloop.counter }}">{{ year.name }}</option>
                                     {% endfor %}
                                 </select>
                             </div>
                         </div>
-                    
+
 
                         <div class="col-xl-2 col-md-4">
-                                <div class="dropdown">
-                                    <select class="form-control" id="year-selector" onchange="choice1(this)">
-                                        <option>Department</option>
-                                        {% for dep in departments %}
-                                            <option value="{{ dep.id }}" id="dep_{{ forloop.counter }}">{{ dep.name }}</option>
-                                        {% endfor %}
-                                    </select>
-                                </div>
+                            <div class="dropdown">
+                                <select class="form-control" id="department-selector" disabled="disabled">
+                                    <option id="dTitle" value="" selected>Department</option>
+                                    {% for dep in departments %}
+                                        <option value="{{ dep.id }}" id="dep_{{ forloop.counter }}">{{ dep.name }}</option>
+                                    {% endfor %}
+                                </select>
                             </div>
                         </div>
-                    
+                    </div>
+
 
                     <div class="col-md-3">
-                        <div class="btn-toolbar float-right" role="toolbar"
-                             aria-label="Toolbar with button groups">
-                            <div class="btn-group mr-3" data-toggle="buttons"
-                                 aria-label="First group">
-                                {% for term in terms %}
-                                    {% if forloop.counter == 1 %}
-                                        <label class="btn btn-outline-secondary active">
+                        <div class="btn-toolbar float-right" role="toolbar" aria-label="Toolbar with button groups">
+                            <div class="btn-group mr-3" data-toggle="buttons" aria-label="First group">
+                                {% for term in terms %} {% if forloop.counter == 1 %}
+                                <label class="btn btn-outline-secondary active">
                                     {% else %}
-                                        <label class="btn btn-outline-secondary">
-                                    {% endif %}
-                                <input type="radio" name="options" value="{{term.id}}"
-                                > {{ term.name }}
-                                </label>
-                                {% endfor %}
+                                    <label class="btn btn-outline-secondary">
+                                        {% endif %}
+                                        <input type="radio" name="options" value="{{term.id}}"> {{ term.name }}
+                                    </label>
+                                    {% endfor %}
 
                             </div>
                         </div>
@@ -65,104 +60,103 @@
                 </div>
 
                 <div class="wrapper mx-auto" style="height: 80vh;width: 75vw;">
-                    <canvas id="canvas-1" class="chart"
-                            style="height: inherit;"></canvas>
+                    <canvas id="canvas-1" class="chart" style="height: inherit;"></canvas>
                 </div>
             </div>
         </div>
-        </div>
+    </div>
 
-        <div class="col-md-12">
-            <div class="card" style="margin-top: 10px">
-                <div class="card-header">
-                    <div class="row">
-                        <div class="col-md-8 col-sm-12">
-                            <h3 class="card-title mb-0">Students</h3>
-                        </div>
+    <div class="col-md-12">
+        <div class="card" style="margin-top: 10px">
+            <div class="card-header">
+                <div class="row">
+                    <div class="col-md-8 col-sm-12">
+                        <h3 class="card-title mb-0">Students</h3>
+                    </div>
 
-                        <div class="input-group col-md-4 col-sm-12">
-                            <input type="text" id="search_input"
-                                   name="input1-group2"
-                                   class="form-control" placeholder="Student Name">
-                            <span class=" input-group-btn ">
-                    <button type="button" class="btn btn-primary " onclick="searchResults()"><i
-                            class="fa fa-search"></i></button>
-                  </span>
+                    <div class="input-group col-md-4 col-sm-12">
+                        <input type="text" id="search_input" name="input1-group2" class="form-control" placeholder="Student Name">
+                        <span class=" input-group-btn ">
+                            <button type="button" class="btn btn-primary " onclick="searchResults()">
+                                <i class="fa fa-search"></i>
+                            </button>
+                        </span>
 
-                        </div>
                     </div>
                 </div>
-                <div class="card-body" id="students_results">
-                    {% include './pagination/students_performance.html' %}
-                </div>
+            </div>
+            <div class="card-body" id="students_results">
+                {% include './pagination/students_performance.html' %}
             </div>
         </div>
-        </div>
-    </main>
-    <script>
-        document.getElementById("lis_1").parentElement.classList.add("active");
-        var search_val = "";     
-        function loadPage(event) {
-                var id = event.target.id;
-                if(document.getElementById(id).parentElement.classList.contains("active") != true){
-                page = document.getElementById(id).innerHTML;
-                if(isNaN(page)){
-                    page = id;
-                }
-                url = "/dashboard/administrator_students/?page=" + page;
-                if(search_val != ""){
-                    url += "&keyword="+search_val;
-                }
-                $.ajax({
-                    type: "GET",
-                    url: url,
-                    success: function (data) {
-                        $('#students_results').html(data);
-                        if(isNaN(id) != true)
-                            id = "lis_"+id;
-                        document.getElementById(id).parentElement.classList.add("active");
-                    },
-    
-                    error: function (response, error) {
-                        alert(response.responseText);
-                    }
-                });
+    </div>
+    </div>
+</main>
+<script>
+    document.getElementById("lis_1").parentElement.classList.add("active");
+    var search_val = "";
+
+    function loadPage(event) {
+        var id = event.target.id;
+        if (document.getElementById(id).parentElement.classList.contains("active") != true) {
+            page = document.getElementById(id).innerHTML;
+            if (isNaN(page)) {
+                page = id;
             }
-        }
-    
-            function searchResults(e) {
-                search_val = $("#search_input").val();
-    
-                $.ajax({
-                    type: "GET",
-                    url: "/dashboard/administrator_students/?keyword=" + search_val,
-                    success: function (data) {
-                        $('#students_results').html(data);
-                        document.getElementById("lis_1").parentElement.classList.add("active");
-                    },
-    
-                    error: function (response, error) {
-                        alert(response.responseText);
-                    }
-                });
+            url = "/dashboard/administrator_students/?page=" + page;
+            if (search_val != "") {
+                url += "&keyword=" + search_val;
             }
-            $(document).ready(function(){
-                var input_val;
-                $("#search_btn").click(function(e){
-                    input_val = $("#search_input").val();
-                    if(input_val !== search_val){
-                        searchResults();
-                    }
-                });
-                $("#search_input").keypress(function(e){
-                    input_val = $("#search_input").val();
-                    if(input_val !== search_val){
-                        var key_pressed = e.which;
-                        if(key_pressed == 13){
-                            searchResults();
-                        }
-                    }
-                });
+            $.ajax({
+                type: "GET",
+                url: url,
+                success: function (data) {
+                    $('#students_results').html(data);
+                    if (isNaN(id) != true)
+                        id = "lis_" + id;
+                    document.getElementById(id).parentElement.classList.add("active");
+                },
+
+                error: function (response, error) {
+                    alert(response.responseText);
+                }
             });
-        </script>
+        }
+    }
+
+    function searchResults(e) {
+        search_val = $("#search_input").val();
+
+        $.ajax({
+            type: "GET",
+            url: "/dashboard/administrator_students/?keyword=" + search_val,
+            success: function (data) {
+                $('#students_results').html(data);
+                document.getElementById("lis_1").parentElement.classList.add("active");
+            },
+
+            error: function (response, error) {
+                alert(response.responseText);
+            }
+        });
+    }
+    $(document).ready(function () {
+        var input_val;
+        $("#search_btn").click(function (e) {
+            input_val = $("#search_input").val();
+            if (input_val !== search_val) {
+                searchResults();
+            }
+        });
+        $("#search_input").keypress(function (e) {
+            input_val = $("#search_input").val();
+            if (input_val !== search_val) {
+                var key_pressed = e.which;
+                if (key_pressed == 13) {
+                    searchResults();
+                }
+            }
+        });
+    });
+</script>
 {% endblock %}

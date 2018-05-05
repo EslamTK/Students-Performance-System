@@ -19,10 +19,10 @@
                         <div class="col-xl-2 col-md-3">
 
                             <div class="dropdown">
-                                <select class="form-control" id="year-selector" onchange="choice1(this)">
-                                    <option>Year</option>
+                                <select class="form-control" id="year-selector">
+                                    <option id="yTitle" value="" selected>Year</option>
                                     {% for year in years %}
-                                    <option value="{{ year.name }}" id="year_{{ forloop.counter }}">{{ year.name }}</option>
+                                    <option value="{{ year.id }}" id="year_{{ forloop.counter }}">{{ year.name }}</option>
                                     {% endfor %}
                                 </select>
 
@@ -39,7 +39,7 @@
                                     {% else %}
                                     <label class="btn btn-outline-secondary">
                                         {% endif %}
-                                        <input type="radio" name="options" value="{{term.id}}"> {{ term.name }}
+                                        <input type="radio" id="rb" name="options" value="{{term.id}}" checked="checked"> {{ term.name }}
                                     </label>
                                     {% endfor %}
                             </div>
