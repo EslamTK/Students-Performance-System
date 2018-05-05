@@ -20,7 +20,7 @@ $(function () {
             }
         else {
             review_item_label.push(data[i].review_item__name);
-            review_item[data[i].review_item__name] = new Array();
+            review_item[data[i].review_item__name] = [];
             review_item[data[i].review_item__name].push(data[i].rate__avg);
 
         }
@@ -48,7 +48,7 @@ $(function () {
     var lineChartData = {
         labels: label_data,
         datasets: datasetss
-    }
+    };
 
     var ctx = document.getElementById('canvas-1');
     var chart = new Chart(ctx, {
@@ -59,7 +59,8 @@ $(function () {
             scales: {
                 yAxes: [{
                     ticks: {
-                        beginAtZero: true
+                        beginAtZero: true,
+                        max: 3
                     }
                 }]
             }

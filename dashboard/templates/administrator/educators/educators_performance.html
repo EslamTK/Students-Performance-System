@@ -50,10 +50,9 @@
                         </div>
                     </div>
                 </div>
-            </div>
-
-            <div class="wrapper mx-auto" style="height: 80vh;width: 75vw;">
-                <canvas id="canvas-1" class="chart" style="height: inherit;"></canvas>
+                <div class="wrapper mx-auto">
+                    <canvas id="canvas-1" class="chart"></canvas>
+                </div>
             </div>
         </div>
     </div>
@@ -65,7 +64,8 @@
                 <div class="row">
                     <div class="col-md-8 col-sm-12">
                         <h3 class="card-title mb-0">Educators
-                            <a href="{%url 'dashboard:administrator_add_educator'%}" type="button" class="btn btn-info">Add</a>
+                            <a href="{% url 'dashboard:administrator_educator_add' %}" type="button"
+                               class="btn btn-info">Add</a>
                         </h3>
                     </div>
 
@@ -81,7 +81,7 @@
                 </div>
             </div>
             <div class="card-body" id="search_results">
-                {% include './pagination/educators_performance.html' %}
+                {% include 'administrator/educators/pagination/educators_performance.html' %}
             </div>
         </div>
     </div>
@@ -99,7 +99,7 @@
             if (isNaN(page)) {
                 page = id;
             }
-            url = "/dashboard/administrator_educators/?page=" + page;
+            url = "{% url 'dashboard:administrator_educators_paginator' %}?page=" + page;
             if (search_val != "") {
                 url += "&keyword=" + search_val;
             }
@@ -123,7 +123,7 @@
         search_val = $("#search_input").val();
         $.ajax({
             type: "GET",
-            url: "/dashboard/administrator_educators/?keyword=" + search_val,
+            url: "{% url 'dashboard:administrator_educators_paginator' %}?keyword=" + search_val,
             success: function (data) {
                 $('#search_results').html(data);
                 document.getElementById("lis_1").parentElement.classList.add("active");

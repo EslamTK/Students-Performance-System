@@ -1,11 +1,21 @@
 from django.urls import path
 
-# from dashboard.controllers import forms_testing
-from dashboard.controllers import administrator_controller
-from dashboard.controllers.educator.apis.counts import EducatorStudentsCountsApi
+from dashboard.controllers.administrator.apis.educator_rating import AdministratorEducatorRatingApi
+from dashboard.controllers.administrator.apis.educators_rating import AdministratorEducatorsRatingApi
+from dashboard.controllers.administrator.apis.review_actions import AdministratorReviewActionsApi
+from dashboard.controllers.administrator.apis.students_years_performance import AdministratorStudentsYearsPerformanceApi
+from dashboard.controllers.administrator.views.educator_profile import AdministratorEducatorProfileView, \
+    AdministratorEducatorReviewsPaginatorView
+from dashboard.controllers.administrator.views.educators import AdministratorEducatorsView, \
+    AdministratorEducatorsPaginatorView
+from dashboard.controllers.administrator.views.index import AdministratorIndexView, \
+    AdministratorStudentsPaginatorView
+from dashboard.controllers.administrator.views.student_profile import AdministratorStudentProfileView, \
+    AdministratorStudentCoursesView
 from dashboard.controllers.educator.apis.rating import EducatorRatingApi
-from dashboard.controllers.educator.apis.report import EducatorReportApi
+from dashboard.controllers.educator.apis.review_report import EducatorReportApi
 from dashboard.controllers.educator.apis.student_courses import EducatorStudentsCoursesGradesApi
+from dashboard.controllers.educator.apis.students_counts import EducatorStudentsCountsApi
 from dashboard.controllers.educator.views.index import EducatorIndexView, EducatorReviewsPaginatorView
 from dashboard.controllers.educator.views.student_profile import EducatorStudentProfileView, \
     EducatorStudentAdvicesPaginatorView
@@ -14,6 +24,7 @@ from dashboard.controllers.student.apis.courses_grades import StudentCoursesGrad
 from dashboard.controllers.student.views.courses import StudentCoursesView, StudentCoursesPaginatorView
 from dashboard.controllers.student.views.educator_profile import StudentEducatorProfileView
 from dashboard.controllers.student.views.index import StudentIndexView, StudentAdvicesPaginatorView
+# from dashboard.controllers import forms_testing
 from dashboard.controllers.user.login import LoginView
 from dashboard.controllers.user.logout import LogoutView
 
@@ -53,7 +64,7 @@ urlpatterns = [
          StudentCoursesGradesApi.as_view(),
          name='student_courses_grades_api'),
 
-    path('student/educator/<int:educator_id>/',
+    path('student/educators/<int:educator_id>/',
          StudentEducatorProfileView.as_view(),
          name='student_educator_profile'),
 
@@ -100,59 +111,63 @@ urlpatterns = [
 
 
     path('administrator/',
-         administrator_controller.index,
+         AdministratorIndexView.as_view(),
          name='administrator_index'),
 
-    path('administrator_years_counts/',
-         administrator_controller.get_years_counts,
-         name='administrator_years_counts'),
+    path('administrator/students/',
+         AdministratorIndexView.as_view(),
+         name='administrator_students'),
 
-    path('administrator_students/',
-         administrator_controller.get_students,
+    path('administrator/students/paginator/',
+         AdministratorStudentsPaginatorView.as_view(),
          name='administrator_students_paginator'),
 
-    path('administrator/student/<int:student_id>/',
-         administrator_controller.student_profile,
-         name='administrator_student_update'),
+    path('api/administrator/students/years/performance/',
+         AdministratorStudentsYearsPerformanceApi.as_view(),
+         name='administrator_students_years_performance_api'),
 
-    path('administrator/student/<int:student_id>/form/',
-         administrator_controller.student_form_handler,
-         name='administrator_student_update_form'),
-
-    path('administrator/student/add/',
-         administrator_controller.student_profile,
+    path('administrator/students/add/',
+         AdministratorStudentProfileView.as_view(),
          name='administrator_student_add'),
 
-    path('administrator/student/add/form/',
-         administrator_controller.student_form_handler,
-         name='administrator_student_add_form'),
+    path('administrator/students/<int:student_id>/',
+         AdministratorStudentProfileView.as_view(),
+         name='administrator_student_update'),
 
-    path('administrator/student/<int:student_id>/courses/form/',
-         administrator_controller.student_courses_formset_handler,
-         name='administrator_student_courses_update_form'),
+    path('administrator/students/<int:student_id>/courses/',
+         AdministratorStudentCoursesView.as_view(),
+         name='administrator_student_courses_update'),
+
 
     path('administrator/educators/',
-         administrator_controller.educators,
+         AdministratorEducatorsView.as_view(),
          name='administrator_educators'),
 
-    path('administrator_educators_rating/',
-         administrator_controller.get_educators_rating,
-         name='administrator_educators_rating'),
-
-    path('administrator_educators/',
-         administrator_controller.get_educators,
+    path('administrator/educators/paginator/',
+         AdministratorEducatorsPaginatorView.as_view(),
          name='administrator_educators_paginator'),
 
-    path('administrator/educator/add/',
-         administrator_controller.add_educator,
-         name='administrator_add_educator'),
-         
-    path('administrator/educator/<int:educator_id>/',
-         administrator_controller.educator_profile,
+    path('api/administrator/educators/rating/',
+         AdministratorEducatorsRatingApi.as_view(),
+         name='administrator_educators_rating_api'),
+
+    path('administrator/educators/add/',
+         AdministratorEducatorProfileView.as_view(),
+         name='administrator_educator_add'),
+
+    path('administrator/educators/<int:educator_id>/',
+         AdministratorEducatorProfileView.as_view(),
          name='administrator_educator_profile'),
 
-    path('administrator/educator/<int:educator_id>/reviews/',
-         administrator_controller.get_educator_reviews,
+    path('administrator/educators/<int:educator_id>/reviews/paginator/',
+         AdministratorEducatorReviewsPaginatorView.as_view(),
          name='administrator_educator_reviews_paginator'),
-    
+
+    path('api/administrator/educators/<int:educator_id>/rating/',
+         AdministratorEducatorRatingApi.as_view(),
+         name='administrator_educator_rating_api'),
+
+    path('api/administrator/reviews/actions/',
+         AdministratorReviewActionsApi.as_view(),
+         name='administrator_review_actions_api')
 ]

@@ -39,10 +39,11 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'dashboard.apps.DashboardConfig',
     'widget_tweaks',
-    
+    'debug_toolbar'
 ]
 
 MIDDLEWARE = [
+    'debug_toolbar.middleware.DebugToolbarMiddleware',
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
@@ -130,3 +131,5 @@ MEDIA_ROOT = BASE_DIR + '/uploads/'
 MEDIA_URL = '/uploads/'
 
 LOGIN_URL = '/dashboard/login'
+
+INTERNAL_IPS = ['127.0.0.1']

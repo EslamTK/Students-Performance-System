@@ -64,9 +64,8 @@
                     </div>
                 </div>
 
-                <div class="wrapper mx-auto" style="height: 80vh;width: 75vw;">
-                    <canvas id="canvas-1" class="chart"
-                            style="height: inherit;"></canvas>
+                <div class="wrapper mx-auto">
+                    <canvas id="canvas-1" class="chart"></canvas>
                 </div>
             </div>
         </div>
@@ -93,7 +92,7 @@
                     </div>
                 </div>
                 <div class="card-body" id="students_results">
-                    {% include './pagination/students_performance.html' %}
+                    {% include 'administrator/students/pagination/students_performance.html' %}
                 </div>
             </div>
         </div>
@@ -109,7 +108,7 @@
                 if(isNaN(page)){
                     page = id;
                 }
-                url = "/dashboard/administrator_students/?page=" + page;
+                    url = "{% url 'dashboard:administrator_students_paginator' %}?page=" + page;
                 if(search_val != ""){
                     url += "&keyword="+search_val;
                 }
@@ -135,7 +134,7 @@
     
                 $.ajax({
                     type: "GET",
-                    url: "/dashboard/administrator_students/?keyword=" + search_val,
+                    url: "{% url 'dashboard:administrator_students_paginator' %}?keyword=" + search_val,
                     success: function (data) {
                         $('#students_results').html(data);
                         document.getElementById("lis_1").parentElement.classList.add("active");
