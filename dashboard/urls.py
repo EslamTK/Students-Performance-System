@@ -24,17 +24,12 @@ from dashboard.controllers.student.apis.courses_grades import StudentCoursesGrad
 from dashboard.controllers.student.views.courses import StudentCoursesView, StudentCoursesPaginatorView
 from dashboard.controllers.student.views.educator_profile import StudentEducatorProfileView
 from dashboard.controllers.student.views.index import StudentIndexView, StudentAdvicesPaginatorView
-# from dashboard.controllers import forms_testing
 from dashboard.controllers.user.login import LoginView
 from dashboard.controllers.user.logout import LogoutView
 
 app_name = 'dashboard'
 
 urlpatterns = [
-
-    # path('form/',
-    #      forms_testing.index,
-    #      name='form'),
 
     path('login/',
          LoginView.as_view(),
