@@ -20,7 +20,7 @@ $('#department-selector').change(function () {
 function send_request() {
     'use strict';
     var depId = 'department_id=' + selectedDep + '';
-    var yId = '&year=' + selectedYear + '';
+    var yId = '&year_id=' + selectedYear + '';
     var bUrl = request_url + '?';
     var aUrl = bUrl + depId + yId;
 

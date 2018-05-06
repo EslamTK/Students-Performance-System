@@ -25,17 +25,15 @@ $("input:radio[name=options]").change(function () {
     if (window.chart !== undefined || window.chart !== null) {
         window.chart.destroy();
     }
-    var ter_id = $('input:radio[name=options]:checked').val();
+    ter_id = $('input:radio[name=options]:checked').val();
     send_request();
 });
 
 function send_request() {
     'use strict';
-    console.log("selectedYear: " + selectedYear);
-    console.log("selectedDep: " + selectedDep);
-    var depId = 'department_id=' + selectedDep + '';
-    var yId = '&year=' + selectedYear + '';
-    var tId = '&term_id=' + ter_id + '';
+    var depId = 'department_id=' + selectedDep;
+    var yId = '&year_id=' + selectedYear;
+    var tId = '&term_id=' + ter_id ;
     var bUrl = request_url + '?';
     var aUrl;
     aUrl = bUrl + depId + yId + tId;
@@ -46,7 +44,7 @@ function send_request() {
         type: 'GET',
         contentType: 'application/json',
         success: function (data) {
-            console.log(data);
+            
             var label_data = [];
             var success = [];
             var fail = [];
@@ -57,9 +55,7 @@ function send_request() {
                 label_data.push(data.result[i].year);
                 success.push(data.result[i].success);
                 fail.push(data.result[i].fail);
-                console.log(data.result[i].year);
-                console.log(data.result[i].success);
-                console.log(data.result[i].fail);
+                
             }
             /////////
             var lineChartData = {
@@ -116,7 +112,6 @@ function default_() {
 
     //getting data from hidden input field
     var my_data = document.getElementById("myData").value;
-    console.log("bam");
     console.log(my_data);
     //formating data to valid json format
     var data = my_data.slice(10, my_data.length, my_data)

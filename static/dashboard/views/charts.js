@@ -25,7 +25,7 @@ $("input:radio[name=options]").change(function () {
 function send_request() {
     'use strict';
     console.log("selectedYear: " + selectedYear);
-    var yId = '?year=' + selectedYear;
+    var yId = '?year_id=' + selectedYear;
     var tId = '&term_id=' + ter_id;
     var bUrl = request_url;
     var aUrl = bUrl + yId + tId;

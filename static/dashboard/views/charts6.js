@@ -10,7 +10,10 @@ $('#year-selector').change(function () {
     send_request();
 });
 $('#department-selector').change(function () {
-    selectedDep = $('#department-selector option:selected').val();
+	selectedDep = $('#department-selector option:selected').val();
+	if (window.chart !== undefined || window.chart !== null) {
+        window.chart.destroy();
+    }
     send_request();
 });
 

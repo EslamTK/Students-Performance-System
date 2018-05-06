@@ -23,7 +23,7 @@
                                 <select class="form-control" id="year-selector">
                                     <option id="yTitle" value="" selected>Year</option>
                                     {% for year in years %}
-                                    <option value="{{ year.name }}" id="year_{{ forloop.counter }}">{{ year.name }}</option>
+                                    <option value="{{ year.id }}" id="year_{{ forloop.counter }}">{{ year.name }}</option>
                                     {% endfor %}
                                 </select>
                             </div>
