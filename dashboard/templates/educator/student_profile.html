@@ -24,7 +24,7 @@
                                 <select class="form-control" id="year-selector">
                                     <option value="" id="yTitle" selected>Year</option>
                                     {% for year in years %}
-                                    <option value="{{ year.id }}" id="year_{{ forloop.counter }}">{{ year.name }}</option>
+                                        <option value="{{ year.id }}" id="year_{{ forloop.counter }}">{{ year.name }}</option>
                                     {% endfor %}
                                 </select>
                             </div>
@@ -34,14 +34,11 @@
                     <div class="col-md-3">
                         <div class="btn-toolbar float-right" role="toolbar" aria-label="Toolbar with button groups">
                             <div class="btn-group mr-3" data-toggle="buttons" aria-label="First group">
-                                {% for term in terms %} {% if forloop.counter == 1 %}
-                                <label class="btn btn-outline-secondary active">
-                                    {% else %}
+                                {% for term in terms %} 
                                     <label class="btn btn-outline-secondary">
-                                        {% endif %}
                                         <input type="radio" id="rb" name="options" value="{{term.id}}" checked="checked"> {{ term.name }}
                                     </label>
-                                    {% endfor %}
+                                {% endfor %}
                             </div>
                         </div>
                     </div>

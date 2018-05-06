@@ -1,46 +1,26 @@
 window.onload = default_;
-var selectedDep;
-var selectedYear;
+var selectedDep = "";
+var selectedYear = "";
 $('#year-selector').change(function () {
     // erase old data from chart when update data 
     if (window.chart !== undefined || window.chart !== null) {
         window.chart.destroy();
     }
     selectedYear = $('#year-selector option:selected').val();
-    //condition to disabe department_list till select year
-    if (selectedYear === '') {
-        selectedDep = null;
-        $("#department-selector").val($("#department-selector option:first").val());
-        $('#department-selector').attr('disabled', 'disabled');
-        default_();
-    } else {
-        $('#department-selector').attr('disabled', false);
-        $('#dTitle').attr('disabled', 'disabled');
-    }
-    console.log("Id: " + selectedYear);
-    if (selectedYear !== null && selectedDep !== null && selectedDep !== undefined) {
-        send_request(selectedYear, selectedDep);
-    }
+    send_request();
 });
 $('#department-selector').change(function () {
     selectedDep = $('#department-selector option:selected').val();
-    // send selected year and dep to send_request function 
-    send_request(selectedYear, selectedDep);
+    send_request();
 });
 
-var edu= $('#educator_id').val();
-console.log("sssss: "+edu);
 //method that get the selected year and dep and display new data on the chart
-function send_request(selectedYear,selectedDep) {
+function send_request() {
 	   'use strict';
-		console.log("selectedYear: "+selectedYear);
-		console.log("selectedDep: "+selectedDep);
 		var depId = 'department_id='+selectedDep+'';	
 		var cYear = '&year='+selectedYear+'';
-		var edId = '&educator_id='+edu+'';
 		var baseUrl = request_url+'?';
 		var aUrl = baseUrl +  depId + cYear;
-	    console.log("URL: "+ aUrl);
 	
 		$.ajax({
 			url: aUrl,

@@ -32,7 +32,7 @@
 
                         <div class="col-xl-2 col-md-4">
                             <div class="dropdown">
-                                <select class="form-control" id="department-selector" disabled="disabled">
+                                <select class="form-control" id="department-selector">
                                     <option id="dTitle" value="" selected>Department</option>
                                     {% for dep in departments %}
                                         <option value="{{ dep.id }}" id="dep_{{ forloop.counter }}">{{ dep.name }}</option>
@@ -46,15 +46,11 @@
                     <div class="col-md-3">
                         <div class="btn-toolbar float-right" role="toolbar" aria-label="Toolbar with button groups">
                             <div class="btn-group mr-3" data-toggle="buttons" aria-label="First group">
-                                {% for term in terms %} {% if forloop.counter == 1 %}
-                                <label class="btn btn-outline-secondary active">
-                                    {% else %}
+                                {% for term in terms %} 
                                     <label class="btn btn-outline-secondary">
-                                        {% endif %}
-                                        <input type="radio" id="rb" name="options" value="{{term.id}}" checked="checked"> {{ term.name }}
+                                        <input type="radio" id="rb" name="options" value="{{term.id}}"> {{ term.name }}
                                     </label>
-                                    {% endfor %}
-
+                                {% endfor %}
                             </div>
                         </div>
                     </div>

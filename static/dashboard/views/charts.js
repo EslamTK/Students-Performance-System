@@ -1,89 +1,35 @@
 window.onload = default_;
-var selectedYear;
-var flag = 0; //flag to save the state of the term button =>(first or second) in window.term_id before select the year and dep
-window.selected_year = null;
+var selectedYear = "";
+var ter_id = "";
+
 $('#year-selector').change(function () {
     // erase old data from chart when update data 
     if (window.chart !== undefined || window.chart !== null) {
         window.chart.destroy();
     }
     selectedYear = $('#year-selector option:selected').val();
-    //condition to disabe department_list till select year
-    if (selectedYear === '') {
-        $("#department-selector").val($("#department-selector option:first").val());
-        $('#department-selector').attr('disabled', 'disabled');
-        default_();
-    }
-    console.log("Id: " + selectedYear);
-    //------------set year value in global variables 
-    if (selectedYear !== null) {
-        window.selected_year = selectedYear;
-    }
-    //-------------if flag=0 that mean button not checked > then return null in its value
-    if (flag === 0) {
-        send_request(selectedYear, null);
-    } else { //---------else flag=1 that mean button checked > then return its value
-        send_request(selectedYear, window.term_id);
-        flag = 0; //-------- return flag = 0 after execute the function 
-    }
+    send_request();
 });
 
-//function applied on change term 
+
 $("input:radio[name=options]").change(function () {
     // erase old data from chart when update data 
     if (window.chart !== undefined || window.chart !== null) {
         window.chart.destroy();
     }
-    var ter_id = $('input[name=options]:checked').val();
-    console.log("termId : " + ter_id);
-    window.term_id = ter_id; //make ter_id global variable
-    flag = 1;
-    //------------------check if year & department are selected
-    if (window.selected_year === null) {
-        // if year & department not selected send request with selected term only.
-        send_request(null, ter_id);
-    } else { //if year & department are selected send request with selected year, department & term.
-        console.log("you select year: " + window.selected_year);
-        //send request with values of selected year, department & term.
-        send_request(window.selected_year, ter_id);
-
-    }
-    //---------------------------------------------
+    ter_id = $('input[name=options]:checked').val();
+    send_request();
 });
 
-var std_id = $('#student_id').val();
-console.log("sssss: " + std_id);
 
-//default value of radio button
-var term_id = $("#rb").prop("checked", true).val();
-console.log("test_term: " + term_id);
-
-function send_request(selectedYear, t_id) {
+function send_request() {
     'use strict';
     console.log("selectedYear: " + selectedYear);
-    var yId = '?year=' + selectedYear + '';
-    var stdId = '&student_id=' + std_id + '';
-    var tId;
-    if (t_id === null) {
-        tId = '&term_id=' + term_id + '';
-    } else {
-        tId = '&term_id=' + t_id + '';
-    }
+    var yId = '?year=' + selectedYear;
+    var tId = '&term_id=' + ter_id;
     var bUrl = request_url;
-    var aUrl;
-    // if year is not selected 
-    //make url doesn't contain year value as url parameters
-    if (selectedYear === null) {
-        aUrl = bUrl + tId;
-    } else {
-        aUrl = bUrl + yId + tId;
-    }
+    var aUrl = bUrl + yId + tId;
     console.log(aUrl);
-    if (typeof std_id === 'undefined') {
-        aUrl;
-    } else {
-        aUrl += stdId;
-    }
     console.log("URL: " + aUrl);
 
     $.ajax({
