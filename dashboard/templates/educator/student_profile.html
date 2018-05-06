@@ -3,6 +3,7 @@
 
 <script>
     var requireJS = [];
+    var request_url = "{% url 'dashboard:educator_student_profile_courses_grades_api' student_id%}";
     loadJS(requireJS, "{% static 'dashboard/views/charts.js'%}");
 </script>
 <input type="hidden" id="myVar" name="variable" readonly value="{{ student_predictions.courses }}">
@@ -23,7 +24,7 @@
                                 <select class="form-control" id="year-selector">
                                     <option value="" id="yTitle" selected>Year</option>
                                     {% for year in years %}
-                                    <option value="{{ year.name }}" id="year_{{ forloop.counter }}">{{ year.name }}</option>
+                                    <option value="{{ year.id }}" id="year_{{ forloop.counter }}">{{ year.name }}</option>
                                     {% endfor %}
                                 </select>
                             </div>
@@ -38,7 +39,7 @@
                                     {% else %}
                                     <label class="btn btn-outline-secondary">
                                         {% endif %}
-                                        <input type="radio" id="rb" name="options" value="{{term_id}}" checked="checked"> {{ term.name }}
+                                        <input type="radio" id="rb" name="options" value="{{term.id}}" checked="checked"> {{ term.name }}
                                     </label>
                                     {% endfor %}
                             </div>

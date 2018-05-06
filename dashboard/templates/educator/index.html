@@ -1,6 +1,7 @@
 {% extends 'educator/base.html' %} {% block title %}Dashboard{% endblock %} {% block body %} {% load static %}
     <script>
         var requireJS = [];
+        var request_url="{%url 'dashboard:educator_rating_api' %}";
         loadJS(requireJS, "{% static 'dashboard/views/charts2.js'%}");
     </script>
 

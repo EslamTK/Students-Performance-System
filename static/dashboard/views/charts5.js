@@ -1,40 +1,49 @@
 window.onload = default_;
-$('#year-selector').change(function () {	
-        selectedYear=$( '#year-selector option:selected' ).val();
-		//condition to disabe department_list till select year
-	    if(selectedYear === ''){
-			$("#department-selector").val($("#department-selector option:first").val());
-            $('#department-selector').attr('disabled', 'disabled');
-			default_();
-		}else{
-			$('#department-selector').attr('disabled', false);
-			//$('#yTitle').attr('disabled', 'disabled');
-			$('#dTitle').attr('disabled', 'disabled');
-		}	
-		console.log("Id: "+selectedYear);
-		$('#department-selector').change(function () {	
-			var selectedDep=$( '#department-selector option:selected' ).val();
-			// send selected year and dep to send_request function 
-			send_request(selectedYear,selectedDep);
-		});
-    });
-function send_request(selectedYear,selectedDep) {
+var selectedDep;
+var selectedYear;
+$('#year-selector').change(function () {
+    // erase old data from chart when update data 
+    if (window.chart !== undefined || window.chart !== null) {
+        window.chart.destroy();
+    }
+    selectedYear = $('#year-selector option:selected').val();
+    //condition to disabe department_list till select year
+    if (selectedYear === '') {
+        selectedDep = null;
+        $("#department-selector").val($("#department-selector option:first").val());
+        $('#department-selector').attr('disabled', 'disabled');
+        default_();
+    } else {
+        $('#department-selector').attr('disabled', false);
+        $('#dTitle').attr('disabled', 'disabled');
+    }
+    console.log("Id: " + selectedYear);
+    if (selectedYear !== null && selectedDep !== null && selectedDep !== undefined) {
+        send_request(selectedYear, selectedDep);
+    }
+});
+$('#department-selector').change(function () {
+    selectedDep = $('#department-selector option:selected').val();
+    // send selected year and dep to send_request function 
+    send_request(selectedYear, selectedDep);
+});
+
+function send_request(selectedYear, selectedDep) {
     'use strict';
-	console.log("selectedYear: "+selectedYear);
-	console.log("selectedDep: "+selectedDep);
-    var depId = 'department_id='+selectedDep+'';
-    var yId = '&year='+selectedYear+'';
-    var bUrl = 'http://127.0.0.1:8000/dashboard/administrator_educators_rating?';
-    var aUrl = bUrl + depId + yId ;
+    console.log("selectedYear: " + selectedYear);
+    console.log("selectedDep: " + selectedDep);
+    var depId = 'department_id=' + selectedDep + '';
+    var yId = '&year=' + selectedYear + '';
+    var bUrl = request_url + '?';
+    var aUrl = bUrl + depId + yId;
 
     $.ajax({
         url: aUrl,
         dataType: "json",
         type: 'GET',
         contentType: 'application/json',
-        data: JSON.stringify( { } ),
         success: function (data) {
-            var label_data = [];   //year
+            var label_data = []; //year
             var review_item_label = []; // item_name
             var review_item = {};
 
@@ -44,8 +53,7 @@ function send_request(selectedYear,selectedDep) {
                 }
                 if (review_item_label.includes(data.result[i].review_item__name)) {
                     review_item[data.result[i].review_item__name].push(data.result[i].rate__avg);
-                    }
-                else {
+                } else {
                     review_item_label.push(data.result[i].review_item__name);
                     review_item[data.result[i].review_item__name] = new Array();
                     review_item[data.result[i].review_item__name].push(data.result[i].rate__avg);
@@ -53,13 +61,13 @@ function send_request(selectedYear,selectedDep) {
                 }
 
             }
-             
+
 
             var colors = [];
             for (var i = 0; i < review_item_label.length; i++) {
                 colors.push('' + randomScalingFactor() + ',' + randomScalingFactor() + ',' + randomScalingFactor() + ',');
             }
-            
+
             var datasetss = [];
             for (var i = 0; i < review_item_label.length; i++) {
                 datasetss.push({
@@ -79,10 +87,10 @@ function send_request(selectedYear,selectedDep) {
             }
 
             var ctx = document.getElementById('canvas-1');
-			// erase old data from chart when update data 
-			if(window.chart !== undefined || window.chart !== null){
-				window.chart.destroy();
-			}
+            // erase old data from chart when update data 
+            if (window.chart !== undefined || window.chart !== null) {
+                window.chart.destroy();
+            }
             window.chart = new Chart(ctx, {
                 type: 'bar',
                 data: barChartData,
@@ -124,8 +132,7 @@ function default_() {
         }
         if (review_item_label.includes(data[i].review_item__name)) {
             review_item[data[i].review_item__name].push(data[i].rate__avg);
-            }
-        else {
+        } else {
             review_item_label.push(data[i].review_item__name);
             review_item[data[i].review_item__name] = [];
             review_item[data[i].review_item__name].push(data[i].rate__avg);

@@ -61,7 +61,7 @@ console.log("test_term: " + term_id);
 function send_request(selectedYear, t_id) {
     'use strict';
     console.log("selectedYear: " + selectedYear);
-    var yId = 'year=' + selectedYear + '';
+    var yId = '?year=' + selectedYear + '';
     var stdId = '&student_id=' + std_id + '';
     var tId;
     if (t_id === null) {
@@ -69,7 +69,7 @@ function send_request(selectedYear, t_id) {
     } else {
         tId = '&term_id=' + t_id + '';
     }
-    var bUrl = 'http://127.0.0.1:8000/dashboard/student_courses_grades?';
+    var bUrl = request_url;
     var aUrl;
     // if year is not selected 
     //make url doesn't contain year value as url parameters
@@ -91,61 +91,48 @@ function send_request(selectedYear, t_id) {
         dataType: "json",
         type: 'GET',
         contentType: 'application/json',
-        data: JSON.stringify({}),
         success: function (data) {
-            var label_data = []; //year
-            var review_item_label = []; // item_name
-            var review_item = {};
-
+            var label_data = [];
+            var midterm = [];
+            var final = [];
             for (var i = 0; i < data.result.length; i++) {
-                if (!label_data.includes(data.result[i].year)) {
-                    label_data.push(data.result[i].year);
-                }
-                if (review_item_label.includes(data.result[i].review_item__name)) {
-                    review_item[data.result[i].review_item__name].push(data.result[i].rate__avg);
-                } else {
-                    review_item_label.push(data.result[i].review_item__name);
-                    review_item[data.result[i].review_item__name] = new Array();
-                    review_item[data.result[i].review_item__name].push(data.result[i].rate__avg);
-
-                }
+                label_data.push(data.result[i].name);
+                midterm.push(data.result[i].midterm);
+                final.push(data.result[i].final);
 
             }
-
-
-            var colors = [];
-            for (var i = 0; i < review_item_label.length; i++) {
-                colors.push('' + randomScalingFactor() + ',' + randomScalingFactor() + ',' + randomScalingFactor() + ',');
-            }
-
-            var datasetss = [];
-            for (var i = 0; i < review_item_label.length; i++) {
-                datasetss.push({
-                    label: review_item_label[i],
-                    backgroundColor: 'rgba(' + colors[i] + '0.2)',
-                    borderColor: 'rgba(' + colors[i] + '1)',
-                    pointBackgroundColor: 'rgba(' + colors[i] + '1)',
-                    pointBorderColor: '#fff',
-                    data: review_item[review_item_label[i]]
-                });
-
-            }
-
-            var barChartData = {
+            var lineChartData = {
                 labels: label_data,
-                datasets: datasetss
+                datasets: [{
+                        label: 'MidTerm',
+                        backgroundColor: 'rgba(220,220,220,0.2)',
+                        borderColor: 'rgba(220,220,220,1)',
+                        pointBackgroundColor: 'rgba(220,220,220,1)',
+                        pointBorderColor: '#fff',
+                        data: midterm
+                    },
+                    {
+                        label: 'Expected Final Grades',
+                        backgroundColor: 'rgba(151,187,205,0.2)',
+                        borderColor: 'rgba(151,187,205,1)',
+                        pointBackgroundColor: 'rgba(151,187,205,1)',
+                        pointBorderColor: '#fff',
+                        data: final
+                    }
+                ]
             }
 
             var ctx = document.getElementById('canvas-1');
             window.chart = new Chart(ctx, {
                 type: 'bar',
-                data: barChartData,
+                data: lineChartData,
                 options: {
                     responsive: true,
-                    scales: {
+                                scales: {
                         yAxes: [{
                             ticks: {
-                                beginAtZero: true
+                                beginAtZero: true,
+                                max: 100
                             }
                         }]
                     }

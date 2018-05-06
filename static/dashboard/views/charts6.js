@@ -1,28 +1,32 @@
-var selectedYear;
 window.onload = default_;
-$('#year-selector').change(function () {	
-	// erase old data from chart when update data 
-		if(window.chart !== undefined || window.chart !== null){
-			window.chart.destroy();
-			}
-        selectedYear=$( '#year-selector option:selected' ).val();
-		//condition to disabe department_list till select year
-	    if(selectedYear === ''){
-			$("#department-selector").val($("#department-selector option:first").val());
-            $('#department-selector').attr('disabled', 'disabled');
-			default_();
-		}else{
-			$('#department-selector').attr('disabled', false);
-			//$('#yTitle').attr('disabled', 'disabled');
-			$('#dTitle').attr('disabled', 'disabled');
-		}	
-		console.log("Id: "+selectedYear);
-		$('#department-selector').change(function () {	
-			var selectedDep=$( '#department-selector option:selected' ).val();
-			// send selected year and dep to send_request function 
-			send_request(selectedYear,selectedDep);
-		});
-    });
+var selectedDep;
+var selectedYear;
+$('#year-selector').change(function () {
+    // erase old data from chart when update data 
+    if (window.chart !== undefined || window.chart !== null) {
+        window.chart.destroy();
+    }
+    selectedYear = $('#year-selector option:selected').val();
+    //condition to disabe department_list till select year
+    if (selectedYear === '') {
+        selectedDep = null;
+        $("#department-selector").val($("#department-selector option:first").val());
+        $('#department-selector').attr('disabled', 'disabled');
+        default_();
+    } else {
+        $('#department-selector').attr('disabled', false);
+        $('#dTitle').attr('disabled', 'disabled');
+    }
+    console.log("Id: " + selectedYear);
+    if (selectedYear !== null && selectedDep !== null && selectedDep !== undefined) {
+        send_request(selectedYear, selectedDep);
+    }
+});
+$('#department-selector').change(function () {
+    selectedDep = $('#department-selector option:selected').val();
+    // send selected year and dep to send_request function 
+    send_request(selectedYear, selectedDep);
+});
 
 var edu= $('#educator_id').val();
 console.log("sssss: "+edu);
@@ -34,14 +38,8 @@ function send_request(selectedYear,selectedDep) {
 		var depId = 'department_id='+selectedDep+'';	
 		var cYear = '&year='+selectedYear+'';
 		var edId = '&educator_id='+edu+'';
-		var baseUrl = 'http://127.0.0.1:8000/dashboard/educator_rating?';
-		var aUrl;
-	    // check if educator_id exists or not
-		if(typeof edu === 'undefined'){
-			aUrl = baseUrl +  depId + cYear ;
-		}else{
-			aUrl = baseUrl +  depId + cYear + edId;
-		}
+		var baseUrl = request_url+'?';
+		var aUrl = baseUrl +  depId + cYear;
 	    console.log("URL: "+ aUrl);
 	
 		$.ajax({
