@@ -1,7 +1,7 @@
 {% extends 'educator/base.html' %} {% block title %}Dashboard{% endblock %} {% block body %} {% load static %}
     <script>
         var requireJS = [];
-        var request_url="{%url 'dashboard:educator_rating_api' %}";
+        var request_url = "{%url 'dashboard:educator_rating_api' %}";
         loadJS(requireJS, "{% static 'dashboard/views/charts2.js'%}");
     </script>
 
@@ -27,7 +27,7 @@
                                             {{ year.year }}
                                         </option>
                                     {% endfor %}
-    
+
                                 </select>
                             </div>
                         </div>
@@ -35,7 +35,7 @@
                         <div class="col-xl-2 col-md-4">
                             <div class="dropdown">
                                 <select class="form-control" id="department-selector">
-                                
+
                                     <option value="" id="dTitle" selected>Department</option>
                                     {% for dep in educator_reviews_departments %}
                                         <option value="{{ dep.student__department }}"
@@ -43,7 +43,7 @@
                                             {{ dep.student__department__name }}
                                         </option>
                                     {% endfor %}
-    
+
                                 </select>
                             </div>
                         </div>
@@ -94,7 +94,7 @@
         document.getElementById("lis_1").parentElement.classList.add("active");
 
         function report(id) {
-            console.log(id)
+            console.log(id);
             $.ajax({
                 type: "POST",
                 url: "{% url 'dashboard:educator_add_report_api' %}",

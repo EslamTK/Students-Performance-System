@@ -50,13 +50,13 @@ function send_request() {
             var lineChartData = {
                 labels: label_data,
                 datasets: [{
-                        label: 'MidTerm',
-                        backgroundColor: 'rgba(220,220,220,0.2)',
-                        borderColor: 'rgba(220,220,220,1)',
-                        pointBackgroundColor: 'rgba(220,220,220,1)',
-                        pointBorderColor: '#fff',
-                        data: midterm
-                    },
+                    label: 'MidTerm',
+                    backgroundColor: 'rgba(220,220,220,0.2)',
+                    borderColor: 'rgba(220,220,220,1)',
+                    pointBackgroundColor: 'rgba(220,220,220,1)',
+                    pointBorderColor: '#fff',
+                    data: midterm
+                },
                     {
                         label: 'Expected Final Grades',
                         backgroundColor: 'rgba(151,187,205,0.2)',
@@ -66,7 +66,7 @@ function send_request() {
                         data: final
                     }
                 ]
-            }
+            };
 
             var ctx = document.getElementById('canvas-1');
             window.chart = new Chart(ctx, {
@@ -74,7 +74,7 @@ function send_request() {
                 data: lineChartData,
                 options: {
                     responsive: true,
-                                scales: {
+                    scales: {
                         yAxes: [{
                             ticks: {
                                 beginAtZero: true,
@@ -139,7 +139,7 @@ function default_() {
                 data: prediction
             }
         ]
-    }
+    };
 
 
     var ctx = document.getElementById('canvas-1');
@@ -180,7 +180,7 @@ function default_() {
                 data: [randomScalingFactor(), randomScalingFactor(), randomScalingFactor(), randomScalingFactor(), randomScalingFactor(), randomScalingFactor(), randomScalingFactor()]
             }
         ]
-    }
+    };
     var ctx = document.getElementById('canvas-2');
     var chart = new Chart(ctx, {
         type: 'bar',

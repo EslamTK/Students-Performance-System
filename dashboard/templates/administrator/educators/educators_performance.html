@@ -3,7 +3,7 @@
 
 <script type='text/javascript'>
     var requireJS = [];
-    var request_url = "{%url 'dashboard:administrator_educators_rating_api'%}"
+    var request_url = "{%url 'dashboard:administrator_educators_rating_api'%}";
     var educatorsRatingData = {{educators_rating|safe}};
     loadJS(requireJS, "{% static 'dashboard/views/charts5.js'%}");
 </script>
@@ -20,10 +20,11 @@
                     <div class="row col-sm-9">
                         <div class="col-xl-2 col-md-3">
                             <div class="dropdown">
-                                <select class="form-control" id="year-selector" >
+                                <select class="form-control" id="year-selector">
                                     <option id="yTitle" value="" selected>Year</option>
                                     {% for year in years %}
-                                        <option value="{{ year.id }}" id="year_{{ forloop.counter }}">{{ year.name }}</option>
+                                        <option value="{{ year.id }}"
+                                                id="year_{{ forloop.counter }}">{{ year.name }}</option>
                                     {% endfor %}
                                 </select>
                             </div>
@@ -35,7 +36,8 @@
                                 <select class="form-control" id="department-selector">
                                     <option id="dTitle" value="" selected>Department</option>
                                     {% for dep in departments %}
-                                        <option value="{{ dep.id }}" id="dep_{{ forloop.counter }}">{{ dep.name }}</option>
+                                        <option value="{{ dep.id }}"
+                                                id="dep_{{ forloop.counter }}">{{ dep.name }}</option>
                                     {% endfor %}
                                 </select>
                             </div>

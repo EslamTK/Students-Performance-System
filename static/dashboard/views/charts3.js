@@ -3,14 +3,14 @@ var selectedYear = "";
 var selectedDep = "";
 var ter_id = "";
 $('#year-selector').change(function () {
-    
+
     if (window.chart !== undefined || window.chart !== null) {
         window.chart.destroy();
     }
     selectedYear = $('#year-selector option:selected').val();
     send_request();
-    
-    
+
+
 });
 $('#department-selector').change(function () {
     if (window.chart !== undefined || window.chart !== null) {
@@ -18,7 +18,7 @@ $('#department-selector').change(function () {
     }
     selectedDep = $('#department-selector option:selected').val();
     send_request();
-    
+
 });
 
 //function applied on change term 
@@ -70,19 +70,18 @@ function send_request() {
             var barChartData = {
                 labels: course_name,
                 datasets: [{
-                        label: 'Midterm Pass',
-                        backgroundColor: 'rgba(220,220,220,0.2)',
-                        borderColor: 'rgba(220,220,220,1)',
-                        pointBackgroundColor: 'rgba(220,220,220,1)',
-                        pointBorderColor: '#fff',
-                        data: mt_pass
-                    },
+                    label: 'Midterm Pass',
+                    backgroundColor: 'rgba(220,220,220,0.2)',
+                    borderColor: 'rgba(220,220,220,1)',
+                    pointBackgroundColor: 'rgba(220,220,220,1)',
+                    pointBorderColor: '#fff',
+                    data: mt_pass
+                },
                     {
                         label: 'Midterm Fail',
                         backgroundColor: 'rgba(151,187,205,0.2)',
                         borderColor: 'rgba(151,187,205,1)',
                         pointBackgroundColor: 'rgba(151,187,205,1)',
-                        pointBorderColor: '#fff',
                         pointBorderColor: '#fff',
 
                         data: mt_fail
@@ -106,7 +105,7 @@ function send_request() {
                         data: fin_fail
                     }
                 ]
-            }
+            };
 
 
             var ctx = document.getElementById('canvas-1');
@@ -124,8 +123,6 @@ function send_request() {
 }
 
 
-
-
 function default_() {
     'use strict';
 
@@ -136,7 +133,7 @@ function default_() {
     var my_data = document.getElementById("myVar").value;
 
     //formating data to valid json format
-    var data = my_data.slice(10, my_data.length, my_data)
+    var data = my_data.slice(10, my_data.length, my_data);
     data = data.replace('>', '');
     data = data.replace(/'/g, '"');
     data = JSON.parse(data);
@@ -151,14 +148,11 @@ function default_() {
 
     for (var i = 0; i < data.length; i++) {
 
-        if (data[i].midterm_pass == 0) {
-
             label_data.push(data[i].course__name);
             midPass.push(data[i].midterm_pass);
             midFail.push(data[i].total - data[i].midterm_pass);
             finalPass.push(data[i].final_pass);
             finalFail.push(data[i].total - data[i].final_pass);
-        }
     }
 
 
@@ -166,10 +160,10 @@ function default_() {
         labels: label_data,
         datasets: [{
                 label: 'Midterm Pass',
-                backgroundColor: 'rgba(220,220,220,0.2)',
-                borderColor: 'rgba(220,220,220,1)',
-                pointBackgroundColor: 'rgba(220,220,220,1)',
-                pointBorderColor: '#fff',
+            backgroundColor: 'rgba(220,220,220,0.2)',
+            borderColor: 'rgba(220,220,220,1)',
+            pointBackgroundColor: 'rgba(220,220,220,1)',
+            pointBorderColor: '#fff',
                 data: midPass
             },
             {
@@ -177,7 +171,6 @@ function default_() {
                 backgroundColor: 'rgba(151,187,205,0.2)',
                 borderColor: 'rgba(151,187,205,1)',
                 pointBackgroundColor: 'rgba(151,187,205,1)',
-                pointBorderColor: '#fff',
                 pointBorderColor: '#fff',
 
                 data: midFail
@@ -201,7 +194,7 @@ function default_() {
                 data: finalFail
             }
         ]
-    }
+    };
 
 
     var ctx = document.getElementById('canvas-1');

@@ -9,7 +9,7 @@ $('#year-selector').change(function () {
     send_request();
 });
 $('#department-selector').change(function () {
-    selectedDep = $('#department-selector option:selected').val();   
+    selectedDep = $('#department-selector option:selected').val();
     send_request();
 });
 
@@ -48,7 +48,7 @@ function send_request() {
                     pointBorderColor: '#fff',
                     data: rates
                 }]
-            }
+            };
 
             var ctx = document.getElementById('canvas-1');
             window.chart = new Chart(ctx, {
@@ -82,7 +82,7 @@ function default_() {
     //getting data from hidden input field
     var my_data = document.getElementById("myVar").value;
     //formating data to valid json format
-    var data = my_data.slice(10, my_data.length, my_data)
+    var data = my_data.slice(10, my_data.length, my_data);
     data = data.replace('>', '');
     data = data.replace(/'/g, '"');
     data = JSON.parse(data);
@@ -110,7 +110,7 @@ function default_() {
             },
 
         ]
-    }
+    };
 
 
     var ctx = document.getElementById('canvas-1');

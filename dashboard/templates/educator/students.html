@@ -2,7 +2,7 @@
 
 <script>
     var requireJS = [];
-    var request_url = "{%url 'dashboard:educator_students_counts_api'%}"
+    var request_url = "{%url 'dashboard:educator_students_counts_api'%}";
     loadJS(requireJS, "{% static 'dashboard/views/charts3.js'%}");
 </script>
 
@@ -24,7 +24,8 @@
                                 <select class="form-control" id="year-selector">
                                     <option id="yTitle" value="" selected>Year</option>
                                     {% for year in years %}
-                                        <option value="{{ year.id }}" id="year_{{ forloop.counter }}">{{ year.name }}</option>
+                                        <option value="{{ year.id }}"
+                                                id="year_{{ forloop.counter }}">{{ year.name }}</option>
                                     {% endfor %}
                                 </select>
                             </div>
@@ -36,7 +37,8 @@
                                 <select class="form-control" id="department-selector">
                                     <option id="dTitle" value="" selected>Department</option>
                                     {% for dep in departments %}
-                                        <option value="{{ dep.id }}" id="dep_{{ forloop.counter }}">{{ dep.name }}</option>
+                                        <option value="{{ dep.id }}"
+                                                id="dep_{{ forloop.counter }}">{{ dep.name }}</option>
                                     {% endfor %}
                                 </select>
                             </div>
@@ -50,7 +52,8 @@
                             <div class="btn-group mr-3" data-toggle="buttons" aria-label="First group">
                                 {% for term in terms %} 
                                     <label class="btn btn-outline-secondary">
-                                        <input type="radio" id="rb" name="options" value="{{term.id}}"> {{ term.name }}
+                                        <input type="radio" id="rb" name="options"
+                                               value="{{ term.id }}"> {{ term.name }}
                                     </label>
                                 {% endfor %}
                             </div>

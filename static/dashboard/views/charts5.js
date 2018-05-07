@@ -1,6 +1,6 @@
 window.onload = default_;
-var selectedDep="";
-var selectedYear="";
+var selectedDep = "";
+var selectedYear = "";
 $('#year-selector').change(function () {
     // erase old data from chart when update data 
     if (window.chart !== undefined || window.chart !== null) {
@@ -42,7 +42,7 @@ function send_request() {
                     review_item[data.result[i].review_item__name].push(data.result[i].rate__avg);
                 } else {
                     review_item_label.push(data.result[i].review_item__name);
-                    review_item[data.result[i].review_item__name] = new Array();
+                    review_item[data.result[i].review_item__name] = [];
                     review_item[data.result[i].review_item__name].push(data.result[i].rate__avg);
 
                 }
@@ -71,7 +71,7 @@ function send_request() {
             var barChartData = {
                 labels: label_data,
                 datasets: datasetss
-            }
+            };
 
             var ctx = document.getElementById('canvas-1');
             // erase old data from chart when update data 

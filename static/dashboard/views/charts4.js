@@ -1,7 +1,7 @@
 window.onload = default_;
-var selectedYear="";
-var selectedDep="";
-var ter_id="";
+var selectedYear = "";
+var selectedDep = "";
+var ter_id = "";
 window.selected_year = null;
 window.selected_dep = null;
 $('#year-selector').change(function () {
@@ -33,7 +33,7 @@ function send_request() {
     'use strict';
     var depId = 'department_id=' + selectedDep;
     var yId = '&year_id=' + selectedYear;
-    var tId = '&term_id=' + ter_id ;
+    var tId = '&term_id=' + ter_id;
     var bUrl = request_url + '?';
     var aUrl;
     aUrl = bUrl + depId + yId + tId;
@@ -44,7 +44,7 @@ function send_request() {
         type: 'GET',
         contentType: 'application/json',
         success: function (data) {
-            
+
             var label_data = [];
             var success = [];
             var fail = [];
@@ -55,19 +55,19 @@ function send_request() {
                 label_data.push(data.result[i].year);
                 success.push(data.result[i].success);
                 fail.push(data.result[i].fail);
-                
+
             }
             /////////
             var lineChartData = {
                 labels: label_data,
                 datasets: [{
-                        label: 'success',
-                        backgroundColor: 'rgba(220,220,220,0.2)',
-                        borderColor: 'rgba(220,220,220,1)',
-                        pointBackgroundColor: 'rgba(220,220,220,1)',
-                        pointBorderColor: '#fff',
-                        data: success
-                    },
+                    label: 'success',
+                    backgroundColor: 'rgba(220,220,220,0.2)',
+                    borderColor: 'rgba(220,220,220,1)',
+                    pointBackgroundColor: 'rgba(220,220,220,1)',
+                    pointBorderColor: '#fff',
+                    data: success
+                },
                     {
                         label: 'Fail',
                         backgroundColor: 'rgba(151,187,205,0.2)',
@@ -77,7 +77,7 @@ function send_request() {
                         data: fail
                     }
                 ]
-            }
+            };
 
 
             var ctx = document.getElementById('canvas-1');
@@ -114,7 +114,7 @@ function default_() {
     var my_data = document.getElementById("myData").value;
     console.log(my_data);
     //formating data to valid json format
-    var data = my_data.slice(10, my_data.length, my_data)
+    var data = my_data.slice(10, my_data.length, my_data);
     data = data.replace('>', '');
     data = data.replace(/'/g, '"');
     data = JSON.parse(data);
@@ -151,7 +151,7 @@ function default_() {
                 data: fail
             }
         ]
-    }
+    };
 
 
     var ctx = document.getElementById('canvas-1');
