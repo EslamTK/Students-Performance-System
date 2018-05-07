@@ -1,4 +1,99 @@
-$(function () {
+window.onload = default_;
+var selectedYear = "";
+var ter_id = "";
+
+$('#year-selector').change(function () {
+    // erase old data from chart when update data 
+    if (window.chart !== undefined || window.chart !== null) {
+        window.chart.destroy();
+    }
+    selectedYear = $('#year-selector option:selected').val();
+    send_request();
+});
+
+
+$("input:radio[name=options]").change(function () {
+    // erase old data from chart when update data 
+    if (window.chart !== undefined || window.chart !== null) {
+        window.chart.destroy();
+    }
+    ter_id = $('input[name=options]:checked').val();
+    send_request();
+});
+
+
+function send_request() {
+    'use strict';
+    console.log("selectedYear: " + selectedYear);
+    var yId = '?year_id=' + selectedYear;
+    var tId = '&term_id=' + ter_id;
+    var bUrl = request_url;
+    var aUrl = bUrl + yId + tId;
+    console.log(aUrl);
+    console.log("URL: " + aUrl);
+
+    $.ajax({
+        url: aUrl,
+        dataType: "json",
+        type: 'GET',
+        contentType: 'application/json',
+        success: function (data) {
+            var label_data = [];
+            var midterm = [];
+            var final = [];
+            for (var i = 0; i < data.result.length; i++) {
+                label_data.push(data.result[i].name);
+                midterm.push(data.result[i].midterm);
+                final.push(data.result[i].final);
+
+            }
+            var lineChartData = {
+                labels: label_data,
+                datasets: [{
+                        label: 'MidTerm',
+                        backgroundColor: 'rgba(220,220,220,0.2)',
+                        borderColor: 'rgba(220,220,220,1)',
+                        pointBackgroundColor: 'rgba(220,220,220,1)',
+                        pointBorderColor: '#fff',
+                        data: midterm
+                    },
+                    {
+                        label: 'Expected Final Grades',
+                        backgroundColor: 'rgba(151,187,205,0.2)',
+                        borderColor: 'rgba(151,187,205,1)',
+                        pointBackgroundColor: 'rgba(151,187,205,1)',
+                        pointBorderColor: '#fff',
+                        data: final
+                    }
+                ]
+            }
+
+            var ctx = document.getElementById('canvas-1');
+            window.chart = new Chart(ctx, {
+                type: 'bar',
+                data: lineChartData,
+                options: {
+                    responsive: true,
+                                scales: {
+                        yAxes: [{
+                            ticks: {
+                                beginAtZero: true,
+                                max: 100
+                            }
+                        }]
+                    }
+                }
+            });
+
+        }
+    });
+
+    var randomScalingFactor = function () {
+        return Math.round(Math.random() * 255)
+    };
+}
+
+function default_() {
     'use strict';
 
     var randomScalingFactor = function () {
@@ -27,8 +122,7 @@ $(function () {
     }
     var lineChartData = {
         labels: label_data,
-        datasets: [
-            {
+        datasets: [{
                 label: 'MidTerm',
                 backgroundColor: 'rgba(220,220,220,0.2)',
                 borderColor: 'rgba(220,220,220,1)',
@@ -49,8 +143,8 @@ $(function () {
 
 
     var ctx = document.getElementById('canvas-1');
-    var chart = new Chart(ctx, {
-        type: 'line',
+    window.chart = new Chart(ctx, {
+        type: 'bar',
         data: lineChartData,
         options: {
             responsive: true,
@@ -71,8 +165,7 @@ $(function () {
     };
     var barChartData = {
         labels: ['January', 'February', 'March', 'April', 'May', 'June', 'July'],
-        datasets: [
-            {
+        datasets: [{
                 backgroundColor: 'rgba(220,220,220,0.5)',
                 borderColor: 'rgba(220,220,220,0.8)',
                 highlightFill: 'rgba(220,220,220,0.75)',
@@ -130,8 +223,7 @@ $(function () {
 
     var radarChartData = {
         labels: ['Eating', 'Drinking', 'Sleeping', 'Designing', 'Coding', 'Cycling', 'Running'],
-        datasets: [
-            {
+        datasets: [{
                 label: 'My First dataset',
                 backgroundColor: 'rgba(220,220,220,0.2)',
                 borderColor: 'rgba(220,220,220,1)',
@@ -221,4 +313,4 @@ $(function () {
     };
 
 
-});
+}
