@@ -1,4 +1,13 @@
-window.onload = default_;
+var my_data = document.getElementById("myVar").value;
+
+//formating data to valid json format
+my_data = my_data.slice(10, my_data.length, my_data);
+my_data = my_data.replace('>', '');
+my_data = my_data.replace(/'/g, '"');
+my_data = JSON.parse(my_data);
+
+window.onload = drawChart(my_data);
+
 var selectedYear = "";
 var selectedDep = "";
 var ter_id = "";
@@ -44,99 +53,14 @@ function send_request() {
         type: 'GET',
         contentType: 'application/json',
         success: function (data) {
-            console.log(data.result);
-            // transform json array into normal array
-            var course_name = data.result.map(function (result) {
-                return result.course__name;
-            });
-            var mt_pass = data.result.map(function (result) {
-                return result.midterm_pass;
-            });
-            var fin_pass = data.result.map(function (result) {
-                return result.final_pass;
-            });
-            var ttl = data.result.map(function (result) {
-                return result.total;
-            });
-            // subtract total - pass 
-            var mt_fail = ttl.map(function (ttl, idx) {
-                return ttl - mt_pass[idx];
-            });
-            var fin_fail = ttl.map(function (ttl, idx) {
-                return ttl - fin_pass[idx];
-            });
-
-            /////////////
-            var barChartData = {
-                labels: course_name,
-                datasets: [{
-                    label: 'Midterm Pass',
-                    backgroundColor: 'rgba(220,220,220,0.2)',
-                    borderColor: 'rgba(220,220,220,1)',
-                    pointBackgroundColor: 'rgba(220,220,220,1)',
-                    pointBorderColor: '#fff',
-                    data: mt_pass
-                },
-                    {
-                        label: 'Midterm Fail',
-                        backgroundColor: 'rgba(151,187,205,0.2)',
-                        borderColor: 'rgba(151,187,205,1)',
-                        pointBackgroundColor: 'rgba(151,187,205,1)',
-                        pointBorderColor: '#fff',
-
-                        data: mt_fail
-                    },
-                    {
-                        label: 'Final Pass',
-                        backgroundColor: 'rgba(234,209,204,0.2)',
-                        borderColor: 'rgba(234,209,204,1)',
-                        pointBackgroundColor: 'rgba(234,209,204,1)',
-
-                        pointBorderColor: '#fff',
-                        data: fin_pass
-                    },
-                    {
-                        label: 'Final Fail',
-                        backgroundColor: 'rgba(41,54,61,0.2)',
-                        borderColor: 'rgba(41,54,61,1)',
-                        pointBackgroundColor: 'rgba(41,54,61,1)',
-
-                        pointBorderColor: '#fff',
-                        data: fin_fail
-                    }
-                ]
-            };
-
-
-            var ctx = document.getElementById('canvas-1');
-            window.chart = new Chart(ctx, {
-                type: 'bar',
-                data: barChartData,
-                options: {
-                    responsive: true
-                }
-            });
-
-            ////////////
+            drawChart(data.result);
         }
     });
 }
 
 
-function default_() {
+function drawChart(data) {
     'use strict';
-
-    var randomScalingFactor = function () {
-        return Math.round(Math.random() * 10)
-    };
-
-    var my_data = document.getElementById("myVar").value;
-
-    //formating data to valid json format
-    var data = my_data.slice(10, my_data.length, my_data);
-    data = data.replace('>', '');
-    data = data.replace(/'/g, '"');
-    data = JSON.parse(data);
 
     console.log(data);
     //collecting data
@@ -148,11 +72,14 @@ function default_() {
 
     for (var i = 0; i < data.length; i++) {
 
+        if (data[i].midterm_pass == 0) {
+
             label_data.push(data[i].course__name);
             midPass.push(data[i].midterm_pass);
             midFail.push(data[i].total - data[i].midterm_pass);
             finalPass.push(data[i].final_pass);
             finalFail.push(data[i].total - data[i].final_pass);
+        }
     }
 
 
@@ -160,10 +87,10 @@ function default_() {
         labels: label_data,
         datasets: [{
                 label: 'Midterm Pass',
-            backgroundColor: 'rgba(220,220,220,0.2)',
-            borderColor: 'rgba(220,220,220,1)',
-            pointBackgroundColor: 'rgba(220,220,220,1)',
-            pointBorderColor: '#fff',
+                backgroundColor: 'rgba(220,220,220,0.2)',
+                borderColor: 'rgba(220,220,220,1)',
+                pointBackgroundColor: 'rgba(220,220,220,1)',
+                pointBorderColor: '#fff',
                 data: midPass
             },
             {
@@ -171,6 +98,7 @@ function default_() {
                 backgroundColor: 'rgba(151,187,205,0.2)',
                 borderColor: 'rgba(151,187,205,1)',
                 pointBackgroundColor: 'rgba(151,187,205,1)',
+                pointBorderColor: '#fff',
                 pointBorderColor: '#fff',
 
                 data: midFail

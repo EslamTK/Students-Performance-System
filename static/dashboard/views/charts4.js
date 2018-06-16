@@ -1,4 +1,14 @@
-window.onload = default_;
+//getting data from hidden input field
+var my_data = document.getElementById("myData").value;
+
+//formating data to valid json format
+my_data = my_data.slice(10, my_data.length, my_data);
+my_data = my_data.replace('>', '');
+my_data = my_data.replace(/'/g, '"');
+my_data = JSON.parse(my_data);
+
+
+window.onload = drawChart(my_data);
 var selectedYear = "";
 var selectedDep = "";
 var ter_id = "";
@@ -44,80 +54,14 @@ function send_request() {
         type: 'GET',
         contentType: 'application/json',
         success: function (data) {
+            drawChart(data.result);
 
-            var label_data = [];
-            var success = [];
-            var fail = [];
-
-
-            for (var i = 0; i < data.result.length; i++) {
-
-                label_data.push(data.result[i].year);
-                success.push(data.result[i].success);
-                fail.push(data.result[i].fail);
-
-            }
-            /////////
-            var lineChartData = {
-                labels: label_data,
-                datasets: [{
-                    label: 'success',
-                    backgroundColor: 'rgba(220,220,220,0.2)',
-                    borderColor: 'rgba(220,220,220,1)',
-                    pointBackgroundColor: 'rgba(220,220,220,1)',
-                    pointBorderColor: '#fff',
-                    data: success
-                },
-                    {
-                        label: 'Fail',
-                        backgroundColor: 'rgba(151,187,205,0.2)',
-                        borderColor: 'rgba(151,187,205,1)',
-                        pointBackgroundColor: 'rgba(151,187,205,1)',
-                        pointBorderColor: '#fff',
-                        data: fail
-                    }
-                ]
-            };
-
-
-            var ctx = document.getElementById('canvas-1');
-            window.chart = new Chart(ctx, {
-                type: 'bar',
-                data: lineChartData,
-                options: {
-                    scales: {
-                        yAxes: [{
-                            display: true,
-                            ticks: {
-                                beginAtZero: true,
-                                stepSize: 0.2,
-                                max: 2
-                            }
-                        }]
-                    },
-                    responsive: true
-                }
-            });
-            ///////////
         }
     });
 }
 
-function default_() {
+function drawChart(data) {
     'use strict';
-
-    var randomScalingFactor = function () {
-        return Math.round(Math.random() * 100)
-    };
-
-    //getting data from hidden input field
-    var my_data = document.getElementById("myData").value;
-    console.log(my_data);
-    //formating data to valid json format
-    var data = my_data.slice(10, my_data.length, my_data);
-    data = data.replace('>', '');
-    data = data.replace(/'/g, '"');
-    data = JSON.parse(data);
     console.log(data);
 
     var label_data = [];
