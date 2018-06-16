@@ -71,7 +71,7 @@ function drawChart(data) {
     for (var i = 0; i < data.length; i++) {
         label_data.push(data[i].name);
         midterm.push(data[i].midterm);
-        if(prediction_data == true)
+        if (prediction_data == true)
             prediction.push(data[i].prediction);
         else
             prediction.push(data[i].final);
@@ -96,7 +96,7 @@ function drawChart(data) {
                 data: prediction
             }
         ]
-    }
+    };
 
 
     var ctx = document.getElementById('canvas-1');

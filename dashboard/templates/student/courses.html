@@ -23,7 +23,8 @@
                                 <select class="form-control" id="year-selector">
                                     <option id="yTitle" value="" selected>Year</option>
                                     {% for year in years %}
-                                    <option value="{{ year.id }}" id="year_{{ forloop.counter }}">{{ year.name }}</option>
+                                        <option value="{{ year.id }}"
+                                                id="year_{{ forloop.counter }}">{{ year.name }}</option>
                                     {% endfor %}
                                 </select>
 
@@ -37,7 +38,8 @@
                             <div class="btn-group mr-3" data-toggle="buttons" aria-label="First group">
                                 {% for term in terms %} 
                                     <label class="btn btn-outline-secondary">
-                                        <input type="radio" id="rb" name="options" value="{{term.id}}"> {{ term.name }}
+                                        <input type="radio" id="rb" name="options"
+                                               value="{{ term.id }}"> {{ term.name }}
                                     </label>
                                 {% endfor %}
                             </div>

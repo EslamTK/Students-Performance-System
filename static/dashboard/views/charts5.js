@@ -1,8 +1,8 @@
 var my_data = educatorsRatingData;
 
 window.onload = drawChart(my_data);
-var selectedDep="";
-var selectedYear="";
+var selectedDep = "";
+var selectedYear = "";
 $('#year-selector').change(function () {
     // erase old data from chart when update data 
     if (window.chart !== undefined || window.chart !== null) {
@@ -33,7 +33,7 @@ function send_request() {
         contentType: 'application/json',
         success: function (data) {
             drawChart(data.result);
-            
+
         }
     });
 

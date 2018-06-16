@@ -1,7 +1,7 @@
 var my_data = document.getElementById("myVar").value;
 
 //formating data to valid json format
-my_data = my_data.slice(10, my_data.length, my_data)
+my_data = my_data.slice(10, my_data.length, my_data);
 my_data = my_data.replace('>', '');
 my_data = my_data.replace(/'/g, '"');
 my_data = JSON.parse(my_data);
@@ -12,14 +12,14 @@ var selectedYear = "";
 var selectedDep = "";
 var ter_id = "";
 $('#year-selector').change(function () {
-    
+
     if (window.chart !== undefined || window.chart !== null) {
         window.chart.destroy();
     }
     selectedYear = $('#year-selector option:selected').val();
     send_request();
-    
-    
+
+
 });
 $('#department-selector').change(function () {
     if (window.chart !== undefined || window.chart !== null) {
@@ -27,7 +27,7 @@ $('#department-selector').change(function () {
     }
     selectedDep = $('#department-selector option:selected').val();
     send_request();
-    
+
 });
 
 //function applied on change term 
@@ -59,7 +59,7 @@ function send_request() {
 }
 
 
-function drawChart(data){
+function drawChart(data) {
     'use strict';
 
     console.log(data);
@@ -122,7 +122,7 @@ function drawChart(data){
                 data: finalFail
             }
         ]
-    }
+    };
 
 
     var ctx = document.getElementById('canvas-1');

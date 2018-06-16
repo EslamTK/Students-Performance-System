@@ -1,8 +1,7 @@
-
 //getting data from hidden input field
 var my_data = document.getElementById("myVar").value;
 //formating data to valid json format
-my_data = my_data.slice(10, my_data.length, my_data)
+my_data = my_data.slice(10, my_data.length, my_data);
 my_data = my_data.replace('>', '');
 my_data = my_data.replace(/'/g, '"');
 my_data = JSON.parse(my_data);
@@ -22,7 +21,7 @@ $('#department-selector').change(function () {
     if (window.chart !== undefined || window.chart !== null) {
         window.chart.destroy();
     }
-    selectedDep = $('#department-selector option:selected').val();   
+    selectedDep = $('#department-selector option:selected').val();
     send_request();
 });
 
@@ -43,9 +42,9 @@ function send_request() {
     });
 }
 
-    
-function drawChart(data){
-    'use strict'
+
+function drawChart(data) {
+    'use strict';
     //collecting data 
     var label_data = [];
     var rates = [];
@@ -55,20 +54,19 @@ function drawChart(data){
     }
 
 
-
     var lineChartData = {
         labels: label_data,
         datasets: [{
-                label: 'Rate',
-                backgroundColor: 'rgba(151,187,205,0.2)',
-                borderColor: 'rgba(151,187,205,1)',
-                pointBackgroundColor: 'rgba(151,187,205,1)',
-                pointBorderColor: '#fff',
-                data: rates
-            },
+            label: 'Rate',
+            backgroundColor: 'rgba(151,187,205,0.2)',
+            borderColor: 'rgba(151,187,205,1)',
+            pointBackgroundColor: 'rgba(151,187,205,1)',
+            pointBorderColor: '#fff',
+            data: rates
+        },
 
         ]
-    }
+    };
 
 
     var ctx = document.getElementById('canvas-1');

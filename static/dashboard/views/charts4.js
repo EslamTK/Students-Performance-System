@@ -2,16 +2,16 @@
 var my_data = document.getElementById("myData").value;
 
 //formating data to valid json format
-my_data = my_data.slice(10, my_data.length, my_data)
+my_data = my_data.slice(10, my_data.length, my_data);
 my_data = my_data.replace('>', '');
 my_data = my_data.replace(/'/g, '"');
 my_data = JSON.parse(my_data);
 
 
 window.onload = drawChart(my_data);
-var selectedYear="";
-var selectedDep="";
-var ter_id="";
+var selectedYear = "";
+var selectedDep = "";
+var ter_id = "";
 window.selected_year = null;
 window.selected_dep = null;
 $('#year-selector').change(function () {
@@ -43,7 +43,7 @@ function send_request() {
     'use strict';
     var depId = 'department_id=' + selectedDep;
     var yId = '&year_id=' + selectedYear;
-    var tId = '&term_id=' + ter_id ;
+    var tId = '&term_id=' + ter_id;
     var bUrl = request_url + '?';
     var aUrl;
     aUrl = bUrl + depId + yId + tId;
@@ -55,7 +55,7 @@ function send_request() {
         contentType: 'application/json',
         success: function (data) {
             drawChart(data.result);
-            
+
         }
     });
 }
@@ -95,7 +95,7 @@ function drawChart(data) {
                 data: fail
             }
         ]
-    }
+    };
 
 
     var ctx = document.getElementById('canvas-1');

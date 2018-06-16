@@ -1,146 +1,149 @@
-{% extends 'administrator/base.html' %} {% block title %}Educator{% endblock %} {% block body %} {% load static %} 
-{% block scripts %}
-<script>
-    var requireJS = [];
-    var request_url = "{%url 'dashboard:administrator_educator_rating_api' educator_id%}";
-    loadJS(requireJS, "{% static 'dashboard/views/charts6.js'%}");
-</script>
+{% extends 'administrator/base.html' %} {% block title %}Educator{% endblock %} {% block body %} {% load static %}
+    {% block scripts %}
+        <script>
+            var requireJS = [];
+            var request_url = "{%url 'dashboard:administrator_educator_rating_api' educator_id%}";
+            loadJS(requireJS, "{% static 'dashboard/views/charts6.js'%}");
+        </script>
 
-{% endblock %}
-<input type="hidden" id="myData" name="variable" readonly value="{{ educator_rating }}">
-<input type="hidden" id="educator_id" name="variable" readonly value="{{ educator_id }}">
-<main class="animated fadeIn">
-    <div class="card-body">
-        <div class="col-md-12 ">
-            <div class="card " style="margin-top: 10px">
-                <div class="card-header ">
-                    <h3 class="card-title mb-0">Educator Profile</h3>
-                </div>
-                {% if educator_id %}
-                <form method="POST" action="{% url 'dashboard:administrator_educator_profile' educator_id %}" enctype="multipart/form-data"
-                    id="educator_forms">
+    {% endblock %}
+    <input type="hidden" id="myData" name="variable" readonly value="{{ educator_rating }}">
+    <input type="hidden" id="educator_id" name="variable" readonly value="{{ educator_id }}">
+    <main class="animated fadeIn">
+        <div class="card-body">
+            <div class="col-md-12 ">
+                <div class="card " style="margin-top: 10px">
+                    <div class="card-header ">
+                        <h3 class="card-title mb-0">Educator Profile</h3>
+                    </div>
+                    {% if educator_id %}
+                        <form method="POST" action="{% url 'dashboard:administrator_educator_profile' educator_id %}"
+                              enctype="multipart/form-data"
+                              id="educator_forms">
                     {% else %}
-                    <form method="POST" action="{% url 'dashboard:administrator_educator_add' %}" enctype="multipart/form-data" id="educator_forms">
-                        {% endif %}
-                        <div id="forms_template">
-                            {% include 'administrator/educators/forms/educator_profile.html' %}
+                        <form method="POST" action="{% url 'dashboard:administrator_educator_add' %}"
+                              enctype="multipart/form-data" id="educator_forms">
+                    {% endif %}
+                    <div id="forms_template">
+                        {% include 'administrator/educators/forms/educator_profile.html' %}
+                    </div>
+                    <div class="container" style="margin-bottom: 10px">
+                        <div class="row col-md-12">
+                            <div class="col-md-5"></div>
+                            <div class=col-md-6>
+                                <button type="submit" class="btn btn-success">Save Change</button>
+                                <a href="{% url 'dashboard:administrator_educators' %}">
+                                    <button type="button" class="btn btn-success">Cancel</button>
+                                </a>
+                            </div>
                         </div>
-                        <div class="container" style="margin-bottom: 10px">
-                            <div class="row col-md-12">
-                                <div class="col-md-5"></div>
-                                <div class=col-md-6>
-                                    <button type="submit" class="btn btn-success">Save Change</button>
-                                    <a href="{% url 'dashboard:administrator_educators' %}">
-                                        <button type="button" class="btn btn-success">Cancel</button>
-                                    </a>
+                    </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+        {% if educator_id %}
+            <div class="card" style="margin-top: 10px">
+                <div class="card-header">
+                    <h3 class="card-title mb-0">Strength & Weakness</h3>
+                </div>
+                <div class="card-body">
+                    <div class="row">
+                        <div class="row col-sm-9">
+                            <div class="col-xl-2 col-md-3">
+                                <div class="dropdown">
+                                    <select class="form-control" id="year-selector">
+
+                                        <option id="yTitle" value="" selected>Year</option>
+                                        {% for year in educator_reviews_years %}
+                                            <option value="{{ year.year }}" id="year_{{ forloop.counter }}">
+                                                {{ year.year }}
+                                            </option>
+                                        {% endfor %}
+
+                                    </select>
+                                </div>
+                            </div>
+
+                            <div class="col-xl-2 col-md-4">
+                                <div class="dropdown">
+                                    <select class="form-control" id="department-selector">
+
+                                        <option id="dTitle" value="" selected>Department</option>
+                                        {% for dep in educator_reviews_departments %}
+                                            <option value="{{ dep.student__department }}"
+                                                    id="dep_{{ forloop.counter }}">
+                                                {{ dep.student__department__name }}
+                                            </option>
+                                        {% endfor %}
+
+                                    </select>
                                 </div>
                             </div>
                         </div>
-                    </form>
-            </div>
-        </div>
-    </div>
-    {% if educator_id %}
-    <div class="card" style="margin-top: 10px">
-        <div class="card-header">
-            <h3 class="card-title mb-0">Strength & Weakness</h3>
-        </div>
-        <div class="card-body">
-            <div class="row">
-                <div class="row col-sm-9">
-                    <div class="col-xl-2 col-md-3">
-                        <div class="dropdown">
-                            <select class="form-control" id="year-selector">
 
-                                <option id="yTitle" value="" selected>Year</option>
-                                {% for year in educator_reviews_years %}
-                                <option value="{{ year.year }}" id="year_{{ forloop.counter }}">
-                                    {{ year.year }}
-                                </option>
-                                {% endfor %}
+                        <div class="col-md-3">
+                            <div class="btn-toolbar float-right" role="toolbar" aria-label="Toolbar with button groups">
+                                <div class="btn-group mr-3" data-toggle="buttons" aria-label="First group">
 
-                            </select>
+                                </div>
+                            </div>
                         </div>
                     </div>
-
-                    <div class="col-xl-2 col-md-4">
-                        <div class="dropdown">
-                            <select class="form-control" id="department-selector">
-
-                                <option id="dTitle" value="" selected>Department</option>
-                                {% for dep in educator_reviews_departments %}
-                                <option value="{{ dep.student__department }}" id="dep_{{ forloop.counter }}">
-                                    {{ dep.student__department__name }}
-                                </option>
-                                {% endfor %}
-
-                            </select>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="col-md-3">
-                    <div class="btn-toolbar float-right" role="toolbar" aria-label="Toolbar with button groups">
-                        <div class="btn-group mr-3" data-toggle="buttons" aria-label="First group">
-
-                        </div>
+                    <div class="wrapper mx-auto">
+                        <canvas id="canvas-1" class="chart"></canvas>
                     </div>
                 </div>
             </div>
-            <div class="wrapper mx-auto">
-                <canvas id="canvas-1" class="chart"></canvas>
+            <div class="col-md-12">
+                <div class="card" style="margin-top: 10px">
+                    <div class="card-header">
+                        <h3 class="card-title mb-0">Student Reviews</h3>
+                    </div>
+                    <div class="card-body" id="reviews">
+                        {% include 'administrator/educators/pagination/educator_profile.html' %}
+                    </div>
+                </div>
             </div>
-        </div>
-    </div>
-    <div class="col-md-12">
-        <div class="card" style="margin-top: 10px">
-            <div class="card-header">
-                <h3 class="card-title mb-0">Student Reviews</h3>
-            </div>
-            <div class="card-body" id="reviews">
-                {% include 'administrator/educators/pagination/educator_profile.html' %}
-            </div>
-        </div>
-    </div>
-    {% endif %}
+        {% endif %}
 
-</main>
-<script>
-    {%if educator_id %}
-    $("#educator_forms").ajaxForm({
-        type: 'post',
-        success: function (response) {
-            $("#forms_template").html(response);
-        }
-    });
-
-    document.getElementById("lis_1").parentElement.classList.add("active");
-
-    function loadResults(event) {
-        var id = event.target.id;
-        if (document.getElementById(id).parentElement.classList.contains("active") !== true) {
-
-            page = document.getElementById(id).innerHTML;
-            if (isNaN(page)) {
-                page = id;
-            }
-            $.ajax({
-                type: "GET",
-                url: "{% url 'dashboard:administrator_educator_reviews_paginator' educator_id %}/reviews/?page=" +
-                    page,
-                success: function (data) {
-                    $('#reviews').html(data);
-                    if (isNaN(id) !== true)
-                        id = "lis_" + id;
-                    document.getElementById(id).parentElement.classList.add("active");
-                },
-
-                error: function (response, error) {
-                    alert("something");
-                    alert(response.responseText);
+    </main>
+    <script>
+        {%if educator_id %}
+            $("#educator_forms").ajaxForm({
+                type: 'post',
+                success: function (response) {
+                    $("#forms_template").html(response);
                 }
             });
-        }
-    } {% endif %}
-</script>
+
+            document.getElementById("lis_1").parentElement.classList.add("active");
+
+            function loadResults(event) {
+                var id = event.target.id;
+                if (document.getElementById(id).parentElement.classList.contains("active") !== true) {
+
+                    page = document.getElementById(id).innerHTML;
+                    if (isNaN(page)) {
+                        page = id;
+                    }
+                    $.ajax({
+                        type: "GET",
+                        url: "{% url 'dashboard:administrator_educator_reviews_paginator' educator_id %}/reviews/?page=" +
+                        page,
+                        success: function (data) {
+                            $('#reviews').html(data);
+                            if (isNaN(id) !== true)
+                                id = "lis_" + id;
+                            document.getElementById(id).parentElement.classList.add("active");
+                        },
+
+                        error: function (response, error) {
+                            alert("something");
+                            alert(response.responseText);
+                        }
+                    });
+                }
+            } {% endif %}
+    </script>
 {% endblock %}
