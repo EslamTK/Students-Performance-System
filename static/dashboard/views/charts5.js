@@ -1,11 +1,49 @@
-$(function () {
-    'use strict';
+var my_data = educatorsRatingData;
 
+window.onload = drawChart(my_data);
+var selectedDep="";
+var selectedYear="";
+$('#year-selector').change(function () {
+    // erase old data from chart when update data 
+    if (window.chart !== undefined || window.chart !== null) {
+        window.chart.destroy();
+    }
+    selectedYear = $('#year-selector option:selected').val();
+    send_request();
+});
+$('#department-selector').change(function () {
+    if (window.chart !== undefined || window.chart !== null) {
+        window.chart.destroy();
+    }
+    selectedDep = $('#department-selector option:selected').val();
+    send_request();
+});
+
+function send_request() {
+    'use strict';
+    var depId = 'department_id=' + selectedDep + '';
+    var yId = '&year_id=' + selectedYear + '';
+    var bUrl = request_url + '?';
+    var aUrl = bUrl + depId + yId;
+
+    $.ajax({
+        url: aUrl,
+        dataType: "json",
+        type: 'GET',
+        contentType: 'application/json',
+        success: function (data) {
+            drawChart(data.result);
+            
+        }
+    });
+
+}
+
+function drawChart(data) {
+    'use strict';
     var randomScalingFactor = function () {
         return Math.round(Math.random() * 255)
     };
-
-    var data = educatorsRatingData;
 
     var label_data = [];
     var review_item_label = [];
@@ -17,8 +55,7 @@ $(function () {
         }
         if (review_item_label.includes(data[i].review_item__name)) {
             review_item[data[i].review_item__name].push(data[i].rate__avg);
-            }
-        else {
+        } else {
             review_item_label.push(data[i].review_item__name);
             review_item[data[i].review_item__name] = [];
             review_item[data[i].review_item__name].push(data[i].rate__avg);
@@ -51,7 +88,7 @@ $(function () {
     };
 
     var ctx = document.getElementById('canvas-1');
-    var chart = new Chart(ctx, {
+    window.chart = new Chart(ctx, {
         type: 'bar',
         data: lineChartData,
         options: {
@@ -68,4 +105,4 @@ $(function () {
     });
 
 
-});
+}

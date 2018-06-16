@@ -1,6 +1,7 @@
 {% extends 'educator/base.html' %} {% block title %}Dashboard{% endblock %} {% block body %} {% load static %}
     <script>
         var requireJS = [];
+        var request_url="{%url 'dashboard:educator_rating_api' %}";
         loadJS(requireJS, "{% static 'dashboard/views/charts2.js'%}");
     </script>
 
@@ -18,24 +19,31 @@
                     <div class="row col-sm-9">
                         <div class="col-xl-2 col-md-3">
                             <div class="dropdown">
-                                <select class="form-control" id="year-selector" onchange="choice1(this)">
-                                    <option>Year</option>
+                                <select class="form-control" id="year-selector">
+
+                                    <option value="" id="yTitle" selected>Year</option>
                                     {% for year in educator_reviews_years %}
-                                        <option value="{{ year.year }}"
-                                                id="year_{{ forloop.counter }}">{{ year.year }}</option>
+                                        <option value="{{ year.year }}" id="year_{{ forloop.counter }}">
+                                            {{ year.year }}
+                                        </option>
                                     {% endfor %}
+    
                                 </select>
                             </div>
                         </div>
 
                         <div class="col-xl-2 col-md-4">
                             <div class="dropdown">
-                                <select class="form-control" id="dep-selector" onchange="choice1(this)">
-                                    <option>Department</option>
+                                <select class="form-control" id="department-selector">
+                                
+                                    <option value="" id="dTitle" selected>Department</option>
                                     {% for dep in educator_reviews_departments %}
                                         <option value="{{ dep.student__department }}"
-                                                id="dep_{{ forloop.counter }}">{{ dep.student__department__name }}</option>
+                                                id="dep_{{ forloop.counter }}">
+                                            {{ dep.student__department__name }}
+                                        </option>
                                     {% endfor %}
+    
                                 </select>
                             </div>
                         </div>

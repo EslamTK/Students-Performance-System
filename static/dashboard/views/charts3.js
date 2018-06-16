@@ -1,17 +1,66 @@
-$(function () {
+var my_data = document.getElementById("myVar").value;
+
+//formating data to valid json format
+my_data = my_data.slice(10, my_data.length, my_data)
+my_data = my_data.replace('>', '');
+my_data = my_data.replace(/'/g, '"');
+my_data = JSON.parse(my_data);
+
+window.onload = drawChart(my_data);
+
+var selectedYear = "";
+var selectedDep = "";
+var ter_id = "";
+$('#year-selector').change(function () {
+    
+    if (window.chart !== undefined || window.chart !== null) {
+        window.chart.destroy();
+    }
+    selectedYear = $('#year-selector option:selected').val();
+    send_request();
+    
+    
+});
+$('#department-selector').change(function () {
+    if (window.chart !== undefined || window.chart !== null) {
+        window.chart.destroy();
+    }
+    selectedDep = $('#department-selector option:selected').val();
+    send_request();
+    
+});
+
+//function applied on change term 
+$("input:radio[name=options]").change(function () {
+    if (window.chart !== undefined || window.chart !== null) {
+        window.chart.destroy();
+    }
+    ter_id = $('input:radio[name=options]:checked').val();
+    send_request();
+});
+
+function send_request() {
     'use strict';
+    var depId = 'department_id=' + selectedDep + '';
+    var yId = '&year_id=' + selectedYear + '';
+    var tId = '&term_id=' + ter_id;
+    var bUrl = request_url + '?';
+    var aUrl = bUrl + depId + yId + tId;
 
-    var randomScalingFactor = function () {
-        return Math.round(Math.random() * 10)
-    };
+    $.ajax({
+        url: aUrl,
+        dataType: "json",
+        type: 'GET',
+        contentType: 'application/json',
+        success: function (data) {
+            drawChart(data.result);
+        }
+    });
+}
 
-    var my_data = document.getElementById("myVar").value;
 
-    //formating data to valid json format
-    var data = my_data.slice(10, my_data.length, my_data)
-    data = data.replace('>', '');
-    data = data.replace(/'/g, '"');
-    data = JSON.parse(data);
+function drawChart(data){
+    'use strict';
 
     console.log(data);
     //collecting data
@@ -24,10 +73,6 @@ $(function () {
     for (var i = 0; i < data.length; i++) {
 
         if (data[i].midterm_pass == 0) {
-            //for data to be visual remove if valid data entered
-            //data[i].midterm_pass = randomScalingFactor();
-            //for data to be visual remove if valid data entered
-            //data[i].final_pass = randomScalingFactor();
 
             label_data.push(data[i].course__name);
             midPass.push(data[i].midterm_pass);
@@ -40,8 +85,7 @@ $(function () {
 
     var lineChartData = {
         labels: label_data,
-        datasets: [
-            {
+        datasets: [{
                 label: 'Midterm Pass',
                 backgroundColor: 'rgba(220,220,220,0.2)',
                 borderColor: 'rgba(220,220,220,1)',
@@ -58,8 +102,7 @@ $(function () {
                 pointBorderColor: '#fff',
 
                 data: midFail
-            }
-            ,
+            },
             {
                 label: 'Final Pass',
                 backgroundColor: 'rgba(234,209,204,0.2)',
@@ -68,8 +111,7 @@ $(function () {
 
                 pointBorderColor: '#fff',
                 data: finalPass
-            }
-            ,
+            },
             {
                 label: 'Final Fail',
                 backgroundColor: 'rgba(41,54,61,0.2)',
@@ -84,13 +126,11 @@ $(function () {
 
 
     var ctx = document.getElementById('canvas-1');
-    var chart = new Chart(ctx, {
-        type: 'line',
+    window.chart = new Chart(ctx, {
+        type: 'bar',
         data: lineChartData,
         options: {
             responsive: true
         }
     });
-
-
-});
+}

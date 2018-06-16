@@ -3,6 +3,7 @@
 
 <script>
     var requireJS = [];
+    var request_url = "{% url 'dashboard:educator_student_profile_courses_grades_api' student_id%}";
     loadJS(requireJS, "{% static 'dashboard/views/charts.js'%}");
 </script>
 <input type="hidden" id="myVar" name="variable" readonly value="{{ student_predictions.courses }}">
@@ -20,10 +21,10 @@
                     <div class="row col-sm-9">
                         <div class="col-xl-2 col-md-3">
                             <div class="dropdown">
-                                <select class="form-control" id="year-selector" onchange="choice1(this)">
-                                    <option>Year</option>
+                                <select class="form-control" id="year-selector">
+                                    <option value="" id="yTitle" selected>Year</option>
                                     {% for year in years %}
-                                    <option value="{{ year.name }}" id="year_{{ forloop.counter }}">{{ year.name }}</option>
+                                        <option value="{{ year.id }}" id="year_{{ forloop.counter }}">{{ year.name }}</option>
                                     {% endfor %}
                                 </select>
                             </div>
@@ -33,14 +34,11 @@
                     <div class="col-md-3">
                         <div class="btn-toolbar float-right" role="toolbar" aria-label="Toolbar with button groups">
                             <div class="btn-group mr-3" data-toggle="buttons" aria-label="First group">
-                                {% for term in terms %} {% if forloop.counter == 1 %}
-                                <label class="btn btn-outline-secondary active">
-                                    {% else %}
+                                {% for term in terms %} 
                                     <label class="btn btn-outline-secondary">
-                                        {% endif %}
-                                        <input type="radio" name="options" value="{{term_id}}"> {{ term.name }}
+                                        <input type="radio" id="rb" name="options" value="{{term.id}}" checked="checked"> {{ term.name }}
                                     </label>
-                                    {% endfor %}
+                                {% endfor %}
                             </div>
                         </div>
                     </div>
