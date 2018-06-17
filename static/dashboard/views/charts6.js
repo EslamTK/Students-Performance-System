@@ -6,7 +6,7 @@ my_data = my_data.replace('>', '');
 my_data = my_data.replace(/'/g, '"');
 my_data = JSON.parse(my_data);
 
-window.onload = drawChart(my_data);
+window.onload = drawChart(my_data, true);
 
 var selectedDep = "";
 var selectedYear = "";
@@ -43,7 +43,7 @@ function send_request() {
 }
 
 
-function drawChart(data) {
+function drawChart(data, isNew) {
     'use strict';
 
     var label_data = [];
@@ -65,20 +65,27 @@ function drawChart(data) {
         }]
     };
 
-    var ctx = document.getElementById('canvas-1');
-    window.chart = new Chart(ctx, {
-        type: 'bar',
-        data: barChartData,
-        options: {
-            responsive: true,
-            scales: {
-                yAxes: [{
-                    ticks: {
-                        beginAtZero: true,
-                    }
-                }]
+    if (isNew) {
+        var ctx = document.getElementById('canvas-1');
+        window.chart = new Chart(ctx, {
+            type: 'bar',
+            data: barChartData,
+            options: {
+                responsive: true,
+                scales: {
+                    yAxes: [{
+                        ticks: {
+                            beginAtZero: true,
+                        }
+                    }]
+                }
             }
-        }
-    });
-    window.chart.update();
+        });
+    }
+    else {
+        window.chart.data = barChartData;
+        window.chart.update();
+    }
+
+
 }

@@ -5,7 +5,7 @@ var my_data = my_data.replace(/'/g, '"');
 
 //trasnform data into json
 defaultData = JSON.parse(my_data);
-window.onload = defaultChart(defaultData);
+window.onload = drawChart(defaultData, true);
 var selectedYear = "";
 var ter_id = "";
 
@@ -45,11 +45,7 @@ function send_request() {
     });
 }
 
-function defaultChart(data) {
-    drawChart(data);
-}
-
-function drawChart(data) {
+function drawChart(data, isNew) {
     'use strict';
 
     var randomScalingFactor = function () {
@@ -74,13 +70,13 @@ function drawChart(data) {
     var lineChartData = {
         labels: label_data,
         datasets: [{
-                label: 'MidTerm',
-                backgroundColor: 'rgba(220,220,220,0.2)',
-                borderColor: 'rgba(220,220,220,1)',
-                pointBackgroundColor: 'rgba(220,220,220,1)',
-                pointBorderColor: '#fff',
-                data: midterm
-            },
+            label: 'MidTerm',
+            backgroundColor: 'rgba(220,220,220,0.2)',
+            borderColor: 'rgba(220,220,220,1)',
+            pointBackgroundColor: 'rgba(220,220,220,1)',
+            pointBorderColor: '#fff',
+            data: midterm
+        },
             {
                 label: 'Expected Final Grades',
                 backgroundColor: 'rgba(151,187,205,0.2)',
@@ -92,22 +88,26 @@ function drawChart(data) {
         ]
     };
 
-
-    var ctx = document.getElementById('canvas-1');
-    window.chart = new Chart(ctx, {
-        type: 'bar',
-        data: lineChartData,
-        options: {
-            responsive: true,
-            scales: {
-                yAxes: [{
-                    ticks: {
-                        beginAtZero: true
-                    }
-                }]
+    if (isNew) {
+        var ctx = document.getElementById('canvas-1');
+        window.chart = new Chart(ctx, {
+            type: 'bar',
+            data: lineChartData,
+            options: {
+                responsive: true,
+                scales: {
+                    yAxes: [{
+                        ticks: {
+                            beginAtZero: true
+                        }
+                    }]
+                }
             }
-        }
-    });
+        });
+    }
+    else {
+        window.chart.data = lineChartData;
+        window.chart.update();
+    }
 
-    window.chart.update();
 }

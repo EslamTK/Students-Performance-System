@@ -6,7 +6,7 @@ my_data = my_data.replace('>', '');
 my_data = my_data.replace(/'/g, '"');
 my_data = JSON.parse(my_data);
 
-window.onload = drawChart(my_data);
+window.onload = drawChart(my_data, true);
 
 var selectedYear = "";
 var selectedDep = "";
@@ -52,7 +52,7 @@ function send_request() {
 }
 
 
-function drawChart(data) {
+function drawChart(data, isNew) {
     'use strict';
 
     console.log(data);
@@ -65,16 +65,13 @@ function drawChart(data) {
 
     for (var i = 0; i < data.length; i++) {
 
-        if (data[i].midterm_pass === 0) {
-
             label_data.push(data[i].course__name);
             midPass.push(data[i].midterm_pass);
             midFail.push(data[i].total - data[i].midterm_pass);
             finalPass.push(data[i].final_pass);
             finalFail.push(data[i].total - data[i].final_pass);
-        }
-    }
 
+    }
 
     var lineChartData = {
         labels: label_data,
@@ -114,14 +111,19 @@ function drawChart(data) {
         ]
     };
 
+    if (isNew) {
+        var ctx = document.getElementById('canvas-1');
+        window.chart = new Chart(ctx, {
+            type: 'bar',
+            data: lineChartData,
+            options: {
+                responsive: true
+            }
+        });
+    }
 
-    var ctx = document.getElementById('canvas-1');
-    window.chart = new Chart(ctx, {
-        type: 'bar',
-        data: lineChartData,
-        options: {
-            responsive: true
-        }
-    });
-    window.chart.update();
+    else {
+        window.chart.data = lineChartData;
+        window.chart.update();
+    }
 }

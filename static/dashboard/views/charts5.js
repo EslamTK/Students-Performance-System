@@ -1,6 +1,6 @@
 var my_data = educatorsRatingData;
 
-window.onload = drawChart(my_data);
+window.onload = drawChart(my_data, true);
 var selectedDep = "";
 var selectedYear = "";
 $('#year-selector').change(function () {
@@ -34,7 +34,7 @@ function send_request() {
 
 }
 
-function drawChart(data) {
+function drawChart(data, isNew) {
     'use strict';
     var randomScalingFactor = function () {
         return Math.round(Math.random() * 255)
@@ -82,22 +82,27 @@ function drawChart(data) {
         datasets: datasetss
     };
 
-    var ctx = document.getElementById('canvas-1');
-    window.chart = new Chart(ctx, {
-        type: 'bar',
-        data: lineChartData,
-        options: {
-            responsive: true,
-            scales: {
-                yAxes: [{
-                    ticks: {
-                        beginAtZero: true,
-                        max: 3
-                    }
-                }]
-            }
-        }
-    });
+    if (isNew) {
 
-    window.chart.update();
+        var ctx = document.getElementById('canvas-1');
+        window.chart = new Chart(ctx, {
+            type: 'bar',
+            data: lineChartData,
+            options: {
+                responsive: true,
+                scales: {
+                    yAxes: [{
+                        ticks: {
+                            beginAtZero: true,
+                            max: 3
+                        }
+                    }]
+                }
+            }
+        });
+    }
+    else {
+        window.chart.data = lineChartData;
+        window.chart.update();
+    }
 }

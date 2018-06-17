@@ -30,28 +30,12 @@
         {% if student_id %}
             <div class="card" style="margin-top: 10px">
             <div class="card-header">
-                <div class="row">
-                    <div class="col-md-8">
-                    </div>
-                    <div class="col-md-1">
-                    </div>
-                    <div class="col-md-1">
-                    </div>
-                    <div class="col-md-1">
-                    </div>
-                    <div class="input-group col-md-1">
-                         <span class=" input-group-btn ">
-       
-                         <button type="button" class="btn btn-success "><i
-                                 class="fa fa-plus"></i></button>
-                         </span>
-                    </div>
-                </div>
+                <h3 class="card-title mb-0">Student Courses</h3>
             </div>
 
             <form id="student_courses" METHOD="POST">
                 <div class="card-body">
-                    <table class="table table-striped table-bordered table-hover table-condensed">
+                    <table class="table table-striped table-bordered table-hover table-condensed table-responsive-sm">
                         <thead>
                         <tr>
                             <th>Course</th>
