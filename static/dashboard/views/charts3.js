@@ -13,18 +13,13 @@ var selectedDep = "";
 var ter_id = "";
 $('#year-selector').change(function () {
 
-    if (window.chart !== undefined || window.chart !== null) {
-        window.chart.destroy();
-    }
     selectedYear = $('#year-selector option:selected').val();
     send_request();
 
 
 });
 $('#department-selector').change(function () {
-    if (window.chart !== undefined || window.chart !== null) {
-        window.chart.destroy();
-    }
+
     selectedDep = $('#department-selector option:selected').val();
     send_request();
 
@@ -32,9 +27,7 @@ $('#department-selector').change(function () {
 
 //function applied on change term 
 $("input:radio[name=options]").change(function () {
-    if (window.chart !== undefined || window.chart !== null) {
-        window.chart.destroy();
-    }
+
     ter_id = $('input:radio[name=options]:checked').val();
     send_request();
 });
@@ -72,7 +65,7 @@ function drawChart(data) {
 
     for (var i = 0; i < data.length; i++) {
 
-        if (data[i].midterm_pass == 0) {
+        if (data[i].midterm_pass === 0) {
 
             label_data.push(data[i].course__name);
             midPass.push(data[i].midterm_pass);
@@ -87,10 +80,10 @@ function drawChart(data) {
         labels: label_data,
         datasets: [{
                 label: 'Midterm Pass',
-                backgroundColor: 'rgba(220,220,220,0.2)',
-                borderColor: 'rgba(220,220,220,1)',
-                pointBackgroundColor: 'rgba(220,220,220,1)',
-                pointBorderColor: '#fff',
+            backgroundColor: 'rgba(220,220,220,0.2)',
+            borderColor: 'rgba(220,220,220,1)',
+            pointBackgroundColor: 'rgba(220,220,220,1)',
+            pointBorderColor: '#fff',
                 data: midPass
             },
             {
@@ -98,9 +91,6 @@ function drawChart(data) {
                 backgroundColor: 'rgba(151,187,205,0.2)',
                 borderColor: 'rgba(151,187,205,1)',
                 pointBackgroundColor: 'rgba(151,187,205,1)',
-                pointBorderColor: '#fff',
-                pointBorderColor: '#fff',
-
                 data: midFail
             },
             {
@@ -133,4 +123,5 @@ function drawChart(data) {
             responsive: true
         }
     });
+    window.chart.update();
 }

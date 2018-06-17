@@ -4,17 +4,12 @@ window.onload = drawChart(my_data);
 var selectedDep = "";
 var selectedYear = "";
 $('#year-selector').change(function () {
-    // erase old data from chart when update data 
-    if (window.chart !== undefined || window.chart !== null) {
-        window.chart.destroy();
-    }
+
     selectedYear = $('#year-selector option:selected').val();
     send_request();
 });
 $('#department-selector').change(function () {
-    if (window.chart !== undefined || window.chart !== null) {
-        window.chart.destroy();
-    }
+
     selectedDep = $('#department-selector option:selected').val();
     send_request();
 });
@@ -104,5 +99,5 @@ function drawChart(data) {
         }
     });
 
-
+    window.chart.update();
 }

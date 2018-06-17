@@ -42,14 +42,16 @@ class AdministratorStudentLogic(Logic):
     def update_student(student_form):
         student_form.save()
 
-    @staticmethod
-    def add_student(user_form, student_form):
+    def add_student(self, user_form, student_form):
 
         user = user_form.save()
 
         student = student_form.save(commit=False)
         student.user_id = user.id
         student.save()
+
+        students_group = self._unit_of_work.groups.get_group_by_name('students')
+        user.groups.add(students_group)
 
         return user.id
 
@@ -83,7 +85,3 @@ class AdministratorStudentLogic(Logic):
 
         for instance in course_formset.deleted_objects:
             instance.delete()
-
-        deleted_forms = [form['id'].value() for form in course_formset.deleted_forms]
-
-        return deleted_forms

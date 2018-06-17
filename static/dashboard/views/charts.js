@@ -10,20 +10,14 @@ var selectedYear = "";
 var ter_id = "";
 
 $('#year-selector').change(function () {
-    // erase old data from chart when update data 
-    if (window.chart !== undefined || window.chart !== null) {
-        window.chart.destroy();
-    }
+
     selectedYear = $('#year-selector option:selected').val();
     send_request();
 });
 
 
 $("input:radio[name=options]").change(function () {
-    // erase old data from chart when update data 
-    if (window.chart !== undefined || window.chart !== null) {
-        window.chart.destroy();
-    }
+
     ter_id = $('input[name=options]:checked').val();
     send_request();
 });
@@ -71,7 +65,7 @@ function drawChart(data) {
     for (var i = 0; i < data.length; i++) {
         label_data.push(data[i].name);
         midterm.push(data[i].midterm);
-        if (prediction_data == true)
+        if (prediction_data === true)
             prediction.push(data[i].prediction);
         else
             prediction.push(data[i].final);
@@ -108,15 +102,12 @@ function drawChart(data) {
             scales: {
                 yAxes: [{
                     ticks: {
-                        beginAtZero: true,
+                        beginAtZero: true
                     }
                 }]
             }
         }
     });
 
-
-    var randomScalingFactor = function () {
-        return Math.round(Math.random() * 100)
-    };
+    window.chart.update();
 }

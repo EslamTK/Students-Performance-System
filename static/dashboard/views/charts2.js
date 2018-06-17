@@ -11,16 +11,12 @@ window.onload = drawChart(my_data);
 var selectedDep = "";
 var selectedYear = "";
 $('#year-selector').change(function () {
-    if (window.chart !== undefined || window.chart !== null) {
-        window.chart.destroy();
-    }
+
     selectedYear = $('#year-selector option:selected').val();
     send_request();
 });
 $('#department-selector').change(function () {
-    if (window.chart !== undefined || window.chart !== null) {
-        window.chart.destroy();
-    }
+
     selectedDep = $('#department-selector option:selected').val();
     send_request();
 });
@@ -45,7 +41,7 @@ function send_request() {
 
 function drawChart(data) {
     'use strict';
-    //collecting data 
+
     var label_data = [];
     var rates = [];
     for (var i = 0; i < data.length; i++) {
@@ -63,9 +59,7 @@ function drawChart(data) {
             pointBackgroundColor: 'rgba(151,187,205,1)',
             pointBorderColor: '#fff',
             data: rates
-        },
-
-        ]
+        }]
     };
 
 
@@ -78,12 +72,12 @@ function drawChart(data) {
             scales: {
                 yAxes: [{
                     ticks: {
-                        beginAtZero: true,
+                        beginAtZero: true
                     }
                 }]
             }
         }
     });
-
+    window.chart.update();
 
 }

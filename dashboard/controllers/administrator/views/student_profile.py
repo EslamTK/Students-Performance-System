@@ -77,6 +77,9 @@ class AdministratorStudentCoursesView(AdministratorBaseView):
         if courses_formset.is_valid():
             administrator.update_student_courses(course_formset=courses_formset,
                                                  student_id=student_id)
+
+            courses_formset = administrator.get_student_courses_formset(student_id=student_id)
+
         result = {
             'student_id': student_id,
             'courses_formset': courses_formset

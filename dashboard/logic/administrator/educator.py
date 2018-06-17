@@ -72,14 +72,16 @@ class AdministratorEducatorLogic(Logic):
         for instance in accounts_formset.deleted_objects:
             instance.delete()
 
-    @staticmethod
-    def add_educator(user_form, educator_form, accounts_formset):
+    def add_educator(self, user_form, educator_form, accounts_formset):
 
         user = user_form.save()
 
         educator = educator_form.save(commit=False)
         educator.user_id = user.id
         educator.save()
+
+        educators_group = self._unit_of_work.groups.get_group_by_name('educators')
+        user.groups.add(educators_group)
 
         instances = accounts_formset.save(commit=False)
 

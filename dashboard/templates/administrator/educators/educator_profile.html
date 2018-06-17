@@ -2,7 +2,9 @@
     {% block scripts %}
         <script>
             var requireJS = [];
-            var request_url = "{%url 'dashboard:administrator_educator_rating_api' educator_id%}";
+            {% if educator_id %}
+                var request_url = "{%url 'dashboard:administrator_educator_rating_api' educator_id%}";
+            {% endif %}
             loadJS(requireJS, "{% static 'dashboard/views/charts6.js'%}");
         </script>
 
